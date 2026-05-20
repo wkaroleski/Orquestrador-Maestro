@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "purpose": "Execution profiles for skill loading, token budget, validation, and delegation.",
+  "profiles": {
+    "fast": {
+      "maxSkills": 1,
+      "loadReferences": false,
+      "allowSubagents": false,
+      "validation": "lightest-meaningful",
+      "notes": "Use for small edits, quick answers, and tasks where one skill clearly matches."
+    },
+    "standard": {
+      "maxSkills": 3,
+      "loadReferences": "only-if-directly-needed",
+      "allowSubagents": false,
+      "validation": "task-appropriate",
+      "notes": "Default profile for most work."
+    },
+    "deep": {
+      "maxSkills": 5,
+      "startSkill": "skill-multiagent-orchestration",
+      "loadReferences": "progressive",
+      "allowSubagents": true,
+      "validation": "lint-typecheck-test-or-doctor",
+      "notes": "Use for broad changes, multi-system work, or explicit subagent requests."
+    },
+    "multiagent": {
+      "maxSkills": 5,
+      "startSkill": "skill-multiagent-orchestration",
+      "loadReferences": "progressive",
+      "allowSubagents": true,
+      "validation": "integration-plus-lane-verification",
+      "notes": "Use when the user asks for subagents/multiagents/team/swarm or when independent workstreams materially improve speed or review quality."
+    },
+    "saas": {
+      "maxSkills": 5,
+      "startSkill": "skill-saas-factory",
+      "loadReferences": "progressive",
+      "allowSubagents": true,
+      "validation": "project-gates-plus-security",
+      "notes": "Use when building or reviewing SaaS products, dashboards, payments, tenancy, or admin systems."
+    },
+    "security": {
+      "maxSkills": 4,
+      "startSkill": "skill-saas-security-scan",
+      "loadReferences": "progressive",
+      "allowSubagents": true,
+      "validation": "security-gates",
+      "requiresExplicitAuthorization": true,
+      "notes": "Use only for owned local repos or explicitly authorized staging/preview targets."
+    }
+  }
+}

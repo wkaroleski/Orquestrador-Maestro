@@ -1,0 +1,39 @@
+{
+    "generatedAt":  "2026-05-19T20:41:53",
+    "source":  "sanitized-local-export",
+    "packages":  {
+                     "orquestrador":  {
+                                          "path":  "orquestrador",
+                                          "files":  57,
+                                          "skillDirectories":  22
+                                      },
+                     "codex":  {
+                                   "path":  "codex",
+                                   "skillFiles":  109,
+                                   "agentFiles":  20,
+                                   "promptFiles":  20
+                               },
+                     "communitySkills":  {
+                                             "path":  "skill-library/community-skills",
+                                             "files":  1411,
+                                             "skillDirectories":  610
+                                         },
+                     "toolProfiles":  {
+                                          "path":  "tool-profiles",
+                                          "files":  12
+                                      }
+                 },
+    "excluded":  [
+                     "logs",
+                     "backups",
+                     "runtime caches",
+                     "binary build artifacts",
+                     "benchmark results",
+                     "generated databases",
+                     "local memories",
+                     "local config files",
+                     "Codex local rules and command allowlists",
+                     "private path names",
+                     "backup files"
+                 ]
+}

@@ -1,0 +1,43 @@
+import React from 'react';
+import { LucideIcon } from 'lucide-react';
+
+interface {{name}}Props {
+  title: string;
+  description?: string;
+  icon?: LucideIcon;
+  onClick?: () => void;
+  className?: string;
+}
+
+/**
+ * {{name}} Component
+ * Standardized via Orquestrador v4.0
+ */
+export const {{name}}: React.FC<{{name}}Props> = ({ 
+  title, 
+  description, 
+  icon: Icon, 
+  onClick,
+  className = "" 
+}) => {
+  return (
+    <div 
+      onClick={onClick}
+      className={`p-4 bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-all cursor-pointer ${className}`}
+    >
+      <div className="flex items-center space-x-3">
+        {Icon && (
+          <div className="p-2 bg-brand-purple/10 rounded-full">
+            <Icon className="w-5 h-5 text-brand-purple" />
+          </div>
+        )}
+        <div>
+          <h3 className="text-sm font-semibold text-gray-900">{title}</h3>
+          {description && (
+            <p className="text-xs text-gray-500 mt-1">{description}</p>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "purpose": "Skill chaining policy. Start with the primary skill, then load only the listed skills that match the task evidence.",
+  "defaults": {
+    "maxSkillsStandard": 3,
+    "maxSkillsDeep": 5,
+    "preferTopLevelSkill": true,
+    "neverLoadFullCatalog": true
+  },
+  "chains": {
+    "skill-saas-factory": {
+      "loadFirst": true,
+      "mayInvoke": [
+        "skill-saas-admin-dashboard",
+        "skill-saas-core-limits",
+        "skill-frontend-ux-guardrails",
+        "skill-modern-ui-patterns",
+        "skill-open-design-ui",
+        "skill-supabase-rls",
+        "skill-abacatepay-integration",
+        "skill-stripe-integration",
+        "skill-saas-security-scan",
+        "skill-security-hooks",
+        "skill-unified-analytics",
+        "skill-ai-orchestration",
+        "skill-multiagent-orchestration",
+        "skill-aionui-cowork-orchestration"
+      ],
+      "rules": [
+        "Use frontend/UI skills when landing, login, signup, onboarding, app dashboard, responsive behavior, or visual polish are present.",
+        "Use payment skills only when a provider or billing workflow is present.",
+        "Use Supabase RLS when database, tenancy, auth, policies, or browser-side data access are present.",
+        "Use security scan/hooks before production or when the user asks for audit, hardening, or SaaS security."
+      ]
+    },
+    "skill-saas-admin-dashboard": {
+      "mayInvoke": [
+        "skill-frontend-ux-guardrails",
+        "skill-modern-ui-patterns",
+        "skill-unified-analytics",
+        "skill-saas-core-limits"
+      ]
+    },
+    "skill-saas-security-scan": {
+      "mayInvoke": [
+        "skill-security-hooks",
+        "skill-supabase-rls",
+        "skill-saas-dast-recon"
+      ],
+      "rules": [
+        "DAST requires explicit owned target or staging authorization.",
+        "Hooks require explicit local repository authorization."
+      ]
+    },
+    "skill-security-hooks": {
+      "mayInvoke": [
+        "skill-saas-security-scan"
+      ]
+    },
+    "skill-supabase-rls": {
+      "mayInvoke": [
+        "skill-saas-security-scan",
+        "skill-saas-core-limits"
+      ]
+    },
+    "skill-ai-orchestration": {
+      "mayInvoke": [
+        "skill-multiagent-orchestration",
+        "skill-aionui-cowork-orchestration",
+        "skill-unified-analytics",
+        "skill-google-workspace-sync",
+        "skill-elevenlabs-voice-cloning"
+      ]
+    },
+    "skill-multiagent-orchestration": {
+      "mayInvoke": [
+        "skill-saas-factory",
+        "skill-saas-security-scan",
+        "skill-security-hooks",
+        "skill-frontend-ux-guardrails",
+        "skill-unified-analytics",
+        "skill-aionui-cowork-orchestration"
+      ],
+      "rules": [
+        "Use only when workstreams are independent or the user explicitly asks for subagents/multiagents.",
+        "Assign file/module ownership before implementation agents edit files.",
+        "Keep integration and final verification with the lead agent."
+      ]
+    },
+    "skill-aionui-cowork-orchestration": {
+      "mayInvoke": [
+        "skill-multiagent-orchestration",
+        "skill-ai-orchestration",
+        "skill-saas-factory",
+        "skill-security-hooks"
+      ],
+      "rules": [
+        "Use AionUi as coordination UI, not as the source of truth.",
+        "Do not enable YOLO/full-auto for risky code, secrets, payments, auth, production, RLS, migrations, cron, or customer data.",
+        "Keep Codex as default executor unless the user explicitly chooses another agent."
+      ]
+    },
+    "skill-evolution-api": {
+      "mayInvoke": [
+        "skill-ai-orchestration",
+        "skill-unified-analytics"
+      ]
+    },
+    "skill-google-workspace-sync": {
+      "mayInvoke": [
+        "skill-ai-orchestration",
+        "skill-unified-analytics"
+      ]
+    },
+    "skill-live-processing": {
+      "mayInvoke": [
+        "skill-smart-clip-detection",
+        "skill-manual-video-processing",
+        "skill-ai-orchestration"
+      ]
+    },
+    "skill-manual-video-processing": {
+      "mayInvoke": [
+        "skill-smart-clip-detection",
+        "skill-ai-orchestration"
+      ]
+    },
+    "skill-open-design-ui": {
+      "mayInvoke": [
+        "skill-frontend-ux-guardrails",
+        "skill-modern-ui-patterns"
+      ]
+    }
+  }
+}

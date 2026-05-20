@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "owner": "{{USER_NAME}}",
+  "home": "{{USER_HOME}}",
+  "principle": "Keep each tool's native entrypoints stable; sync compact canonical content into the paths each tool already reads.",
+  "canonical": {
+    "rules": "{{USER_HOME}}/.orquestrador/rules.md",
+    "maestro": "{{USER_HOME}}/.orquestrador/maestro.md",
+    "hooks": "{{USER_HOME}}/.orquestrador/hooks.md",
+    "skillsIndex": "{{USER_HOME}}/.orquestrador/SKILLS_INDEX.md",
+    "skillsRouter": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+    "skillAliases": "{{USER_HOME}}/.orquestrador/SKILL_ALIASES.json",
+    "skillChains": "{{USER_HOME}}/.orquestrador/SKILL_CHAINS.json",
+    "skillExecutionProfiles": "{{USER_HOME}}/.orquestrador/SKILL_EXECUTION_PROFILES.json",
+    "skillUsageSchema": "{{USER_HOME}}/.orquestrador/SKILL_USAGE_SCHEMA.json",
+    "projectDevHierarchy": "{{USER_HOME}}/.orquestrador/PROJECT_DEV_HIERARCHY.md",
+    "projectDevInitializer": "{{USER_HOME}}/.orquestrador/bin/init-project-dev.ps1",
+    "skillsRoot": "{{USER_HOME}}/.orquestrador/skills",
+    "globalSkillsRoot": "{{USER_HOME}}/.global-skills"
+  },
+  "programs": {
+    "codex": {
+      "primary": [
+        "{{USER_HOME}}/.codex/config.toml",
+        "{{USER_HOME}}/.codex/AGENTS.md",
+        "{{USER_HOME}}/AGENTS.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.codex/skills",
+      "notes": "Codex discovers user skills from .codex/skills and project/global AGENTS.md files."
+    },
+    "opencode": {
+      "primary": [
+        "{{USER_HOME}}/.config/opencode/AGENTS.md",
+        "{{USER_HOME}}/.config/opencode/opencode.json",
+        "{{USER_HOME}}/.opencode/default-skill.json",
+        "{{USER_HOME}}/.opencode/SYSTEM.md",
+        "{{USER_HOME}}/.opencode/rules.md",
+        "{{USER_HOME}}/.opencode/maestro.md",
+        "{{USER_HOME}}/.opencode/hooks.md",
+        "{{USER_HOME}}/.opencode/SKILLS_INDEX.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.opencode/skills",
+      "compatibilityRoots": [
+        "{{USER_HOME}}/.agents/skills"
+      ],
+      "notes": "OpenCode keeps its own .opencode entrypoints; legacy .agents/skills remains populated for compatibility."
+    },
+    "antigravity": {
+      "primary": [
+        "{{USER_HOME}}/antigravity-rules.json",
+        "{{USER_HOME}}/.antigravity/antigravity.json",
+        "{{USER_HOME}}/.antigravity/settings.json"
+      ],
+      "standardsRoot": "{{USER_HOME}}/.ai-standards",
+      "skillsRoot": "{{USER_HOME}}/.antigravity-skills/skills",
+      "optionalEndpoint": "ws://localhost:3001"
+    },
+    "claude": {
+      "primary": [
+        "{{USER_HOME}}/.claude/CLAUDE.md",
+        "{{USER_HOME}}/.claude/SYSTEM_PROMPT.md",
+        "{{USER_HOME}}/.claude/hooks.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.claude/skills",
+      "notes": "Claude Code loads user memory from .claude/CLAUDE.md."
+    },
+    "cursor": {
+      "primary": [
+        "{{USER_HOME}}/.cursor/AGENTS.md",
+        "{{USER_HOME}}/.cursor/rules/orquestrador-maestro.mdc",
+        "{{USER_HOME}}/.cursor/hooks.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.cursor/skills",
+      "notes": "Cursor supports AGENTS.md and rule files; the installer writes both as portable local entrypoints."
+    },
+    "gemini": {
+      "primary": [
+        "{{USER_HOME}}/.gemini/GEMINI.md",
+        "{{USER_HOME}}/.gemini/hooks.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.gemini/skills",
+      "notes": "Gemini CLI loads global context from .gemini/GEMINI.md by default."
+    },
+    "windsurf": {
+      "primary": [
+        "{{USER_HOME}}/.codeium/windsurf/memories/global_rules.md",
+        "{{USER_HOME}}/.windsurf/hooks.md"
+      ],
+      "skillsRoot": "{{USER_HOME}}/.windsurf/skills",
+      "notes": "Windsurf Cascade loads global rules from .codeium/windsurf/memories/global_rules.md."
+    }
+  }
+}

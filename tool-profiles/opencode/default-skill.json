@@ -1,0 +1,38 @@
+{
+  "defaultSkill": "orquestrador-maestro",
+  "skillPath": "{{USER_HOME}}/.codex/skills/orquestrador-maestro/SKILL.md",
+  "skillsRoot": "{{USER_HOME}}/.opencode/skills",
+  "commandsPath": "{{USER_HOME}}/.orquestrador/",
+  "rulesPath": "{{USER_HOME}}/.opencode/rules.md",
+  "systemPath": "{{USER_HOME}}/.opencode/SYSTEM.md",
+  "hooksPath": "{{USER_HOME}}/.opencode/hooks.md",
+  "skillsIndexPath": "{{USER_HOME}}/.opencode/SKILLS_INDEX.md",
+  "canonicalEntrypointsPath": "{{USER_HOME}}/.orquestrador/PROGRAM_ENTRYPOINTS.json",
+  "canonicalRouterPath": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+  "autoLoad": true,
+  "autoDetect": true,
+  "integrations": {
+    "orquestrador": {
+      "enabled": true,
+      "path": "{{USER_HOME}}/.orquestrador/",
+      "entrypoints": "{{USER_HOME}}/.orquestrador/PROGRAM_ENTRYPOINTS.json",
+      "router": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json"
+    },
+    "opencode": {
+      "enabled": true,
+      "commandsDir": "{{USER_HOME}}/.orquestrador/",
+      "skillsDir": "{{USER_HOME}}/.opencode/skills"
+    }
+  },
+  "smartLoading": {
+    "enabled": true,
+    "patterns": {
+      "bug": ["fix"],
+      "feature": ["implement", "new-feature"],
+      "refactor": ["refactor"],
+      "test": ["test"],
+      "review": ["review"],
+      "workflow": ["workflow"]
+    }
+  }
+}

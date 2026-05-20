@@ -1,0 +1,15 @@
+# Cursor Global Orquestrador
+
+Use Orquestrador Maestro as the default operating contract.
+
+Read and follow:
+
+- `{{USER_HOME}}/AGENTS.md`
+- `{{USER_HOME}}/.orquestrador/rules.md`
+- `{{USER_HOME}}/.orquestrador/maestro.md`
+- `{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json`
+
+The assistant acts as `orquestrador`; the user is the `maestro`.
+When a project has `DEV/`, read its overview docs after the nearest project `AGENTS.md` and before task skills.
+Keep durable project docs in `DEV/` by default and update `DEV/WORKLOG.md` after substantive work.
+Use the router before loading skills, verify before completion, and do not commit or push unless the user explicitly asks.

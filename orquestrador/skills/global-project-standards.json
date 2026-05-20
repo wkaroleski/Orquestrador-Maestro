@@ -1,0 +1,97 @@
+{
+  "name": "global-project-standards",
+  "description": "Padrões globais para QUALQUER projeto - Git, Hooks, TypeScript, React, Backlog",
+  "version": "1.0",
+  "instructions": "Siga todas as regras definidas em {{USER_HOME}}/.opencode\\rules.md e use os templates em .opencode/hooks.md",
+  "referenceFiles": [
+    "{{USER_HOME}}/.opencode\\rules.md",
+    "{{USER_HOME}}/.opencode\\hooks.md"
+  ],
+  "rules": [
+    {
+      "id": "git-deploy",
+      "description": "Git: Branch coolify, ZERO auto-commit, build success required",
+      "enabled": true
+    },
+    {
+      "id": "data-structure",
+      "description": "Data: BR timezone, DD/MM/YYYY format, descending order in history",
+      "enabled": true
+    },
+    {
+      "id": "hooks-system",
+      "description": "Hooks: Check hooks.md first, never read full docs without need",
+      "enabled": true
+    },
+    {
+      "id": "typescript-strict",
+      "description": "TypeScript: No any, explicit interfaces, optional chaining",
+      "enabled": true
+    },
+    {
+      "id": "imports-order",
+      "description": "Imports: 1.React 2.External 3.Internal 4.Components",
+      "enabled": true
+    },
+    {
+      "id": "naming-conventions",
+      "description": "Naming: PascalCase components, use hooks, SCREAMING_SNAKE constants",
+      "enabled": true
+    },
+    {
+      "id": "error-handling",
+      "description": "Error Handling: Try/Catch required, toast feedback, console with context",
+      "enabled": true
+    },
+    {
+      "id": "react-patterns",
+      "description": "React: Function components, hooks pattern, loading states required",
+      "enabled": true
+    },
+    {
+      "id": "state-management",
+      "description": "State: Local → Context → Zustand/Redux (only if needed)",
+      "enabled": true
+    },
+    {
+      "id": "supabase-rls",
+      "description": "Supabase: RLS required, no select(*), service role never exposed",
+      "enabled": true
+    },
+    {
+      "id": "backlog-structure",
+      "description": "Backlog: Top = FIXES & FEATURES, History = descending order, dates in BR format",
+      "enabled": true
+    },
+    {
+      "id": "documentation-update",
+      "description": "Docs: Update hooks.md after creating hooks, keep backlog organized",
+      "enabled": true
+    }
+  ],
+  "buildCommands": {
+    "dev": "npm run dev",
+    "build": "npm run build",
+    "lint": "npm run lint"
+  },
+  "paths": {
+    "src": "src/",
+    "components": "src/components/",
+    "hooks": "src/hooks/",
+    "contexts": "src/contexts/",
+    "lib": "src/lib/",
+    "types": "src/types/",
+    "dev": "dev/",
+    "docs": "dev/DOCS/",
+    "logs": "dev/LOGS/"
+  },
+  "templates": {
+    "hook": {
+      "file": ".opencode/hook-template.md",
+      "required": ["useState", "useEffect", "useCallback", "useAuth", "loading", "error"]
+    },
+    "backlog": {
+      "sections": ["FIXES & BUGS", "FEATURES & MELHORIAS", "Em Andamento", "A Fazer", "HISTÓRICO"]
+    }
+  }
+}
