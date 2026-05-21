@@ -14,7 +14,10 @@
     "skillExecutionProfiles": "{{USER_HOME}}/.orquestrador/SKILL_EXECUTION_PROFILES.json",
     "skillUsageSchema": "{{USER_HOME}}/.orquestrador/SKILL_USAGE_SCHEMA.json",
     "projectDevHierarchy": "{{USER_HOME}}/.orquestrador/PROJECT_DEV_HIERARCHY.md",
-    "projectDevInitializer": "{{USER_HOME}}/.orquestrador/bin/init-project-dev.ps1",
+    "projectDevInitializerWindows": "{{USER_HOME}}/.orquestrador/bin/init-project-dev.ps1",
+    "projectDevInitializerUnix": "{{USER_HOME}}/.orquestrador/bin/init-project-dev.sh",
+    "skillSyncWindows": "{{USER_HOME}}/.orquestrador/sync-skills.ps1",
+    "skillSyncUnix": "{{USER_HOME}}/.orquestrador/sync-skills.sh",
     "skillsRoot": "{{USER_HOME}}/.orquestrador/skills",
     "globalSkillsRoot": "{{USER_HOME}}/.global-skills"
   },

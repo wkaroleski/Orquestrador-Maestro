@@ -7,14 +7,15 @@ Este documento explica como uma IA deve trabalhar depois que o Orquestrador Maes
 A instalação coloca o contrato global em:
 
 ```text
-%USERPROFILE%\AGENTS.md
+Windows: %USERPROFILE%\AGENTS.md
+Linux/macOS: $HOME/AGENTS.md
 ```
 
 Toda IA que conseguir ler arquivos locais deve começar por ele. Esse arquivo aponta para a hierarquia real:
 
-1. `%USERPROFILE%\.orquestrador\rules.md`
-2. `%USERPROFILE%\.orquestrador\maestro.md`
-3. `%USERPROFILE%\AGENTS.md`
+1. `%USERPROFILE%\.orquestrador\rules.md` ou `$HOME/.orquestrador/rules.md`
+2. `%USERPROFILE%\.orquestrador\maestro.md` ou `$HOME/.orquestrador/maestro.md`
+3. `%USERPROFILE%\AGENTS.md` ou `$HOME/AGENTS.md`
 4. `AGENTS.md` mais próximo dentro do projeto atual, quando existir
 5. `DEV/` do projeto atual, quando existir
 6. Skill específica da tarefa
@@ -63,6 +64,8 @@ Arquivos principais:
 %USERPROFILE%\.orquestrador\SKILL_EXECUTION_PROFILES.json
 ```
 
+No Linux/macOS, use os equivalentes em `$HOME/.orquestrador/`.
+
 A lógica detalhada de roteamento, hooks, perfis, chains e agentes está em [orquestrador-reference.md](orquestrador-reference.md). A lista completa das skills publicadas está em [skill-catalog.md](skill-catalog.md).
 
 Roteamento básico:
@@ -85,7 +88,7 @@ Use este prompt quando abrir uma IA em um projeto:
 
 ```text
 Use o Orquestrador Maestro instalado no meu usuário.
-Leia primeiro %USERPROFILE%\AGENTS.md, depois o AGENTS.md deste projeto se existir, e a pasta DEV deste projeto se existir.
+Leia primeiro meu AGENTS.md global (%USERPROFILE%\AGENTS.md no Windows ou $HOME/AGENTS.md no Linux/macOS), depois o AGENTS.md deste projeto se existir, e a pasta DEV deste projeto se existir.
 Consulte as skills globais antes de decidir a abordagem.
 Resolva a tarefa diretamente, verifique antes de concluir e não faça commit/push sem eu pedir.
 Quando fizer trabalho substancial, registre o resumo em DEV/WORKLOG.md.
@@ -123,9 +126,9 @@ Use $ralph. Siga até concluir [descrever objetivo], verificando no final.
 
 Se a IA não encontrar as skills:
 
-1. Verificar se `%USERPROFILE%\.orquestrador` existe.
-2. Rodar `scripts\verify-install.ps1` a partir do clone do repositório.
-3. Conferir se `%USERPROFILE%\AGENTS.md` foi instalado.
-4. Pedir para a IA abrir `%USERPROFILE%\.orquestrador\SKILLS_INDEX.md`.
+1. Verificar se `%USERPROFILE%\.orquestrador` existe no Windows ou `$HOME/.orquestrador` no Linux/macOS.
+2. Rodar `scripts\verify-install.ps1` no Windows ou `scripts/verify-install.sh` no Linux/macOS a partir do clone do repositório.
+3. Conferir se `%USERPROFILE%\AGENTS.md` foi instalado no Windows ou `$HOME/AGENTS.md` no Linux/macOS.
+4. Pedir para a IA abrir `%USERPROFILE%\.orquestrador\SKILLS_INDEX.md` ou `$HOME/.orquestrador/SKILLS_INDEX.md`.
 
 Se o problema for de login, API key ou token, configure isso na ferramenta específica. O Orquestrador não publica nem instala credenciais.

@@ -37,10 +37,22 @@ Instalação completa recomendada, incluindo núcleo, skills, agentes, prompts e
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh
+```
+
 Instalação avançada de núcleo, skills, agentes e prompts sem os perfis de ferramenta:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install.ps1
+```
+
+Linux/macOS:
+
+```bash
+bash scripts/install.sh --force
 ```
 
 Instalação avançada incluindo hooks/perfis de ferramenta:
@@ -49,10 +61,22 @@ Instalação avançada incluindo hooks/perfis de ferramenta:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install.ps1 -InstallToolProfiles
 ```
 
+Linux/macOS:
+
+```bash
+bash scripts/install.sh --force --install-tool-profiles
+```
+
 Só núcleo Orquestrador:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install.ps1 -SkipExtraSkills
+```
+
+Linux/macOS:
+
+```bash
+bash scripts/install.sh --force --skip-extra-skills
 ```
 
 Codex pack sem biblioteca comunitária:
@@ -61,4 +85,10 @@ Codex pack sem biblioteca comunitária:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install.ps1 -SkipCommunitySkills
 ```
 
-Em máquinas que já têm essas pastas, use `-Force` para fazer backup e mesclar a instalação.
+Linux/macOS:
+
+```bash
+bash scripts/install.sh --force --skip-community-skills
+```
+
+Em máquinas que já têm essas pastas, use `-Force` no PowerShell ou `--force` no Bash para fazer backup e mesclar a instalação.

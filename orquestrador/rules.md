@@ -53,8 +53,18 @@ Load only the skill files needed for the task. Load long references only when th
 
 Health check:
 
-`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\doctor.ps1`
+Windows:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador/doctor.ps1`
+
+Linux/macOS: use the lightest available project validation; `doctor.ps1` is Windows-only unless PowerShell is installed.
 
 Sync skills:
 
-`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\sync-skills.ps1 -Apply`
+Windows:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador/sync-skills.ps1 -Apply`
+
+Linux/macOS:
+
+`bash {{USER_HOME}}/.orquestrador/sync-skills.sh --apply`

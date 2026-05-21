@@ -69,7 +69,7 @@ No repositório, "hook" significa uma regra operacional que dispara antes, duran
 | Automatic skill hook | `orquestrador/hooks.md` e hooks de ferramentas | Mapeia gatilhos como SaaS, Stripe, RLS, DAST, UX ou analytics para skills específicas. |
 | Token budget hook | `orquestrador/hooks.md` | Impede carregar catálogos completos; limita skills por perfil. |
 | Verification hook | `orquestrador/hooks.md` | Obriga verificação antes de dizer que terminou; para config global recomenda `doctor.ps1`. |
-| Sync hook | `orquestrador/hooks.md` | Depois de mudar uma skill compartilhada, manda rodar `sync-skills.ps1 -Apply`. |
+| Sync hook | `orquestrador/hooks.md` | Depois de mudar uma skill compartilhada, manda rodar `sync-skills.ps1 -Apply` no Windows ou `sync-skills.sh --apply` no Linux/macOS. |
 | Usage log hook | `SKILL_USAGE_SCHEMA.json` | Define um log JSONL opcional para medir quais skills foram selecionadas e abertas. |
 | Project DEV hook | `PROJECT_DEV_HIERARCHY.md` | Pede leitura compacta de `DEV/` e atualização de `DEV/WORKLOG.md` após trabalho substancial. |
 | Tool entrypoint hook | `PROGRAM_ENTRYPOINTS.json` e `tool-profiles/` | Faz Codex, OpenCode, Claude, Cursor, Gemini, Windsurf e Antigravity chamarem o Orquestrador por padrão. |
@@ -192,19 +192,21 @@ Os agentes em `codex/agents/` são perfis de delegação. Eles não substituem o
 
 ## Instalação E Sync
 
-O `install.ps1` da raiz é um wrapper conservador. Por padrão ele chama `scripts/install.ps1` com `-Force` e instala perfis de ferramentas, a menos que o usuário passe `-NoForce`, `-NoToolProfiles` ou `-CoreOnly`.
+O `install.ps1` da raiz é um wrapper conservador para Windows. Por padrão ele chama `scripts/install.ps1` com `-Force` e instala perfis de ferramentas, a menos que o usuário passe `-NoForce`, `-NoToolProfiles` ou `-CoreOnly`.
 
-O motor `scripts/install.ps1`:
+O `install.sh` da raiz é o wrapper equivalente para Linux/macOS. Por padrão ele chama `scripts/install.sh` com `--force` e instala perfis de ferramentas, a menos que o usuário passe `--no-force`, `--no-tool-profiles` ou `--core-only`.
+
+Os motores `scripts/install.ps1` e `scripts/install.sh`:
 
 1. Resolve o home do usuário atual.
 2. Monta fontes do repo: `orquestrador/`, `home/AGENTS.md`, `codex/`, `skill-library/community-skills/` e `tool-profiles/`.
-3. Faz backup em `%USERPROFILE%\.orquestrador-public-backups` quando substitui algo.
+3. Faz backup em `%USERPROFILE%\.orquestrador-public-backups` no Windows ou `$HOME/.orquestrador-public-backups` no Linux/macOS quando substitui algo.
 4. Copia arquivos textuais trocando `{{USER_HOME}}`, `{{USER_NAME}}` e `{{USER_FULL_NAME}}`.
 5. Instala skills e perfis conforme flags.
-6. Cria `%USERPROFILE%\.orquestrador\logs`.
-7. Roda `sync-skills.ps1 -Apply`, salvo quando `-SkipSkillSync` é usado.
+6. Cria `.orquestrador/logs` no home do usuário.
+7. Roda `sync-skills.ps1 -Apply` no Windows ou `sync-skills.sh --apply` no Linux/macOS, salvo quando o sync é desativado.
 
-O `sync-skills.ps1` mantém as 22 skills canônicas nos espelhos:
+O `sync-skills.ps1` e o `sync-skills.sh` mantêm as 22 skills canônicas nos espelhos:
 
 ```text
 .codex\skills

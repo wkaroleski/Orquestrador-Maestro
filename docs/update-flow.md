@@ -5,7 +5,8 @@
 Edite primeiro a instalação local:
 
 ```text
-%USERPROFILE%\.orquestrador
+Windows: %USERPROFILE%\.orquestrador
+Linux/macOS: $HOME/.orquestrador
 ```
 
 Depois gere o snapshot público nesta pasta.
@@ -64,4 +65,11 @@ Antes de publicar uma mudança de instalador ou documentação, teste em um home
 $tempHome = Join-Path $env:TEMP "orquestrador-public-test"
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -HomePath $tempHome
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1 -HomePath $tempHome
+```
+
+No Linux/macOS:
+
+```bash
+bash install.sh --home-path /tmp/orquestrador-public-test
+bash scripts/verify-install.sh --home-path /tmp/orquestrador-public-test
 ```

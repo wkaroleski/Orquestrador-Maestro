@@ -1,6 +1,6 @@
 # Orquestrador Maestro
 
-Kit público e sanitizado para instalar uma hierarquia de orquestração de IAs no Windows, com regras globais, Codex skills, hooks, roteamento de skills, perfis de ferramentas e memória operacional de projetos em `DEV/`.
+Kit público e sanitizado para instalar uma hierarquia de orquestração de IAs no Windows, Linux e macOS, com regras globais, Codex skills, hooks, roteamento de skills, perfis de ferramentas e memória operacional de projetos em `DEV/`.
 
 Repositório: [github.com/FernandoBolzan/Orquestrador-Maestro](https://github.com/FernandoBolzan/Orquestrador-Maestro)
 
@@ -14,6 +14,20 @@ Participe da comunidade pelo link:
 
 A proposta do projeto é compartilhar uma base prática e instalável para que mais pessoas consigam configurar suas IAs com hierarquia, skills, hooks, documentação local e boas práticas de segurança, sem depender de uma configuração privada de uma máquina específica.
 
+## Contribuição Da Comunidade
+
+O suporte Linux/macOS foi integrado a partir do fork [`kivervinicius/Orquestrador-Maestro`](https://github.com/kivervinicius/Orquestrador-Maestro), aberto na PR [#1 - feat: suporte multiplataforma (Linux/macOS)](https://github.com/FernandoBolzan/Orquestrador-Maestro/pull/1).
+
+O que foi aproveitado e melhorado:
+
+- instalador Bash para Linux/macOS em `install.sh` e `scripts/install.sh`;
+- verificador Bash em `scripts/verify-install.sh`;
+- inicializador `DEV/` para Unix em `scripts/init-project-dev.sh` e `.orquestrador/bin/init-project-dev.sh`;
+- sincronizador Unix de skills em `.orquestrador/sync-skills.sh`;
+- README com comandos separados para Windows, Linux e macOS.
+
+Antes da integração, os scripts foram ajustados para evitar dependência de `readlink -f`, funcionar no Bash antigo do macOS, copiar community skills e Codex skills para o mesmo destino sem perder fontes, manter proteção antes de remoções recursivas e aceitar `--home-path` para testes isolados.
+
 ## Visão Geral
 
 O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI ou Windsurf. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
@@ -25,7 +39,7 @@ O Orquestrador Maestro é uma camada portátil de instruções para fazer vária
 - onde registra memória curta do projeto para economizar tokens;
 - quais arquivos nunca devem ser publicados.
 
-A ideia prática é simples: a pessoa baixa este repositório, executa o instalador e recebe a mesma estrutura base no próprio `%USERPROFILE%`, com placeholders trocados para o usuário dela. O pacote foi preparado para publicação, então não deve conter tokens, logs, caches, memórias locais, backups ou caminhos reais da máquina fonte.
+A ideia prática é simples: a pessoa baixa este repositório, executa o instalador e recebe a mesma estrutura base no próprio home: `%USERPROFILE%` no Windows ou `$HOME` no Linux/macOS. Os placeholders são trocados para o usuário que está instalando. O pacote foi preparado para publicação, então não deve conter tokens, logs, caches, memórias locais, backups ou caminhos reais da máquina fonte.
 
 ## Para Quem Serve
 
@@ -35,14 +49,14 @@ Este repositório é útil para quem quer:
 - compartilhar uma base de skills e hooks sem expor dados pessoais;
 - usar Codex, Claude Code, OpenCode, Cursor, Gemini CLI e Windsurf com a mesma hierarquia;
 - fazer agentes lerem a pasta `DEV/` dos projetos antes de gastar tokens em exploração longa;
-- manter um padrão repetível de instalação em qualquer usuário do Windows;
+- manter um padrão repetível de instalação em qualquer usuário Windows, Linux ou macOS;
 - evoluir skills localmente e depois publicar um snapshot sanitizado.
 
 ## Download
 
 Clone com Git:
 
-```powershell
+```bash
 git clone https://github.com/FernandoBolzan/Orquestrador-Maestro.git
 cd Orquestrador-Maestro
 ```
@@ -54,6 +68,8 @@ Download em ZIP:
 Se baixar como ZIP, extraia a pasta antes de executar os comandos abaixo.
 
 ## Instalação Rápida
+
+### Windows
 
 Abra o PowerShell dentro da pasta do repositório e rode:
 
@@ -67,16 +83,41 @@ Depois verifique:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1
 ```
 
+### Linux/macOS
+
+Abra o terminal dentro da pasta do repositório e rode:
+
+```bash
+bash install.sh
+```
+
+Depois verifique:
+
+```bash
+bash scripts/verify-install.sh
+```
+
 Se a verificação passar, as ferramentas instaladas já passam a ter pontos de entrada globais apontando para o Orquestrador Maestro.
 
 ## Instalação Guiada Por IA
 
 Você também pode pedir para uma IA instalar o pacote. Use um pedido assim:
 
+Windows:
+
 ```text
 Baixe ou clone https://github.com/FernandoBolzan/Orquestrador-Maestro,
 execute install.ps1 no PowerShell, rode scripts/verify-install.ps1
 e confirme que o Orquestrador Maestro foi instalado no meu %USERPROFILE%.
+Não exponha tokens, logs, caches, arquivos privados ou caminhos de outra máquina.
+```
+
+Linux/macOS:
+
+```text
+Baixe ou clone https://github.com/FernandoBolzan/Orquestrador-Maestro,
+execute install.sh com Bash, rode scripts/verify-install.sh
+e confirme que o Orquestrador Maestro foi instalado no meu $HOME.
 Não exponha tokens, logs, caches, arquivos privados ou caminhos de outra máquina.
 ```
 
@@ -86,22 +127,22 @@ A IA deve usar o usuário atual da máquina dela. Ela não deve copiar caminhos 
 
 Por padrão, o instalador copia o núcleo, skills, agentes, prompts e perfis de ferramentas para o home do usuário atual.
 
-| Destino | Função |
-|---|---|
-| `%USERPROFILE%\.orquestrador` | Núcleo canônico com regras, Maestro, hooks, roteadores, índices, scripts e skills principais. |
-| `%USERPROFILE%\AGENTS.md` | Contrato global que Codex e outros agentes devem ler como regra de usuário. |
-| `%USERPROFILE%\.codex\skills` | Skills do Codex/OMX e skills canônicas espelhadas. |
-| `%USERPROFILE%\.codex\agents` | Perfis de subagentes Codex. |
-| `%USERPROFILE%\.codex\prompts` | Prompts de papéis usados por agentes. |
-| `%USERPROFILE%\.agents\skills` | Raiz legada de skills para compatibilidade com outras ferramentas. |
-| `%USERPROFILE%\.claude\skills` | Espelho de skills para Claude Code. |
-| `%USERPROFILE%\.opencode\skills` | Espelho de skills para OpenCode. |
-| `%USERPROFILE%\.cursor\skills` | Espelho de skills para Cursor. |
-| `%USERPROFILE%\.gemini\skills` | Espelho de skills para Gemini CLI. |
-| `%USERPROFILE%\.windsurf\skills` | Espelho de skills para Windsurf. |
-| `%USERPROFILE%\.antigravity-skills\skills` | Espelho de skills para ambientes compatíveis. |
-| `%USERPROFILE%\.ai-standards` | Standards portáteis usados pelo Antigravity. |
-| `%USERPROFILE%\.orquestrador-public-backups` | Backups criados quando o instalador substitui arquivos existentes. |
+| Destino Windows | Destino Linux/macOS | Função |
+|---|---|---|
+| `%USERPROFILE%\.orquestrador` | `$HOME/.orquestrador` | Núcleo canônico com regras, Maestro, hooks, roteadores, índices, scripts e skills principais. |
+| `%USERPROFILE%\AGENTS.md` | `$HOME/AGENTS.md` | Contrato global que Codex e outros agentes devem ler como regra de usuário. |
+| `%USERPROFILE%\.codex\skills` | `$HOME/.codex/skills` | Skills do Codex/OMX e skills canônicas espelhadas. |
+| `%USERPROFILE%\.codex\agents` | `$HOME/.codex/agents` | Perfis de subagentes Codex. |
+| `%USERPROFILE%\.codex\prompts` | `$HOME/.codex/prompts` | Prompts de papéis usados por agentes. |
+| `%USERPROFILE%\.agents\skills` | `$HOME/.agents/skills` | Raiz legada de skills para compatibilidade com outras ferramentas. |
+| `%USERPROFILE%\.claude\skills` | `$HOME/.claude/skills` | Espelho de skills para Claude Code. |
+| `%USERPROFILE%\.opencode\skills` | `$HOME/.opencode/skills` | Espelho de skills para OpenCode. |
+| `%USERPROFILE%\.cursor\skills` | `$HOME/.cursor/skills` | Espelho de skills para Cursor. |
+| `%USERPROFILE%\.gemini\skills` | `$HOME/.gemini/skills` | Espelho de skills para Gemini CLI. |
+| `%USERPROFILE%\.windsurf\skills` | `$HOME/.windsurf/skills` | Espelho de skills para Windsurf. |
+| `%USERPROFILE%\.antigravity-skills\skills` | `$HOME/.antigravity-skills/skills` | Espelho de skills para ambientes compatíveis. |
+| `%USERPROFILE%\.ai-standards` | `$HOME/.ai-standards` | Standards portáteis usados pelo Antigravity. |
+| `%USERPROFILE%\.orquestrador-public-backups` | `$HOME/.orquestrador-public-backups` | Backups criados quando o instalador substitui arquivos existentes. |
 
 O instalador também cria perfis textuais e entrypoints para ferramentas. Eles são os arquivos que fazem o Orquestrador ser chamado por padrão.
 
@@ -115,6 +156,8 @@ O instalador também cria perfis textuais e entrypoints para ferramentas. Eles s
 | Windsurf | `.codeium\windsurf\memories\global_rules.md`, `.windsurf\hooks.md`, `.windsurf\skills`. |
 | Antigravity | `antigravity-rules.json`, `.antigravity\antigravity.json`, `.antigravity\settings.json`, `.ai-standards`, `.antigravity-skills\skills`. |
 
+No Linux/macOS, os mesmos entrypoints são instalados com `/` sob `$HOME`, por exemplo `$HOME/.codex/AGENTS.md`, `$HOME/.config/opencode/opencode.json` e `$HOME/.ai-standards`.
+
 Quando algum arquivo de destino já existe, o instalador faz backup antes de substituir, exceto se você usar flags que mudam esse comportamento.
 
 ## Como Funciona
@@ -125,9 +168,9 @@ O Orquestrador Maestro trabalha por hierarquia. A IA não deve sair abrindo tudo
 
 A ordem esperada é:
 
-1. `%USERPROFILE%\.orquestrador\rules.md`
-2. `%USERPROFILE%\.orquestrador\maestro.md`
-3. `%USERPROFILE%\AGENTS.md`
+1. `%USERPROFILE%\.orquestrador\rules.md` ou `$HOME/.orquestrador/rules.md`
+2. `%USERPROFILE%\.orquestrador\maestro.md` ou `$HOME/.orquestrador/maestro.md`
+3. `%USERPROFILE%\AGENTS.md` ou `$HOME/AGENTS.md`
 4. `AGENTS.md` mais próximo do projeto atual
 5. documentação `DEV/` do projeto, quando existir
 6. skill ou prompt específico da tarefa
@@ -138,7 +181,7 @@ Essa ordem separa três tipos de regra:
 - regras locais do projeto;
 - instruções técnicas da skill escolhida.
 
-Se houver conflito entre documentos, a regra mais especifica e mais próxima da tarefa deve orientar a execução, sem ignorar restrições de segurança e privacidade.
+Se houver conflito entre documentos, a regra mais específica e mais próxima da tarefa deve orientar a execução, sem ignorar restrições de segurança e privacidade.
 
 ### Papel Orquestrador/Maestro
 
@@ -156,7 +199,7 @@ Na prática, isso evita que a IA invente um processo novo a cada projeto. Ela pa
 1. **Observar**: ler regras globais, projeto atual, status do workspace e documentos `DEV/` relevantes.
 2. **Classificar**: entender se a tarefa é simples, padrão, profunda, multiagente, SaaS ou segurança.
 3. **Rotear**: consultar aliases, router e perfis antes de abrir skills grandes.
-4. **Selecionar**: carregar apenas o `SKILL.md` principal e referencias diretamente necessárias.
+4. **Selecionar**: carregar apenas o `SKILL.md` principal e referências diretamente necessárias.
 5. **Executar**: fazer a alteração, investigação ou documentação pedida.
 6. **Verificar**: rodar o menor conjunto de verificações que prova o resultado.
 7. **Registrar**: atualizar `DEV/WORKLOG.md` quando houve trabalho substancial no projeto local.
@@ -192,7 +235,7 @@ Fluxo esperado:
 
 | Perfil | Quando usar | Comportamento esperado |
 |---|---|---|
-| `fast` | Ajuste pequeno, resposta curta ou tarefa óbvia. | Uma skill no maximo, verificação mínima útil. |
+| `fast` | Ajuste pequeno, resposta curta ou tarefa óbvia. | Uma skill no máximo, verificação mínima útil. |
 | `standard` | Maioria das tarefas de código, docs e configuração. | Até três skills, verificação proporcional ao risco. |
 | `deep` | Mudança ampla, arquitetura, várias áreas ou risco maior. | Mais leitura, plano explícito e verificação mais forte. |
 | `multiagent` | Usuário pede time, swarm, paralelo ou agentes. | Divisão de responsabilidades e integração final. |
@@ -211,18 +254,18 @@ As skills canônicas ficam em `orquestrador/skills/` e são espelhadas para as p
 | `skill-stripe-integration` | Guia Stripe Checkout, Billing, subscriptions, portal, invoices, trials, coupons, webhooks e estado de assinatura. |
 | `skill-saas-core-limits` | Define limites de plano, cotas, entitlements, grace period, bloqueios e contadores de uso. |
 | `skill-supabase-rls` | Modela RLS, isolamento de tenant, policies, storage, service role, índices e testes positivo/negativo. |
-| `skill-saas-security-scan` | Orquestra scans defensivos locais com Semgrep, Gitleaks, Trivy, OSV-Scanner e npm audit quando disponiveis. |
+| `skill-saas-security-scan` | Orquestra scans defensivos locais com Semgrep, Gitleaks, Trivy, OSV-Scanner e npm audit quando disponíveis. |
 | `skill-saas-dast-recon` | Orquestra DAST/recon conservador em alvo próprio ou autorizado, com rate limit e ferramentas opcionais. |
 | `skill-security-hooks` | Instala hooks Git defensivos e gates de CI sem sobrescrever configuração existente. |
 | `skill-ai-orchestration` | Estrutura uso server-side de IA: provedores, roteamento de modelos, fallback, filas, retries, tokens e observabilidade. |
-| `skill-multiagent-orchestration` | Divide trabalho independente entre agentes, define posse por arquivos e mantem integração final. |
+| `skill-multiagent-orchestration` | Divide trabalho independente entre agentes, define posse por arquivos e mantém integração final. |
 | `skill-aionui-cowork-orchestration` | Integra AionUi como camada de coordenação sem substituir Codex, skills, hooks e permissões locais. |
 | `skill-evolution-api` | Guia automação WhatsApp com Evolution API: instancias, QR, webhooks, consentimento, filas e rate limits. |
 | `skill-frontend-ux-guardrails` | Aplica gates de UX: responsividade, overflow, acessibilidade, consistência visual e validação em telas. |
 | `skill-modern-ui-patterns` | Orienta UI SaaS/admin com React, TypeScript, Tailwind, estados de componentes e design system. |
 | `skill-open-design-ui` | Guia redesign visual, tokens, biblioteca de componentes e QA visual. |
 | `skill-live-processing` | Desenha pipeline de live/VOD com captura, filas, transcrição, clips, storage, retries e workers. |
-| `skill-manual-vídeo-processing` | Guia upload manual de vídeo/áudio com validação, malware scan, cotas, jobs assíncronos e signed URLs. |
+| `skill-manual-video-processing` | Guia upload manual de vídeo/áudio com validação, malware scan, cotas, jobs assíncronos e signed URLs. |
 | `skill-smart-clip-detection` | Detecta candidatos de clips por transcript/mídia, score, timestamps, batches e revisão. |
 | `skill-unified-analytics` | Define taxonomia de eventos, métricas, funis, dashboards, privacidade, ativação, retenção e billing metrics. |
 | `skill-elevenlabs-voice-cloning` | Integra TTS/clonagem ElevenLabs com consentimento, uploads seguros, jobs e proteção de biometria vocal. |
@@ -230,7 +273,7 @@ As skills canônicas ficam em `orquestrador/skills/` e são espelhadas para as p
 
 As skills workflow do Codex/OMX ficam em `codex/skills/`. Elas cobrem execução, revisão, planejamento, delegação, diagnóstico, consulta a outros modelos e modos de trabalho como `ralph`, `team`, `ultrawork`, `deep-interview`, `code-review` e `security-review`.
 
-O catálogo completo esta em [docs/skill-catalog.md](docs/skill-catalog.md).
+O catálogo completo está em [docs/skill-catalog.md](docs/skill-catalog.md).
 
 ## Hooks
 
@@ -244,7 +287,7 @@ Neste repositório, "hook" significa uma regra ou ponto de execução que muda o
 | Verification | `orquestrador/hooks.md` | Verificar antes de declarar conclusão. |
 | Project DEV | `PROJECT_DEV_HIERARCHY.md` | Ler memória local do projeto e atualizar `DEV/WORKLOG.md` após trabalho substancial. |
 | Tool entrypoints | `PROGRAM_ENTRYPOINTS.json`, `tool-profiles/` | Fazer cada ferramenta encontrar o Orquestrador no caminho nativo dela. |
-| Skill sync | `sync-skills.ps1` | Espelhar skills canônicas para `.codex`, `.agents`, `.claude`, `.opencode`, `.cursor`, `.gemini`, `.windsurf` e `.antigravity-skills`. |
+| Skill sync | `sync-skills.ps1`, `sync-skills.sh` | Espelhar skills canônicas para `.codex`, `.agents`, `.claude`, `.opencode`, `.cursor`, `.gemini`, `.windsurf` e `.antigravity-skills`. |
 | Usage log | `SKILL_USAGE_SCHEMA.json` | Padrão opcional para registrar qual skill foi escolhida, aberta e verificada. |
 | Security Git hooks | `skill-security-hooks/scripts/install-security-hooks.cmd` | Instalar `pre-commit` e `pre-push` defensivos em repositórios autorizados. |
 
@@ -298,10 +341,22 @@ Para criar `DEV/` em um projeto:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\init-project-dev.ps1 -ProjectPath "C:\caminho\do\projeto"
 ```
 
+No Linux/macOS:
+
+```bash
+bash scripts/init-project-dev.sh /caminho/do/projeto
+```
+
 Depois da instalação, também existe o helper instalado no usuário:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.orquestrador\bin\init-project-dev.ps1" -ProjectPath "C:\caminho\do\projeto"
+```
+
+No Linux/macOS:
+
+```bash
+bash "$HOME/.orquestrador/bin/init-project-dev.sh" /caminho/do/projeto
 ```
 
 O script cria a estrutura base sem sobrescrever arquivos existentes.
@@ -348,10 +403,22 @@ Instalação padrão:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh
+```
+
 Instalar sem forçar sobrescrita do núcleo se ele já existir:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -NoForce
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --no-force
 ```
 
 Instalar apenas o núcleo Orquestrador e o `AGENTS.md` global:
@@ -360,10 +427,22 @@ Instalar apenas o núcleo Orquestrador e o `AGENTS.md` global:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -CoreOnly
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh --core-only
+```
+
 Instalar sem hooks/perfis das ferramentas:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -NoToolProfiles
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --no-tool-profiles
 ```
 
 Instalar em outro home, útil para teste:
@@ -372,10 +451,22 @@ Instalar em outro home, útil para teste:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -HomePath "C:\Temp\TestHome"
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh --home-path /tmp/orquestrador-test-home
+```
+
 Verificar uma instalação feita em outro home:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1 -HomePath "C:\Temp\TestHome"
+```
+
+Linux/macOS:
+
+```bash
+bash scripts/verify-install.sh --home-path /tmp/orquestrador-test-home
 ```
 
 ## Atualizar Uma Instalação
@@ -388,11 +479,19 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1
 ```
 
-O instalador cria backups antes de substituir arquivos conhecidos. Se você fez alterações locais nos arquivos instalados, revise os backups em `%USERPROFILE%\.orquestrador-public-backups`.
+Linux/macOS:
+
+```bash
+git pull
+bash install.sh
+bash scripts/verify-install.sh
+```
+
+O instalador cria backups antes de substituir arquivos conhecidos. Se você fez alterações locais nos arquivos instalados, revise os backups em `%USERPROFILE%\.orquestrador-public-backups` no Windows ou `$HOME/.orquestrador-public-backups` no Linux/macOS.
 
 ## Atualizar Este Repositório Público
 
-Este repositório é um snapshot público. Em uma máquina fonte, depois de alterar o Orquestrador local, o fluxo recomendado e:
+Este repositório é um snapshot público. Em uma máquina fonte, depois de alterar o Orquestrador local, o fluxo recomendado é:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\sync-from-local.ps1
@@ -400,7 +499,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public.ps
 git diff -- .
 ```
 
-So faca commit e push depois de revisar o diff e confirmar que não ha dados privados.
+Só faça commit e push depois de revisar o diff e confirmar que não há dados privados.
 
 ## Segurança E Privacidade
 
@@ -431,6 +530,7 @@ O validador público verifica:
   AGENTS.md
   README.md
   install.ps1
+  install.sh
   codex/
     agents/
     prompts/
@@ -455,10 +555,13 @@ O validador público verifica:
     skills/
   scripts/
     install.ps1
+    install.sh
     verify-install.ps1
+    verify-install.sh
     validate-public.ps1
     sync-from-local.ps1
     init-project-dev.ps1
+    init-project-dev.sh
   skill-library/
     community-skills/
   tool-profiles/
@@ -469,7 +572,7 @@ O validador público verifica:
 - [docs/installation.md](docs/installation.md): instalação completa, destinos criados e troubleshooting.
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
-- [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitarias publicadas.
+- [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
 - [docs/ai-agent-operating-guide.md](docs/ai-agent-operating-guide.md): como as IAs devem resolver tarefas usando o Orquestrador.
 - [docs/project-dev-hierarchy.md](docs/project-dev-hierarchy.md): hierarquia `DEV/` para documentação e memória de projetos.
 - [docs/skill-packs.md](docs/skill-packs.md): composição dos pacotes de skills.
@@ -494,6 +597,13 @@ Se a IA não encontrar as skills:
 3. rode `%USERPROFILE%\.orquestrador\sync-skills.ps1 -Apply`;
 4. rode novamente `scripts\verify-install.ps1`.
 
+No Linux/macOS, use os equivalentes Bash:
+
+```bash
+bash scripts/verify-install.sh
+bash "$HOME/.orquestrador/sync-skills.sh" --apply
+```
+
 Se aparecer texto quebrado:
 
 1. confirme que os arquivos estão em UTF-8;
@@ -505,13 +615,13 @@ Se aparecer texto quebrado:
 Descrição curta sugerida para o campo About:
 
 ```text
-Grupo IAPro initiative: AI agent orchestration kit for Windows with Codex skills, hooks, tool profiles, project DEV memory and portable setup for Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf and Antigravity.
+Grupo IAPro initiative: multiplatform AI agent orchestration kit for Windows, Linux and macOS with Codex skills, hooks, tool profiles, project DEV memory and portable setup for Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf and Antigravity.
 ```
 
 Topics sugeridos:
 
 ```text
-ai-agents agent-orchestration codex-skills claude-code opencode cursor gemini-cli windsurf antigravity windows powershell developer-tools ai-workflows prompt-engineering multi-agent skills hooks ai-community iapro
+ai-agents agent-orchestration codex-skills claude-code opencode cursor gemini-cli windsurf antigravity windows linux macos powershell bash developer-tools ai-workflows prompt-engineering multi-agent skills hooks ai-community iapro
 ```
 
 Palavras-chave naturais do README:
@@ -526,6 +636,7 @@ Palavras-chave naturais do README:
 - Gemini CLI context;
 - Windsurf global rules;
 - Windows PowerShell installer;
+- Linux/macOS Bash installer;
 - project memory;
 - DEV documentation hierarchy;
 - multi-agent workflow;
@@ -540,4 +651,4 @@ powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public.ps
 git diff -- .
 ```
 
-O repositório deve continuar instalavel, revisavel e seguro para publicação.
+O repositório deve continuar instalável, revisável e seguro para publicação.

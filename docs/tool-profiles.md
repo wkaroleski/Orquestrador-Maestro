@@ -34,16 +34,34 @@ O instalador principal já inclui perfis de ferramenta:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh
+```
+
 Para pular os perfis:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -NoToolProfiles
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh --no-tool-profiles
+```
+
 No instalador avançado, perfis de ferramenta são opt-in:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\install.ps1 -InstallToolProfiles
+```
+
+Linux/macOS:
+
+```bash
+bash scripts/install.sh --install-tool-profiles --force
 ```
 
 Se usar o instalador avançado e a máquina já tiver `.orquestrador` ou `AGENTS.md`, use `-Force` para criar backup antes da substituição:
@@ -68,4 +86,6 @@ O pacote instala arquivos nos locais que as ferramentas costumam ler como regra,
 
 Todos esses pontos de entrada mandam a ferramenta usar o `AGENTS.md` global, o Orquestrador e, quando existir no projeto aberto, a documentação `DEV/` antes das skills globais. Eles também orientam a manter documentação durável do projeto em `DEV/` e registrar trabalho substancial em `DEV/WORKLOG.md`.
 
-Se uma ferramenta estiver em uma versão que só aceita regra global por UI ou conta em nuvem, copie o conteúdo de `%USERPROFILE%\AGENTS.md` para a regra global dessa ferramenta.
+No Linux/macOS, os mesmos pontos ficam sob `$HOME`, como `$HOME/AGENTS.md`, `$HOME/.config/opencode/opencode.json`, `$HOME/.claude/CLAUDE.md`, `$HOME/.cursor/AGENTS.md`, `$HOME/.gemini/GEMINI.md`, `$HOME/.codeium/windsurf/memories/global_rules.md` e `$HOME/.ai-standards`.
+
+Se uma ferramenta estiver em uma versão que só aceita regra global por UI ou conta em nuvem, copie o conteúdo de `%USERPROFILE%\AGENTS.md` no Windows ou `$HOME/AGENTS.md` no Linux/macOS para a regra global dessa ferramenta.

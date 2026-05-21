@@ -1,14 +1,16 @@
 # Guia De Instalação
 
-Este guia é para quem baixou o repositório e quer instalar o Orquestrador no próprio usuário do Windows.
+Este guia é para quem baixou o repositório e quer instalar o Orquestrador no próprio usuário do Windows, Linux ou macOS.
 
 ## Pré-Requisitos
 
-- Windows com PowerShell.
+- Windows com PowerShell ou Linux/macOS com Bash.
 - Git instalado para clonar o repositório.
 - Codex, Claude, Gemini, Cursor, OpenCode, Windsurf ou Antigravity são opcionais. O instalador prepara as pastas e os arquivos; cada ferramenta continua responsável pelo próprio login, runtime e credenciais.
 
 ## Instalação Completa Recomendada
+
+### Windows
 
 ```powershell
 git clone https://github.com/FernandoBolzan/Orquestrador-Maestro.git
@@ -16,13 +18,22 @@ cd Orquestrador-Maestro
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1
 ```
 
+### Linux/macOS
+
+```bash
+git clone https://github.com/FernandoBolzan/Orquestrador-Maestro.git
+cd Orquestrador-Maestro
+bash install.sh
+```
+
 O instalador usa o home do usuário que executa o comando:
 
 ```text
-%USERPROFILE%
+Windows: %USERPROFILE%
+Linux/macOS: $HOME
 ```
 
-Em uma máquina de exemplo, se o usuário for `maria`, os destinos ficam abaixo do `%USERPROFILE%` dela. Se o usuário for `joao`, ficam abaixo do `%USERPROFILE%` dele.
+Em uma máquina de exemplo, se o usuário for `maria`, os destinos ficam abaixo do home dela. Se o usuário for `joao`, ficam abaixo do home dele.
 
 ## Pastas Instaladas
 
@@ -55,12 +66,15 @@ Em uma máquina de exemplo, se o usuário for `maria`, os destinos ficam abaixo 
 | `%USERPROFILE%\.antigravity\antigravity.json` | Configuração de integração Antigravity + Orquestrador |
 | `%USERPROFILE%\.antigravity\settings.json` | Configuração portável do Antigravity |
 
+No Linux/macOS, os destinos equivalentes usam `$HOME` e `/`, por exemplo `$HOME/.orquestrador`, `$HOME/AGENTS.md`, `$HOME/.codex/skills`, `$HOME/.config/opencode` e `$HOME/.ai-standards`.
+
 ## Backups
 
-O instalador principal `install.ps1` usa backup automático. Quando encontra arquivos ou pastas existentes, ele salva cópias em:
+O instalador principal usa backup automático. Quando encontra arquivos ou pastas existentes, ele salva cópias em:
 
 ```text
-%USERPROFILE%\.orquestrador-public-backups\YYYYMMDD-HHMMSS
+Windows: %USERPROFILE%\.orquestrador-public-backups\YYYYMMDD-HHMMSS
+Linux/macOS: $HOME/.orquestrador-public-backups/YYYYMMDD-HHMMSS
 ```
 
 Depois aplica a instalação completa.
@@ -71,6 +85,12 @@ Rode:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1
+```
+
+No Linux/macOS:
+
+```bash
+bash scripts/verify-install.sh
 ```
 
 Resultado esperado:
@@ -89,10 +109,22 @@ Só núcleo Orquestrador:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -CoreOnly
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh --core-only
+```
+
 Completo sem hooks/perfis de ferramentas:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -NoToolProfiles
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --no-tool-profiles
 ```
 
 Completo sem forçar substituição de `.orquestrador` e `AGENTS.md` existentes:
@@ -101,12 +133,25 @@ Completo sem forçar substituição de `.orquestrador` e `AGENTS.md` existentes:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -NoForce
 ```
 
+Linux/macOS:
+
+```bash
+bash install.sh --no-force
+```
+
 Teste em home temporário:
 
 ```powershell
 $tempHome = Join-Path $env:TEMP "orquestrador-test-home"
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -HomePath $tempHome
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1 -HomePath $tempHome
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --home-path /tmp/orquestrador-test-home
+bash scripts/verify-install.sh --home-path /tmp/orquestrador-test-home
 ```
 
 ## Depois De Instalar
@@ -126,10 +171,22 @@ Para criar a estrutura `DEV/` em um projeto:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\init-project-dev.ps1 -ProjectPath "C:\caminho\do\projeto"
 ```
 
+No Linux/macOS:
+
+```bash
+bash scripts/init-project-dev.sh /caminho/do/projeto
+```
+
 Depois de instalado, o mesmo helper também fica disponível no usuário:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.orquestrador\bin\init-project-dev.ps1" -ProjectPath "C:\caminho\do\projeto"
+```
+
+No Linux/macOS:
+
+```bash
+bash "$HOME/.orquestrador/bin/init-project-dev.sh" /caminho/do/projeto
 ```
 
 O script cria `DEV/README.md`, `DEV/INDEX.md`, `DEV/CONTEXT.md`, `DEV/WORKLOG.md` e subpastas como `ADR/`, `API/`, `DATABASE/`, `RUNBOOKS/`, `TASKS/`, `RESEARCH/`, `HANDOFFS/`, `LOGS/`, `SQL/`, `ARCH/`, `WORKFLOWS/`, `TESTS/`, `DOCUMENTATION/` e `BACKLOG/`, sem sobrescrever arquivos existentes.
@@ -144,7 +201,9 @@ O instalador também grava pontos globais de entrada para ferramentas que suport
 - Windsurf/Cascade: `%USERPROFILE%\.codeium\windsurf\memories\global_rules.md`.
 - Antigravity: `%USERPROFILE%\antigravity-rules.json`, `%USERPROFILE%\.antigravity\antigravity.json`, `%USERPROFILE%\.antigravity\settings.json` e `%USERPROFILE%\.ai-standards`.
 
-Se uma versão da ferramenta usar regras globais em nuvem ou apenas pela interface, copie o conteúdo de `%USERPROFILE%\AGENTS.md` para a regra global do usuário nessa interface.
+No Linux/macOS, esses pontos usam `$HOME`, como `$HOME/AGENTS.md`, `$HOME/.config/opencode/opencode.json`, `$HOME/.claude/CLAUDE.md`, `$HOME/.cursor/AGENTS.md`, `$HOME/.gemini/GEMINI.md`, `$HOME/.codeium/windsurf/memories/global_rules.md` e `$HOME/.ai-standards`.
+
+Se uma versão da ferramenta usar regras globais em nuvem ou apenas pela interface, copie o conteúdo de `%USERPROFILE%\AGENTS.md` no Windows ou `$HOME/AGENTS.md` no Linux/macOS para a regra global do usuário nessa interface.
 
 ## Troubleshooting
 
@@ -160,10 +219,17 @@ Se a instalação parecer incompleta, rode:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-install.ps1
 ```
 
+No Linux/macOS:
+
+```bash
+bash scripts/verify-install.sh
+```
+
 Se quiser voltar uma instalação anterior, procure o backup mais recente em:
 
 ```text
-%USERPROFILE%\.orquestrador-public-backups
+Windows: %USERPROFILE%\.orquestrador-public-backups
+Linux/macOS: $HOME/.orquestrador-public-backups
 ```
 
 Este repo não instala credenciais, tokens, logins ou chaves de API. Configure esses itens diretamente em cada ferramenta.

@@ -713,6 +713,6 @@ Total: 610
 ## Como Manter Este Catálogo
 
 - Ao alterar uma skill canônica, atualize primeiro `orquestrador/skills/<skill>/SKILL.md`.
-- Depois rode `orquestrador/sync-skills.ps1 -Apply` no ambiente instalado para espalhar a skill para os espelhos locais.
+- Depois rode `orquestrador/sync-skills.ps1 -Apply` no Windows ou `orquestrador/sync-skills.sh --apply` no Linux/macOS para espalhar a skill para os espelhos locais.
 - Antes de publicar, rode `scripts/validate-public.ps1` para checar JSON, caminhos locais, segredos prováveis e mojibake.
 - Este arquivo é referência de descoberta; a lógica operacional continua dentro de cada `SKILL.md`.

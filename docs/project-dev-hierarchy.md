@@ -71,10 +71,22 @@ Depois de instalar o Orquestrador, rode no clone deste repositório:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\init-project-dev.ps1 -ProjectPath "C:\caminho\do\projeto"
 ```
 
+No Linux/macOS:
+
+```bash
+bash scripts/init-project-dev.sh /caminho/do/projeto
+```
+
 Ou pelo helper instalado no usuário:
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.orquestrador\bin\init-project-dev.ps1" -ProjectPath "C:\caminho\do\projeto"
+```
+
+No Linux/macOS:
+
+```bash
+bash "$HOME/.orquestrador/bin/init-project-dev.sh" /caminho/do/projeto
 ```
 
 O script cria a estrutura base sem sobrescrever arquivos existentes.

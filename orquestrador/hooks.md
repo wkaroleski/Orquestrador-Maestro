@@ -22,13 +22,23 @@ Before claiming completion:
 2. For code changes, prefer build/lint/test when available.
 3. For global config changes, run:
 
-`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\doctor.ps1`
+Windows:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador/doctor.ps1`
+
+Linux/macOS: use the lightest available project validation; `doctor.ps1` is Windows-only unless PowerShell is installed.
 
 ## Sync Hook
 
 After adding or changing a shared skill, run:
 
-`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\sync-skills.ps1 -Apply`
+Windows:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador/sync-skills.ps1 -Apply`
+
+Linux/macOS:
+
+`bash {{USER_HOME}}/.orquestrador/sync-skills.sh --apply`
 
 ## Automatic Skill Hooks
 
