@@ -4,6 +4,16 @@ Kit público e sanitizado para instalar uma hierarquia de orquestração de IAs 
 
 Repositório: [github.com/FernandoBolzan/Orquestrador-Maestro](https://github.com/FernandoBolzan/Orquestrador-Maestro)
 
+## Iniciativa Grupo IAPro
+
+O Orquestrador Maestro é uma iniciativa do Grupo IAPro, uma comunidade de WhatsApp e Discord para quem está construindo, estudando e aplicando IA no trabalho real: automações, agentes, desenvolvimento, produto, operações e novos fluxos com ferramentas de IA.
+
+Participe da comunidade pelo link:
+
+[fernandobolzan.com/bio](https://www.fernandobolzan.com/bio)
+
+A proposta do projeto é compartilhar uma base prática e instalável para que mais pessoas consigam configurar suas IAs com hierarquia, skills, hooks, documentação local e boas práticas de segurança, sem depender de uma configuração privada de uma máquina específica.
+
 ## Visão Geral
 
 O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI ou Windsurf. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
@@ -90,6 +100,7 @@ Por padrão, o instalador copia o núcleo, skills, agentes, prompts e perfis de 
 | `%USERPROFILE%\.gemini\skills` | Espelho de skills para Gemini CLI. |
 | `%USERPROFILE%\.windsurf\skills` | Espelho de skills para Windsurf. |
 | `%USERPROFILE%\.antigravity-skills\skills` | Espelho de skills para ambientes compatíveis. |
+| `%USERPROFILE%\.ai-standards` | Standards portáteis usados pelo Antigravity. |
 | `%USERPROFILE%\.orquestrador-public-backups` | Backups criados quando o instalador substitui arquivos existentes. |
 
 O instalador também cria perfis textuais e entrypoints para ferramentas. Eles são os arquivos que fazem o Orquestrador ser chamado por padrão.
@@ -102,6 +113,7 @@ O instalador também cria perfis textuais e entrypoints para ferramentas. Eles s
 | Cursor | `.cursor\AGENTS.md`, `.cursor\rules\orquestrador-maestro.mdc`, `.cursor\hooks.md`, `.cursor\skills`. |
 | Gemini CLI | `.gemini\GEMINI.md`, `.gemini\hooks.md`, `.gemini\skills`. |
 | Windsurf | `.codeium\windsurf\memories\global_rules.md`, `.windsurf\hooks.md`, `.windsurf\skills`. |
+| Antigravity | `antigravity-rules.json`, `.antigravity\antigravity.json`, `.antigravity\settings.json`, `.ai-standards`, `.antigravity-skills\skills`. |
 
 Quando algum arquivo de destino já existe, o instalador faz backup antes de substituir, exceto se você usar flags que mudam esse comportamento.
 
@@ -493,17 +505,19 @@ Se aparecer texto quebrado:
 Descrição curta sugerida para o campo About:
 
 ```text
-AI agent orchestration kit for Windows with Codex skills, hooks, tool profiles, project DEV memory and portable setup for Claude Code, OpenCode, Cursor, Gemini CLI and Windsurf.
+Grupo IAPro initiative: AI agent orchestration kit for Windows with Codex skills, hooks, tool profiles, project DEV memory and portable setup for Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf and Antigravity.
 ```
 
 Topics sugeridos:
 
 ```text
-ai-agents agent-orchestration codex-skills claude-code opencode cursor gemini-cli windsurf windows powershell developer-tools ai-workflows prompt-engineering multi-agent skills hooks
+ai-agents agent-orchestration codex-skills claude-code opencode cursor gemini-cli windsurf antigravity windows powershell developer-tools ai-workflows prompt-engineering multi-agent skills hooks ai-community iapro
 ```
 
 Palavras-chave naturais do README:
 
+- Grupo IAPro;
+- comunidade de IA no WhatsApp e Discord;
 - AI agent orchestration;
 - Codex skills;
 - Claude Code skills;

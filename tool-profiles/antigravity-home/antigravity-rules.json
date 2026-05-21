@@ -1,0 +1,87 @@
+{
+  "name": "antigravity-maestro-integration",
+  "description": "Antigravity + Maestro + Orquestrador integration",
+  "version": "1.0.0",
+  "standards_source": "{{USER_HOME}}/.ai-standards",
+  "orchestrator": {
+    "enabled": true,
+    "endpoint": "ws://localhost:3001",
+    "protocol": "universal_message_v3",
+    "auto_connect": true,
+    "timeout": 120000,
+    "rules_path": "{{USER_HOME}}/.orquestrador/rules.md",
+    "maestro_path": "{{USER_HOME}}/.orquestrador/maestro.md",
+    "skills_router_path": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+    "skills_index_path": "{{USER_HOME}}/.orquestrador/SKILLS_INDEX.md"
+  },
+  "maestro": {
+    "enabled": true,
+    "workflow_mode": "integrated",
+    "validation_level": "strict",
+    "workflows_path": "{{USER_HOME}}/.ai-standards/core/workflow.md"
+  },
+  "standards": {
+    "rules_path": "{{USER_HOME}}/.ai-standards/core/rules.md",
+    "patterns_path": "{{USER_HOME}}/.ai-standards/core/patterns.md",
+    "orchestrator_path": "{{USER_HOME}}/.ai-standards/core/orchestrator.md",
+    "integration_path": "{{USER_HOME}}/.ai-standards/core/integration.md",
+    "auto_sync": true,
+    "sync_interval": 5000
+  },
+  "project_context": {
+    "project_agents": "AGENTS.md",
+    "dev_root": "DEV",
+    "dev_index": "DEV/INDEX.md",
+    "dev_context": "DEV/CONTEXT.md",
+    "dev_worklog": "DEV/WORKLOG.md"
+  },
+  "commands": {
+    "universal": [
+      "/fix",
+      "/implement",
+      "/new-feature",
+      "/refactor",
+      "/test",
+      "/review",
+      "/dev-workflow"
+    ],
+    "context": [
+      "/context",
+      "/status",
+      "/workflow",
+      "/help",
+      "/sync",
+      "/orchestrate"
+    ],
+    "terminal": [
+      "npm run dev",
+      "npm run build",
+      "npm run lint",
+      "npm run test",
+      "npm run preview"
+    ]
+  },
+  "integration": {
+    "connect_to": [
+      "codex",
+      "opencode",
+      "gemini",
+      "claude",
+      "cursor",
+      "windsurf"
+    ],
+    "share_context": true,
+    "sync_commands": true,
+    "validate_quality": true
+  },
+  "validation": {
+    "required_checks": [
+      "build_success",
+      "lint_pass",
+      "tests_pass",
+      "code_style_compliant",
+      "patterns_followed"
+    ],
+    "quality_gates": true
+  }
+}

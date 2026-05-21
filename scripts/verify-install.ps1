@@ -90,6 +90,11 @@ if (-not $SkipToolProfiles) {
   Assert-Path -Path (Join-Path $HomePath ".gemini\hooks.md") -Label "Gemini hooks profile"
   Assert-Path -Path (Join-Path $HomePath ".codeium\windsurf\memories\global_rules.md") -Label "Windsurf global rules"
   Assert-Path -Path (Join-Path $HomePath ".windsurf\hooks.md") -Label "Windsurf hooks profile"
+  Assert-Path -Path (Join-Path $HomePath "antigravity-rules.json") -Label "Antigravity global rules"
+  Assert-Path -Path (Join-Path $HomePath ".antigravity\antigravity.json") -Label "Antigravity integration config"
+  Assert-Path -Path (Join-Path $HomePath ".antigravity\settings.json") -Label "Antigravity settings"
+  Assert-Path -Path (Join-Path $HomePath ".ai-standards\core\rules.md") -Label "Antigravity AI standards rules"
+  Assert-Path -Path (Join-Path $HomePath ".ai-standards\core\workflow.md") -Label "Antigravity AI standards workflow"
 
   Assert-FileContains -Path (Join-Path $HomePath ".codex\AGENTS.md") -Pattern "DEV/WORKLOG\.md" -Label "Codex AGENTS profile"
   Assert-FileContains -Path (Join-Path $HomePath ".config\opencode\AGENTS.md") -Pattern "DEV/WORKLOG\.md" -Label "OpenCode global AGENTS profile"
@@ -98,6 +103,9 @@ if (-not $SkipToolProfiles) {
   Assert-FileContains -Path (Join-Path $HomePath ".cursor\rules\orquestrador-maestro.mdc") -Pattern "DEV/WORKLOG\.md" -Label "Cursor Orquestrador rule"
   Assert-FileContains -Path (Join-Path $HomePath ".gemini\GEMINI.md") -Pattern "DEV/WORKLOG\.md" -Label "Gemini global context"
   Assert-FileContains -Path (Join-Path $HomePath ".codeium\windsurf\memories\global_rules.md") -Pattern "DEV/WORKLOG\.md" -Label "Windsurf global rules"
+  Assert-FileContains -Path (Join-Path $HomePath "antigravity-rules.json") -Pattern "\.ai-standards" -Label "Antigravity global rules"
+  Assert-FileContains -Path (Join-Path $HomePath ".antigravity\antigravity.json") -Pattern "\.orquestrador" -Label "Antigravity integration config"
+  Assert-FileContains -Path (Join-Path $HomePath ".ai-standards\core\rules.md") -Pattern "DEV/WORKLOG\.md" -Label "Antigravity AI standards rules"
 
   $opencodeConfig = Join-Path $HomePath ".config\opencode\opencode.json"
   if (Test-Path -LiteralPath $opencodeConfig) {
@@ -114,6 +122,20 @@ if (-not $SkipToolProfiles) {
       Add-Issue "OpenCode global config is not valid JSON: $opencodeConfig"
     }
   }
+
+  foreach ($jsonPath in @(
+    (Join-Path $HomePath "antigravity-rules.json"),
+    (Join-Path $HomePath ".antigravity\antigravity.json"),
+    (Join-Path $HomePath ".antigravity\settings.json")
+  )) {
+    if (Test-Path -LiteralPath $jsonPath) {
+      try {
+        Get-Content -LiteralPath $jsonPath -Raw -Encoding UTF8 | ConvertFrom-Json | Out-Null
+      } catch {
+        Add-Issue "Antigravity JSON is not valid: $jsonPath"
+      }
+    }
+  }
 }
 
 $summary = [pscustomobject]@{
@@ -125,6 +147,7 @@ $summary = [pscustomobject]@{
   AgentSkills = Count-Dirs -Path (Join-Path $HomePath ".agents\skills")
   ClaudeSkills = Count-Dirs -Path (Join-Path $HomePath ".claude\skills")
   OpenCodeSkills = Count-Dirs -Path (Join-Path $HomePath ".opencode\skills")
+  AntigravitySkills = Count-Dirs -Path (Join-Path $HomePath ".antigravity-skills\skills")
   ToolProfilesChecked = -not $SkipToolProfiles
 }
 

@@ -432,7 +432,18 @@ if (-not $SkipToolProfiles) {
     @{ Source = ".claude\SYSTEM_PROMPT.md"; Destination = "claude\SYSTEM_PROMPT.md" },
     @{ Source = ".cursor\hooks.md"; Destination = "cursor\hooks.md" },
     @{ Source = ".gemini\hooks.md"; Destination = "gemini\hooks.md" },
-    @{ Source = ".windsurf\hooks.md"; Destination = "windsurf\hooks.md" }
+    @{ Source = ".windsurf\hooks.md"; Destination = "windsurf\hooks.md" },
+    @{ Source = "antigravity-rules.json"; Destination = "antigravity-home\antigravity-rules.json" },
+    @{ Source = ".antigravity\antigravity.json"; Destination = "antigravity\antigravity.json" },
+    @{ Source = ".antigravity\settings.json"; Destination = "antigravity\settings.json" },
+    @{ Source = ".ai-standards\README.md"; Destination = "ai-standards\README.md" },
+    @{ Source = ".ai-standards\core\rules.md"; Destination = "ai-standards\core\rules.md" },
+    @{ Source = ".ai-standards\core\workflow.md"; Destination = "ai-standards\core\workflow.md" },
+    @{ Source = ".ai-standards\core\orchestrator.md"; Destination = "ai-standards\core\orchestrator.md" },
+    @{ Source = ".ai-standards\core\integration.md"; Destination = "ai-standards\core\integration.md" },
+    @{ Source = ".ai-standards\core\patterns.md"; Destination = "ai-standards\core\patterns.md" },
+    @{ Source = ".ai-standards\templates\session.md"; Destination = "ai-standards\templates\session.md" },
+    @{ Source = ".ai-standards\templates\log.md"; Destination = "ai-standards\templates\log.md" }
   )
 
   foreach ($profile in $profileFiles) {
@@ -610,6 +621,208 @@ When a project has `DEV/`, read its overview docs after the nearest project `AGE
 Keep durable project docs in `DEV/` by default and update `DEV/WORKLOG.md` after substantive work.
 
 Before loading skills, consult the router. Load only task-relevant skills. Verify before claiming completion. Do not commit or push unless the user explicitly asks.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "antigravity-home\antigravity-rules.json" -Content @'
+{
+  "name": "antigravity-maestro-integration",
+  "description": "Antigravity + Maestro + Orquestrador integration",
+  "version": "1.0.0",
+  "standards_source": "{{USER_HOME}}/.ai-standards",
+  "orchestrator": {
+    "enabled": true,
+    "endpoint": "ws://localhost:3001",
+    "protocol": "universal_message_v3",
+    "auto_connect": true,
+    "timeout": 120000,
+    "rules_path": "{{USER_HOME}}/.orquestrador/rules.md",
+    "maestro_path": "{{USER_HOME}}/.orquestrador/maestro.md",
+    "skills_router_path": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+    "skills_index_path": "{{USER_HOME}}/.orquestrador/SKILLS_INDEX.md"
+  },
+  "maestro": {
+    "enabled": true,
+    "workflow_mode": "integrated",
+    "validation_level": "strict",
+    "workflows_path": "{{USER_HOME}}/.ai-standards/core/workflow.md"
+  },
+  "standards": {
+    "rules_path": "{{USER_HOME}}/.ai-standards/core/rules.md",
+    "patterns_path": "{{USER_HOME}}/.ai-standards/core/patterns.md",
+    "orchestrator_path": "{{USER_HOME}}/.ai-standards/core/orchestrator.md",
+    "integration_path": "{{USER_HOME}}/.ai-standards/core/integration.md",
+    "auto_sync": true,
+    "sync_interval": 5000
+  },
+  "project_context": {
+    "project_agents": "AGENTS.md",
+    "dev_root": "DEV",
+    "dev_index": "DEV/INDEX.md",
+    "dev_context": "DEV/CONTEXT.md",
+    "dev_worklog": "DEV/WORKLOG.md"
+  },
+  "commands": {
+    "universal": [
+      "/fix",
+      "/implement",
+      "/new-feature",
+      "/refactor",
+      "/test",
+      "/review",
+      "/dev-workflow"
+    ],
+    "context": [
+      "/context",
+      "/status",
+      "/workflow",
+      "/help",
+      "/sync",
+      "/orchestrate"
+    ]
+  },
+  "validation": {
+    "quality_gates": true,
+    "verify_before_completion": true
+  }
+}
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "antigravity\antigravity.json" -Content @'
+{
+  "name": "antigravity-maestro-integration",
+  "description": "Portable Antigravity profile for Orquestrador Maestro",
+  "version": "1.0.0",
+  "standards_source": "{{USER_HOME}}/.ai-standards",
+  "orchestrator": {
+    "enabled": true,
+    "endpoint": "ws://localhost:3001",
+    "protocol": "universal_message_v3",
+    "auto_connect": true,
+    "timeout": 120000,
+    "rules_path": "{{USER_HOME}}/.orquestrador/rules.md",
+    "maestro_path": "{{USER_HOME}}/.orquestrador/maestro.md",
+    "skills_router_path": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json"
+  },
+  "maestro": {
+    "enabled": true,
+    "workflow_mode": "integrated",
+    "validation_level": "strict",
+    "workflows_path": "{{USER_HOME}}/.ai-standards/core/workflow.md"
+  },
+  "standards": {
+    "rules_path": "{{USER_HOME}}/.ai-standards/core/rules.md",
+    "patterns_path": "{{USER_HOME}}/.ai-standards/core/patterns.md",
+    "orchestrator_path": "{{USER_HOME}}/.ai-standards/core/orchestrator.md",
+    "integration_path": "{{USER_HOME}}/.ai-standards/core/integration.md",
+    "templates_path": "{{USER_HOME}}/.ai-standards/templates"
+  },
+  "skills": {
+    "root": "{{USER_HOME}}/.antigravity-skills/skills",
+    "canonical_root": "{{USER_HOME}}/.orquestrador/skills",
+    "router": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json"
+  },
+  "project_context": {
+    "global_agents": "{{USER_HOME}}/AGENTS.md",
+    "project_agents": "AGENTS.md",
+    "dev_root": "DEV",
+    "dev_worklog": "DEV/WORKLOG.md"
+  }
+}
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "antigravity\settings.json" -Content @'
+{
+  "workbench.colorTheme": "Default Dark+",
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "security.workspace.trust.enabled": false,
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "manual",
+  "orquestradorMaestro.enabled": true,
+  "orquestradorMaestro.globalAgents": "{{USER_HOME}}/AGENTS.md",
+  "orquestradorMaestro.rules": "{{USER_HOME}}/.orquestrador/rules.md",
+  "orquestradorMaestro.maestro": "{{USER_HOME}}/.orquestrador/maestro.md",
+  "orquestradorMaestro.skillsRouter": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+  "orquestradorMaestro.aiStandards": "{{USER_HOME}}/.ai-standards"
+}
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\README.md" -Content @'
+# AI Standards For Antigravity
+
+This directory is installed to `{{USER_HOME}}/.ai-standards`.
+
+It gives Antigravity a portable standards root that points back to Orquestrador Maestro without exposing a real user path. Antigravity should read the project `AGENTS.md`, then `DEV/` overview docs when present, then the selected task skill.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\core\rules.md" -Content @'
+# Antigravity Rules
+
+Antigravity must use Orquestrador Maestro as the default operating contract for this user.
+
+Read first:
+
+1. `{{USER_HOME}}/AGENTS.md`
+2. `{{USER_HOME}}/.orquestrador/rules.md`
+3. `{{USER_HOME}}/.orquestrador/maestro.md`
+4. nearest project `AGENTS.md`
+5. project `DEV/README.md`, `DEV/INDEX.md` or `DEV/CONTEXT.md` when present
+6. the task-relevant skill
+
+Keep durable project documentation in `DEV/` by default and update `DEV/WORKLOG.md` after substantive project work. Verify before claiming completion.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\core\workflow.md" -Content @'
+# Antigravity Workflow
+
+Observe, classify, route, select, execute, verify, record and report. Use compact context first, then open only the selected skill and directly referenced files.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\core\orchestrator.md" -Content @'
+# Orquestrador And Maestro
+
+Antigravity acts as Orquestrador. The user is the Maestro. Execute safe, well-scoped work directly and ask only when a missing answer cannot be discovered safely.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\core\integration.md" -Content @'
+# Tool Integration
+
+Antigravity should use `{{USER_HOME}}/antigravity-rules.json`, `{{USER_HOME}}/.antigravity/antigravity.json`, `{{USER_HOME}}/.antigravity/settings.json`, `{{USER_HOME}}/.ai-standards` and `{{USER_HOME}}/.antigravity-skills/skills`.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\core\patterns.md" -Content @'
+# Implementation Patterns
+
+Prefer existing project patterns, keep changes scoped, verify before completion, and keep durable project notes under `DEV/`.
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\templates\session.md" -Content @'
+# Session Note
+
+## Objective
+
+## Context Read
+
+## Decisions
+
+## Verification
+
+## Handoff
+'@
+
+  Write-ToolProfileTemplateIfMissing -Destination "ai-standards\templates\log.md" -Content @'
+# Worklog Entry
+
+## YYYY-MM-DD - Short Title
+
+- Altered:
+- Reason:
+- Verified:
+- Next context:
 '@
 }
 

@@ -72,7 +72,7 @@ No repositório, "hook" significa uma regra operacional que dispara antes, duran
 | Sync hook | `orquestrador/hooks.md` | Depois de mudar uma skill compartilhada, manda rodar `sync-skills.ps1 -Apply`. |
 | Usage log hook | `SKILL_USAGE_SCHEMA.json` | Define um log JSONL opcional para medir quais skills foram selecionadas e abertas. |
 | Project DEV hook | `PROJECT_DEV_HIERARCHY.md` | Pede leitura compacta de `DEV/` e atualização de `DEV/WORKLOG.md` após trabalho substancial. |
-| Tool entrypoint hook | `PROGRAM_ENTRYPOINTS.json` e `tool-profiles/` | Faz Codex, OpenCode, Claude, Cursor, Gemini e Windsurf chamarem o Orquestrador por padrão. |
+| Tool entrypoint hook | `PROGRAM_ENTRYPOINTS.json` e `tool-profiles/` | Faz Codex, OpenCode, Claude, Cursor, Gemini, Windsurf e Antigravity chamarem o Orquestrador por padrão. |
 | Security Git hooks | `skill-security-hooks/scripts/install-security-hooks.cmd` | Instala `.githooks/pre-commit` e `.githooks/pre-push` em repositório autorizado. |
 
 ## Hooks De Segurança Instaláveis
@@ -215,6 +215,7 @@ O `sync-skills.ps1` mantém as 22 skills canônicas nos espelhos:
 .gemini\skills
 .windsurf\skills
 .antigravity-skills\skills
+.ai-standards
 ```
 
 Ele compara arquivos por SHA256, copia quando falta ou quando difere, e só remove destino calculado dentro da raiz esperada.
@@ -227,6 +228,7 @@ Use `scripts/verify-install.ps1` depois de instalar. Ele verifica:
 - `%USERPROFILE%\AGENTS.md`.
 - Skills, agentes e prompts do Codex.
 - Espelhos `.agents`, `.claude`, `.opencode`, `.cursor`, `.gemini`, `.windsurf` e `.antigravity-skills`.
+- Entry points Antigravity: `antigravity-rules.json`, `.antigravity/antigravity.json`, `.antigravity/settings.json` e `.ai-standards`.
 - Entrypoints de ferramentas quando os perfis não foram pulados.
 - Presença de `DEV/WORKLOG.md` nas regras globais e perfis principais.
 - Configuração OpenCode com `~/.orquestrador/rules.md` e `~/.orquestrador/maestro.md`.

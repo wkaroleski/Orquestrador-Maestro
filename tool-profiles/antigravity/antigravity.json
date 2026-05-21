@@ -1,0 +1,46 @@
+{
+  "name": "antigravity-maestro-integration",
+  "description": "Portable Antigravity profile for Orquestrador Maestro",
+  "version": "1.0.0",
+  "standards_source": "{{USER_HOME}}/.ai-standards",
+  "orchestrator": {
+    "enabled": true,
+    "endpoint": "ws://localhost:3001",
+    "protocol": "universal_message_v3",
+    "auto_connect": true,
+    "timeout": 120000,
+    "rules_path": "{{USER_HOME}}/.orquestrador/rules.md",
+    "maestro_path": "{{USER_HOME}}/.orquestrador/maestro.md",
+    "skills_router_path": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json"
+  },
+  "maestro": {
+    "enabled": true,
+    "workflow_mode": "integrated",
+    "validation_level": "strict",
+    "workflows_path": "{{USER_HOME}}/.ai-standards/core/workflow.md"
+  },
+  "standards": {
+    "rules_path": "{{USER_HOME}}/.ai-standards/core/rules.md",
+    "patterns_path": "{{USER_HOME}}/.ai-standards/core/patterns.md",
+    "orchestrator_path": "{{USER_HOME}}/.ai-standards/core/orchestrator.md",
+    "integration_path": "{{USER_HOME}}/.ai-standards/core/integration.md",
+    "templates_path": "{{USER_HOME}}/.ai-standards/templates"
+  },
+  "skills": {
+    "root": "{{USER_HOME}}/.antigravity-skills/skills",
+    "canonical_root": "{{USER_HOME}}/.orquestrador/skills",
+    "router": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+    "aliases": "{{USER_HOME}}/.orquestrador/SKILL_ALIASES.json",
+    "chains": "{{USER_HOME}}/.orquestrador/SKILL_CHAINS.json"
+  },
+  "project_context": {
+    "global_agents": "{{USER_HOME}}/AGENTS.md",
+    "project_agents": "AGENTS.md",
+    "dev_root": "DEV",
+    "dev_worklog": "DEV/WORKLOG.md"
+  },
+  "validation": {
+    "quality_gates": true,
+    "verify_before_completion": true
+  }
+}

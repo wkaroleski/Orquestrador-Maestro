@@ -118,6 +118,22 @@ function Add-InstallTarget {
   }
 }
 
+function Add-InstallFileTarget {
+  param(
+    [System.Collections.Generic.List[object]]$Targets,
+    [string]$Source,
+    [string]$Destination,
+    [string]$Label
+  )
+  if (Test-Path -LiteralPath $Source) {
+    $Targets.Add([pscustomobject]@{
+      Source = $Source
+      Destination = $Destination
+      Label = $Label
+    })
+  }
+}
+
 if (-not (Test-Path -LiteralPath $SourceOrquestrador)) {
   throw "Missing generated snapshot: $SourceOrquestrador. Run scripts\sync-from-local.ps1 first."
 }
@@ -133,6 +149,7 @@ if ((Test-Path -LiteralPath $TargetAgents) -and -not $Force) {
 }
 
 $extraTargets = New-Object System.Collections.Generic.List[object]
+$extraFileTargets = New-Object System.Collections.Generic.List[object]
 if (-not $SkipExtraSkills) {
   if (-not $SkipCommunitySkills) {
     $communityRoots = @(
@@ -163,7 +180,9 @@ if ($InstallToolProfiles) {
     @{ Source = "cursor"; Destination = ".cursor"; Label = ".cursor" },
     @{ Source = "gemini"; Destination = ".gemini"; Label = ".gemini" },
     @{ Source = "windsurf"; Destination = ".windsurf"; Label = ".windsurf" },
-    @{ Source = "windsurf-global"; Destination = ".codeium\windsurf\memories"; Label = ".codeium__windsurf__memories" }
+    @{ Source = "windsurf-global"; Destination = ".codeium\windsurf\memories"; Label = ".codeium__windsurf__memories" },
+    @{ Source = "antigravity"; Destination = ".antigravity"; Label = ".antigravity" },
+    @{ Source = "ai-standards"; Destination = ".ai-standards"; Label = ".ai-standards" }
   )
   foreach ($target in $toolProfileTargets) {
     Add-InstallTarget `
@@ -172,12 +191,25 @@ if ($InstallToolProfiles) {
       -Destination (Join-Path $HomePath $target.Destination) `
       -Label $target.Label
   }
+
+  Add-InstallFileTarget `
+    -Targets $extraFileTargets `
+    -Source (Join-Path $SourceToolProfiles "antigravity-home\antigravity-rules.json") `
+    -Destination (Join-Path $HomePath "antigravity-rules.json") `
+    -Label "antigravity-rules.json"
 }
 
 Backup-Path -Path $TargetOrquestrador -Label ".orquestrador"
 Backup-Path -Path $TargetAgents -Label "AGENTS.md"
 $backedUpExtraTargets = @{}
 foreach ($target in $extraTargets) {
+  $key = [System.IO.Path]::GetFullPath($target.Destination).ToLowerInvariant()
+  if (-not $backedUpExtraTargets.ContainsKey($key)) {
+    Backup-Path -Path $target.Destination -Label $target.Label
+    $backedUpExtraTargets[$key] = $true
+  }
+}
+foreach ($target in $extraFileTargets) {
   $key = [System.IO.Path]::GetFullPath($target.Destination).ToLowerInvariant()
   if (-not $backedUpExtraTargets.ContainsKey($key)) {
     Backup-Path -Path $target.Destination -Label $target.Label
@@ -198,6 +230,9 @@ New-Item -ItemType Directory -Force -Path (Join-Path $TargetOrquestrador "logs")
 
 foreach ($target in $extraTargets) {
   Copy-TreeWithPlaceholders -SourceDir $target.Source -DestinationDir $target.Destination
+}
+foreach ($target in $extraFileTargets) {
+  Copy-WithPlaceholders -SourceFile $target.Source -DestinationFile $target.Destination
 }
 
 if (-not $SkipSkillSync) {

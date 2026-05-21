@@ -47,6 +47,7 @@ Instalação completa cria ou atualiza:
 | `%USERPROFILE%\.gemini\skills` | Skills para Gemini |
 | `%USERPROFILE%\.windsurf\skills` | Skills para Windsurf |
 | `%USERPROFILE%\.antigravity-skills\skills` | Espelho adicional de compatibilidade |
+| `%USERPROFILE%\.ai-standards` | Standards portáteis usados pelo Antigravity |
 
 Também instala pontos de entrada para ferramentas:
 
@@ -58,12 +59,13 @@ Também instala pontos de entrada para ferramentas:
 | Cursor | `%USERPROFILE%\.cursor\AGENTS.md` e `%USERPROFILE%\.cursor\rules\orquestrador-maestro.mdc` |
 | Gemini CLI | `%USERPROFILE%\.gemini\GEMINI.md` |
 | Windsurf/Cascade | `%USERPROFILE%\.codeium\windsurf\memories\global_rules.md` |
+| Antigravity | `%USERPROFILE%\antigravity-rules.json`, `%USERPROFILE%\.antigravity\antigravity.json`, `%USERPROFILE%\.antigravity\settings.json` e `%USERPROFILE%\.ai-standards` |
 
 ## Pré-Requisitos
 
 - Windows com PowerShell.
 - Git instalado, se for baixar por `git clone`.
-- A ferramenta de IA que você pretende usar, como Codex, OpenCode, Claude Code, Cursor, Gemini CLI ou Windsurf.
+- A ferramenta de IA que você pretende usar, como Codex, OpenCode, Claude Code, Cursor, Gemini CLI, Windsurf ou Antigravity.
 
 Credenciais, tokens, logins e chaves de API não são instalados por este repositório. Configure esses itens diretamente em cada ferramenta.
 

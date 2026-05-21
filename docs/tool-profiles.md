@@ -14,6 +14,9 @@ Os hooks e entrypoints estão detalhados em [orquestrador-reference.md](orquestr
 - `tool-profiles/gemini/`: hooks.
 - `tool-profiles/windsurf/`: hooks.
 - `tool-profiles/windsurf-global/`: `global_rules.md` para Windsurf/Cascade.
+- `tool-profiles/antigravity-home/`: `antigravity-rules.json` instalado no home do usuário.
+- `tool-profiles/antigravity/`: `antigravity.json` e `settings.json`.
+- `tool-profiles/ai-standards/`: standards portáteis instalados em `~/.ai-standards`.
 
 ## Excluído
 
@@ -61,6 +64,7 @@ O pacote instala arquivos nos locais que as ferramentas costumam ler como regra,
 | Gemini CLI | `%USERPROFILE%\.gemini\GEMINI.md` |
 | Cursor | `%USERPROFILE%\.cursor\rules\orquestrador-maestro.mdc` e `%USERPROFILE%\.cursor\AGENTS.md` |
 | Windsurf/Cascade | `%USERPROFILE%\.codeium\windsurf\memories\global_rules.md` |
+| Antigravity | `%USERPROFILE%\antigravity-rules.json`, `%USERPROFILE%\.antigravity\antigravity.json`, `%USERPROFILE%\.antigravity\settings.json` e `%USERPROFILE%\.ai-standards` |
 
 Todos esses pontos de entrada mandam a ferramenta usar o `AGENTS.md` global, o Orquestrador e, quando existir no projeto aberto, a documentação `DEV/` antes das skills globais. Eles também orientam a manter documentação durável do projeto em `DEV/` e registrar trabalho substancial em `DEV/WORKLOG.md`.
 

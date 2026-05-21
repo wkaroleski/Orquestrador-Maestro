@@ -1,0 +1,18 @@
+{
+  "workbench.colorTheme": "Default Dark+",
+  "editor.fontSize": 14,
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "files.autoSave": "afterDelay",
+  "files.autoSaveDelay": 1000,
+  "security.workspace.trust.enabled": false,
+  "telemetry.telemetryLevel": "off",
+  "update.mode": "manual",
+  "orquestradorMaestro.enabled": true,
+  "orquestradorMaestro.globalAgents": "{{USER_HOME}}/AGENTS.md",
+  "orquestradorMaestro.rules": "{{USER_HOME}}/.orquestrador/rules.md",
+  "orquestradorMaestro.maestro": "{{USER_HOME}}/.orquestrador/maestro.md",
+  "orquestradorMaestro.skillsRouter": "{{USER_HOME}}/.orquestrador/SKILLS_ROUTER.json",
+  "orquestradorMaestro.aiStandards": "{{USER_HOME}}/.ai-standards"
+}

@@ -6,7 +6,7 @@ Este guia é para quem baixou o repositório e quer instalar o Orquestrador no p
 
 - Windows com PowerShell.
 - Git instalado para clonar o repositório.
-- Codex, Claude, Gemini, Cursor, OpenCode ou Windsurf são opcionais. O instalador prepara as pastas e os arquivos; cada ferramenta continua responsável pelo próprio login, runtime e credenciais.
+- Codex, Claude, Gemini, Cursor, OpenCode, Windsurf ou Antigravity são opcionais. O instalador prepara as pastas e os arquivos; cada ferramenta continua responsável pelo próprio login, runtime e credenciais.
 
 ## Instalação Completa Recomendada
 
@@ -40,6 +40,7 @@ Em uma máquina de exemplo, se o usuário for `maria`, os destinos ficam abaixo 
 | `%USERPROFILE%\.gemini\skills` | Skills para Gemini |
 | `%USERPROFILE%\.windsurf\skills` | Skills para Windsurf |
 | `%USERPROFILE%\.antigravity-skills\skills` | Espelho adicional de compatibilidade |
+| `%USERPROFILE%\.ai-standards` | Standards portáteis usados pelo Antigravity |
 | `%USERPROFILE%\.opencode` | Hooks e perfil textual do OpenCode |
 | `%USERPROFILE%\.claude` | Hooks e prompt textual do Claude |
 | `%USERPROFILE%\.cursor` | Hooks do Cursor |
@@ -50,6 +51,9 @@ Em uma máquina de exemplo, se o usuário for `maria`, os destinos ficam abaixo 
 | `%USERPROFILE%\.cursor\rules\orquestrador-maestro.mdc` | Regra local do Cursor para ativar o Orquestrador |
 | `%USERPROFILE%\.gemini\GEMINI.md` | Contexto global do Gemini CLI |
 | `%USERPROFILE%\.codeium\windsurf\memories\global_rules.md` | Regras globais do Windsurf/Cascade |
+| `%USERPROFILE%\antigravity-rules.json` | Regras globais do Antigravity apontando para Orquestrador e AI standards |
+| `%USERPROFILE%\.antigravity\antigravity.json` | Configuração de integração Antigravity + Orquestrador |
+| `%USERPROFILE%\.antigravity\settings.json` | Configuração portável do Antigravity |
 
 ## Backups
 
@@ -138,6 +142,7 @@ O instalador também grava pontos globais de entrada para ferramentas que suport
 - Gemini CLI: `%USERPROFILE%\.gemini\GEMINI.md`.
 - Cursor: `%USERPROFILE%\.cursor\rules\orquestrador-maestro.mdc` e `%USERPROFILE%\.cursor\AGENTS.md`.
 - Windsurf/Cascade: `%USERPROFILE%\.codeium\windsurf\memories\global_rules.md`.
+- Antigravity: `%USERPROFILE%\antigravity-rules.json`, `%USERPROFILE%\.antigravity\antigravity.json`, `%USERPROFILE%\.antigravity\settings.json` e `%USERPROFILE%\.ai-standards`.
 
 Se uma versão da ferramenta usar regras globais em nuvem ou apenas pela interface, copie o conteúdo de `%USERPROFILE%\AGENTS.md` para a regra global do usuário nessa interface.
 
