@@ -28,6 +28,7 @@ Também é possível manter termos privados em `.local/private-terms.txt`, um po
 ## Validar
 
 ```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skills.ps1
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public.ps1
 ```
 

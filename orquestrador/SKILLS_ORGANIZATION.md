@@ -6,6 +6,7 @@ Use this as the operating model for shared local skills.
 
 - `{{USER_HOME}}/.orquestrador\skills` is the canonical source for custom skills.
 - `{{USER_HOME}}/.orquestrador\SKILLS_ROUTER.json` is the first file agents should read.
+- `{{USER_HOME}}/.orquestrador\SKILLS_MANIFEST.json` is the canonical registry for managed skills and sync behavior.
 - `{{USER_HOME}}/.orquestrador\SKILL_ALIASES.json` maps user wording to canonical skill names.
 - `{{USER_HOME}}/.orquestrador\SKILL_CHAINS.json` controls which skills may be chained together.
 - `{{USER_HOME}}/.orquestrador\SKILL_EXECUTION_PROFILES.json` controls max skill loading and validation depth.
@@ -69,13 +70,26 @@ Refresh security and SaaS skills against primary sources:
 
 ## Improvement Workflow
 
-1. Edit canonical skill in `.orquestrador\skills`.
-2. Update `SKILLS_ROUTER.json` if the triggers changed.
-3. Add the skill to `$mustHave` in `sync-skills.ps1` only if it should be mirrored everywhere.
-4. Run:
+1. Create the canonical skill with the helper when possible:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\new-canonical-skill.ps1 -Name "skill-example" -Description "Use for ..." -Category "ai" -Risk "medium" -Trigger "example" -Alias "exemplo" -MirrorEverywhere`
+
+2. Edit the generated `SKILL.md` and keep the body compact.
+3. Update `SKILL_CHAINS.json` only when the new skill should be chained by existing skills.
+4. Run the catalog validation:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skills.ps1`
+
+5. Sync mirrored roots:
 
 `powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\sync-skills.ps1 -Apply`
 
-5. Run:
+6. Run:
 
 `powershell -NoProfile -ExecutionPolicy Bypass -File {{USER_HOME}}/.orquestrador\doctor.ps1`
+
+7. Before publishing the snapshot, run:
+
+`powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public.ps1`
+
+The `mirrorEverywhere` field in `SKILLS_MANIFEST.json` controls whether `sync-skills.ps1` and `sync-skills.sh` copy a skill into Codex, Claude, OpenCode, Cursor, Gemini, Windsurf, Antigravity, and legacy compatibility roots.

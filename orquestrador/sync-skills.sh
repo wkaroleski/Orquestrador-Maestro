@@ -63,30 +63,38 @@ TARGETS=(
   "$HOME_PATH/.antigravity-skills/skills"
 )
 
-MUST_HAVE=(
-  "skill-saas-factory"
-  "skill-saas-admin-dashboard"
-  "skill-abacatepay-integration"
-  "skill-stripe-integration"
-  "skill-saas-core-limits"
-  "skill-supabase-rls"
-  "skill-saas-security-scan"
-  "skill-saas-dast-recon"
-  "skill-security-hooks"
-  "skill-ai-orchestration"
-  "skill-multiagent-orchestration"
-  "skill-aionui-cowork-orchestration"
-  "skill-evolution-api"
-  "skill-frontend-ux-guardrails"
-  "skill-modern-ui-patterns"
-  "skill-open-design-ui"
-  "skill-live-processing"
-  "skill-manual-video-processing"
-  "skill-smart-clip-detection"
-  "skill-unified-analytics"
-  "skill-elevenlabs-voice-cloning"
-  "skill-google-workspace-sync"
-)
+MANIFEST="$HOME_PATH/.orquestrador/SKILLS_MANIFEST.json"
+if [ -f "$MANIFEST" ] && command -v node >/dev/null 2>&1; then
+  MUST_HAVE=()
+  while IFS= read -r skill_name; do
+    [ -n "$skill_name" ] && MUST_HAVE+=("$skill_name")
+  done < <(node -e 'const fs=require("fs"); const manifest=JSON.parse(fs.readFileSync(process.argv[1],"utf8")); for (const [name, entry] of Object.entries(manifest.skills || {}).sort()) { if (entry.mirrorEverywhere) console.log(name); }' "$MANIFEST")
+else
+  MUST_HAVE=(
+    "skill-saas-factory"
+    "skill-saas-admin-dashboard"
+    "skill-abacatepay-integration"
+    "skill-stripe-integration"
+    "skill-saas-core-limits"
+    "skill-supabase-rls"
+    "skill-saas-security-scan"
+    "skill-saas-dast-recon"
+    "skill-security-hooks"
+    "skill-ai-orchestration"
+    "skill-multiagent-orchestration"
+    "skill-aionui-cowork-orchestration"
+    "skill-evolution-api"
+    "skill-frontend-ux-guardrails"
+    "skill-modern-ui-patterns"
+    "skill-open-design-ui"
+    "skill-live-processing"
+    "skill-manual-video-processing"
+    "skill-smart-clip-detection"
+    "skill-unified-analytics"
+    "skill-elevenlabs-voice-cloning"
+    "skill-google-workspace-sync"
+  )
+fi
 
 get_skill_source() {
   local name="$1"

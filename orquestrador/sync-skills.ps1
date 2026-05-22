@@ -28,30 +28,41 @@ $targets = @(
   (Join-Path $HomePath ".antigravity-skills\skills")
 )
 
-$mustHave = @(
-  "skill-saas-factory",
-  "skill-saas-admin-dashboard",
-  "skill-abacatepay-integration",
-  "skill-stripe-integration",
-  "skill-saas-core-limits",
-  "skill-supabase-rls",
-  "skill-saas-security-scan",
-  "skill-saas-dast-recon",
-  "skill-security-hooks",
-  "skill-ai-orchestration",
-  "skill-multiagent-orchestration",
-  "skill-aionui-cowork-orchestration",
-  "skill-evolution-api",
-  "skill-frontend-ux-guardrails",
-  "skill-modern-ui-patterns",
-  "skill-open-design-ui",
-  "skill-live-processing",
-  "skill-manual-video-processing",
-  "skill-smart-clip-detection",
-  "skill-unified-analytics",
-  "skill-elevenlabs-voice-cloning",
-  "skill-google-workspace-sync"
-)
+$manifestPath = Join-Path $HomePath ".orquestrador\SKILLS_MANIFEST.json"
+if (Test-Path -LiteralPath $manifestPath) {
+  $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  $mustHave = @(
+    $manifest.skills.PSObject.Properties |
+      Where-Object { $_.Value.mirrorEverywhere -eq $true } |
+      ForEach-Object { $_.Name } |
+      Sort-Object
+  )
+} else {
+  $mustHave = @(
+    "skill-saas-factory",
+    "skill-saas-admin-dashboard",
+    "skill-abacatepay-integration",
+    "skill-stripe-integration",
+    "skill-saas-core-limits",
+    "skill-supabase-rls",
+    "skill-saas-security-scan",
+    "skill-saas-dast-recon",
+    "skill-security-hooks",
+    "skill-ai-orchestration",
+    "skill-multiagent-orchestration",
+    "skill-aionui-cowork-orchestration",
+    "skill-evolution-api",
+    "skill-frontend-ux-guardrails",
+    "skill-modern-ui-patterns",
+    "skill-open-design-ui",
+    "skill-live-processing",
+    "skill-manual-video-processing",
+    "skill-smart-clip-detection",
+    "skill-unified-analytics",
+    "skill-elevenlabs-voice-cloning",
+    "skill-google-workspace-sync"
+  )
+}
 
 function Get-SkillSource {
   param([string]$Name)

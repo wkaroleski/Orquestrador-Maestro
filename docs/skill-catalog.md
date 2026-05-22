@@ -4,6 +4,54 @@ Este catálogo é gerado a partir dos arquivos `SKILL.md` publicados no reposit�
 
 Regra de uso: escolha primeiro pelo roteador em `orquestrador/SKILLS_ROUTER.json`; abra o `SKILL.md` completo somente da skill selecionada e dos arquivos referenciados diretamente por ela.
 
+## Adicionar Skill Canônica
+
+Use o helper em vez de criar todos os registros manualmente:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\new-canonical-skill.ps1 `
+  -Name "skill-example" `
+  -Description "Use for ..." `
+  -Category "ai" `
+  -Risk "medium" `
+  -Source "local-patterns" `
+  -Trigger "example" `
+  -Alias "exemplo" `
+  -MirrorEverywhere
+```
+
+No Linux/macOS:
+
+```bash
+./scripts/new-canonical-skill.sh \
+  --name skill-example \
+  --description "Use for ..." \
+  --category ai \
+  --risk medium \
+  --source local-patterns \
+  --trigger example \
+  --alias exemplo \
+  --mirror-everywhere
+```
+
+O comando cria `orquestrador/skills/<skill>/SKILL.md` e atualiza `orquestrador/SKILLS_MANIFEST.json`, `orquestrador/SKILLS_ROUTER.json` e `orquestrador/SKILL_ALIASES.json`.
+
+Depois de editar o corpo da skill, rode:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skills.ps1
+```
+
+ou:
+
+```bash
+./scripts/validate-skills.sh
+```
+
+Se a skill deve ser usada junto com outras, atualize `orquestrador/SKILL_CHAINS.json` manualmente e rode a validação novamente.
+
+`SKILLS_MANIFEST.json` é a fonte de verdade para skills canônicas. O campo `mirrorEverywhere` controla quais skills entram nos espelhos usados por Codex, Claude, OpenCode, Cursor, Gemini, Windsurf, Antigravity e `.agents`.
+
 ## Skills Canônicas Do Orquestrador
 
 Fonte principal editável. O sync copia essas skills para os espelhos compatíveis.

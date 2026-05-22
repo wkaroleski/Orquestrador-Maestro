@@ -14,6 +14,17 @@ Participe da comunidade pelo link:
 
 A proposta do projeto é compartilhar uma base prática e instalável para que mais pessoas consigam configurar suas IAs com hierarquia, skills, hooks, documentação local e boas práticas de segurança, sem depender de uma configuração privada de uma máquina específica.
 
+## Requisitos e Compatibilidade
+
+Para garantir que o Orquestrador Maestro funcione corretamente em seu ambiente, verifique os requisitos mínimos:
+
+- **Windows**: PowerShell 4.0 ou superior (padrão no Windows 10/11; no Windows 7 SP1, requer a instalação do Windows Management Framework 4.0).
+- **Linux/macOS**: Bash 3.2 ou superior (padrão no macOS e na maioria das distribuições Linux).
+- **Sistemas Operacionais**: Windows 10/11, Linux (Ubuntu, Debian, CentOS, etc.) e macOS 10.15+.
+- **Node.js** (Opcional): Recomendado (versão 10.12.0 ou superior) para funções de gerenciamento, como criação de novas skills, validação do catálogo e sincronização dinâmica no Linux/macOS. O funcionamento básico das regras e skills já instaladas não depende do Node.js.
+
+Caso você esteja utilizando uma versão muito antiga de algum SO que não suporte esses requisitos, os scripts de instalação podem apresentar erros de sintaxe ou comandos não encontrados.
+
 ## Contribuição Da Comunidade
 
 O suporte Linux/macOS foi integrado a partir do fork [`kivervinicius/Orquestrador-Maestro`](https://github.com/kivervinicius/Orquestrador-Maestro), aberto na PR [#1 - feat: suporte multiplataforma (Linux/macOS)](https://github.com/FernandoBolzan/Orquestrador-Maestro/pull/1).
@@ -260,7 +271,7 @@ As skills canônicas ficam em `orquestrador/skills/` e são espelhadas para as p
 | `skill-ai-orchestration` | Estrutura uso server-side de IA: provedores, roteamento de modelos, fallback, filas, retries, tokens e observabilidade. |
 | `skill-multiagent-orchestration` | Divide trabalho independente entre agentes, define posse por arquivos e mantém integração final. |
 | `skill-aionui-cowork-orchestration` | Integra AionUi como camada de coordenação sem substituir Codex, skills, hooks e permissões locais. |
-| `skill-evolution-api` | Guia automação WhatsApp com Evolution API: instancias, QR, webhooks, consentimento, filas e rate limits. |
+| `skill-evolution-api` | Guia automação WhatsApp com Evolution API: instâncias, QR, webhooks, consentimento, filas e rate limits. |
 | `skill-frontend-ux-guardrails` | Aplica gates de UX: responsividade, overflow, acessibilidade, consistência visual e validação em telas. |
 | `skill-modern-ui-patterns` | Orienta UI SaaS/admin com React, TypeScript, Tailwind, estados de componentes e design system. |
 | `skill-open-design-ui` | Guia redesign visual, tokens, biblioteca de componentes e QA visual. |
@@ -274,6 +285,140 @@ As skills canônicas ficam em `orquestrador/skills/` e são espelhadas para as p
 As skills workflow do Codex/OMX ficam em `codex/skills/`. Elas cobrem execução, revisão, planejamento, delegação, diagnóstico, consulta a outros modelos e modos de trabalho como `ralph`, `team`, `ultrawork`, `deep-interview`, `code-review` e `security-review`.
 
 O catálogo completo está em [docs/skill-catalog.md](docs/skill-catalog.md).
+
+## Como Criar Uma Nova Skill
+
+Crie skills canônicas em `orquestrador/skills/` dentro deste repositório quando estiver evoluindo o snapshot público. Depois da instalação, a fonte canônica no computador do usuário fica em `%USERPROFILE%\.orquestrador\skills` no Windows ou `$HOME/.orquestrador/skills` no Linux/macOS.
+
+Não edite os espelhos diretamente (`.codex/skills`, `.claude/skills`, `.opencode/skills`, `.agents/skills`, etc.) a menos que esteja depurando. Eles são destinos de sincronização.
+
+### Exemplo: Skill De Front-End React
+
+No Windows, rode na raiz do repositório:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\new-canonical-skill.ps1 `
+  -Name "skill-react-frontend" `
+  -Description "Use for React front-end implementation and review, including component structure, hooks, state, forms, routing, accessibility, responsive layout, tests, and build verification." `
+  -Category "frontend" `
+  -Risk "medium" `
+  -Source "local-react-patterns" `
+  -Trigger "react frontend" `
+  -Trigger "react component" `
+  -Trigger "hooks react" `
+  -Trigger "frontend react" `
+  -Alias "react" `
+  -Alias "componente react" `
+  -Alias "front react" `
+  -MirrorEverywhere
+```
+
+No Linux/macOS:
+
+```bash
+./scripts/new-canonical-skill.sh \
+  --name skill-react-frontend \
+  --description "Use for React front-end implementation and review, including component structure, hooks, state, forms, routing, accessibility, responsive layout, tests, and build verification." \
+  --category frontend \
+  --risk medium \
+  --source local-react-patterns \
+  --trigger "react frontend" \
+  --trigger "react component" \
+  --trigger "hooks react" \
+  --trigger "frontend react" \
+  --alias react \
+  --alias "componente react" \
+  --alias "front react" \
+  --mirror-everywhere
+```
+
+Esse comando cria:
+
+```text
+orquestrador/skills/skill-react-frontend/SKILL.md
+```
+
+E atualiza automaticamente:
+
+```text
+orquestrador/SKILLS_MANIFEST.json
+orquestrador/SKILLS_ROUTER.json
+orquestrador/SKILL_ALIASES.json
+```
+
+Depois abra `orquestrador/skills/skill-react-frontend/SKILL.md` e substitua o corpo inicial por algo específico. Exemplo:
+
+```markdown
+---
+name: skill-react-frontend
+description: Use for React front-end implementation and review, including component structure, hooks, state, forms, routing, accessibility, responsive layout, tests, and build verification.
+category: frontend
+risk: medium
+source: local-react-patterns
+---
+
+# React Front-End
+
+Use this skill when creating, refactoring, or reviewing React UI code.
+Prefer the existing project stack and design system before adding new libraries.
+
+## Core Workflow
+
+1. Inspect the project stack: package scripts, router, component folders, styling system, state management, test setup, and existing UI conventions.
+2. Reuse existing components, hooks, validation helpers, API clients, icons, tokens, and layout primitives before creating new abstractions.
+3. Build the smallest coherent UI slice: data loading, empty/loading/error states, form validation, responsive behavior, and accessibility labels.
+4. Keep component boundaries practical: page/container components own data orchestration; reusable components receive explicit props and avoid hidden global state.
+5. Verify with the closest available gate: typecheck, lint, unit/component tests, build, or visual inspection when the project supports it.
+
+## Guardrails
+
+- Do not introduce a new UI library, state library, CSS framework, or router unless the project already uses it or the task explicitly requires it.
+- Do not hardcode secrets, tenant IDs, user data, private URLs, or environment-specific paths in browser code.
+- Avoid `any`; use explicit props, discriminated states, or `unknown` with guards when needed.
+- Handle mobile width, keyboard navigation, focus states, text overflow, loading states, empty states, and API errors.
+- Keep visible text spelled correctly and avoid broken UTF-8/mojibake.
+
+## Verification
+
+- Run `npm run typecheck`, `npm run lint`, `npm test`, or `npm run build` when available and relevant.
+- For UI-heavy changes, inspect the screen at desktop and mobile widths when a browser tool is available.
+- Confirm no console errors, layout overlap, clipped button text, or inaccessible form controls remain.
+
+## Related Skills
+
+- `skill-frontend-ux-guardrails`
+- `skill-modern-ui-patterns`
+- `skill-open-design-ui`
+```
+
+Se a skill deve ser encadeada por outra, edite também `orquestrador/SKILL_CHAINS.json`. Por exemplo, para permitir que `skill-saas-factory` chame a skill React, adicione `skill-react-frontend` em `chains.skill-saas-factory.mayInvoke`.
+
+### Validar E Sincronizar
+
+Valide o catálogo:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-skills.ps1
+```
+
+Ou:
+
+```bash
+./scripts/validate-skills.sh
+```
+
+Se estiver atualizando a instalação local do usuário, sincronize os espelhos:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File "$env:USERPROFILE\.orquestrador\sync-skills.ps1" -Apply
+```
+
+Antes de publicar o snapshot, valide o pacote público:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\validate-public.ps1
+git diff -- .
+```
 
 ## Hooks
 
@@ -569,7 +714,7 @@ O validador público verifica:
 
 ## Documentação Principal
 
-- [docs/installation.md](docs/installation.md): instalação completa, destinos criados e troubleshooting.
+- [docs/installation.md](docs/installation.md): instalação completa, destinos criados e resolução de problemas.
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
 - [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
@@ -580,7 +725,7 @@ O validador público verifica:
 - [docs/privacy-model.md](docs/privacy-model.md): modelo de privacidade e sanitização.
 - [docs/update-flow.md](docs/update-flow.md): como atualizar este repo a partir da máquina fonte.
 
-## Troubleshooting
+## Resolução de Problemas
 
 Se a ferramenta não chamar o Orquestrador:
 

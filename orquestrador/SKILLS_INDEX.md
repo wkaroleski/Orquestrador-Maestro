@@ -14,6 +14,8 @@ Read these compact files before loading skill catalogs:
 
 `{{USER_HOME}}/.orquestrador\SKILL_CHAINS.json`
 
+`{{USER_HOME}}/.orquestrador\SKILLS_MANIFEST.json`
+
 Then open only the selected `SKILL.md` files and their directly referenced files.
 
 ## Canonical Skill Roots
