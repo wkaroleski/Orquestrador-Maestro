@@ -159,13 +159,14 @@ foreach ($file in Get-ChildItem -LiteralPath $repoRootFull -Recurse -File -Force
     }
   }
 
-  $mojibakeMarkers = @(
-    [string][char]0x00C3,
-    [string][char]0x00C2,
-    [string][char]0x00E2
+  $mojibakeSequenceCodePoints = @(
+    "00C3,00A1", "00C3,00A0", "00C3,00A2", "00C3,00A3", "00C3,00A4", "00C3,00A9", "00C3,00AA", "00C3,00AD", "00C3,00B3", "00C3,00B4", "00C3,00B5", "00C3,00BA", "00C3,00BC", "00C3,00A7",
+    "00C2,00BA", "00C2,00AA", "00C2,00A9", "00C2,00AE", "00C2,00B7", "00C2,00AB", "00C2,00BB",
+    "00E2,20AC,201C", "00E2,20AC,201D", "00E2,20AC,02DC", "00E2,20AC,2122", "00E2,20AC,0153", "00E2,20AC,00A6", "00E2,20AC,00A2", "00E2,201E,00A2"
   )
-  foreach ($marker in $mojibakeMarkers) {
-    if ($text.Contains($marker) -and ($relative -notmatch "validate-public\.ps1$")) {
+  foreach ($encodedSequence in $mojibakeSequenceCodePoints) {
+    $sequence = -join ($encodedSequence.Split(",") | ForEach-Object { [string][char][Convert]::ToInt32($_, 16) })
+    if ($text.Contains($sequence) -and ($relative -notmatch "validate-public\.ps1$")) {
       Add-Issue -Kind "possible-mojibake" -Path $relative -Detail "Text contains common mojibake markers."
       break
     }
