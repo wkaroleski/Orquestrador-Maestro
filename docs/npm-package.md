@@ -205,7 +205,7 @@ Exemplo de evento:
 {
   "schemaVersion": 1,
   "packageName": "@iapro/orquestrador-maestro-cli",
-  "packageVersion": "0.1.0",
+  "packageVersion": "0.1.1",
   "event": "cli_command",
   "command": "install",
   "flags": ["--core-only"],

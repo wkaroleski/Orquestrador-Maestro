@@ -1,6 +1,6 @@
 {
   "name": "@iapro/orquestrador-maestro-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "CLI npm para instalar, atualizar, verificar e remover o Orquestrador Maestro no usuario atual.",
   "bin": {
     "orquestrador-maestro": "bin/orquestrador-maestro.js"
@@ -23,6 +23,7 @@
     "orquestrador/personas/",
     "orquestrador/skills/",
     "scripts/*.js",
+    "scripts/*.py",
     "scripts/*.ps1",
     "scripts/*.sh",
     "skill-library/MANIFEST.json",
@@ -31,6 +32,8 @@
     "README.md"
   ],
   "scripts": {
+    "audit": "node scripts/audit-dependencies.js audit",
+    "outdated:all": "node scripts/audit-dependencies.js outdated",
     "pack:dry-run": "npm pack --dry-run",
     "validate": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-public.ps1 && powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-skills.ps1"
   },

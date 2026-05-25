@@ -1,10 +1,10 @@
 {
-    "generatedAt":  "2026-05-19T20:41:53",
+    "generatedAt":  "2026-05-20T13:15:31",
     "source":  "sanitized-local-export",
     "packages":  {
                      "orquestrador":  {
                                           "path":  "orquestrador",
-                                          "files":  57,
+                                          "files":  59,
                                           "skillDirectories":  22
                                       },
                      "codex":  {
@@ -20,7 +20,7 @@
                                          },
                      "toolProfiles":  {
                                           "path":  "tool-profiles",
-                                          "files":  12
+                                          "files":  19
                                       }
                  },
     "excluded":  [

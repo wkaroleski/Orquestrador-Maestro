@@ -4,6 +4,73 @@ Kit público e sanitizado para instalar uma hierarquia de orquestração de IAs 
 
 Repositório: [github.com/FernandoBolzan/Orquestrador-Maestro](https://github.com/FernandoBolzan/Orquestrador-Maestro)
 
+## Funcionamento Em 60 Segundos
+
+O ponto central do Orquestrador Maestro é simples: ele não cria uma IA nova. Ele instala uma camada portátil de regras, skills, hooks, perfis e entrypoints para que as ferramentas de IA do usuário leiam o mesmo contrato operacional antes de agir.
+
+Na prática, o usuário instala uma vez, e Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity passam a encontrar o Orquestrador por padrão nas pastas corretas do próprio usuário.
+
+### 1. Instalação Portátil
+
+![Fluxo de instalação portátil do Orquestrador Maestro](docs/assets/install-flow.gif)
+
+Este fluxo mostra o caminho de instalação recomendado: baixar a CLI via npm, aplicar o snapshot sanitizado no home do usuário, criar os entrypoints das ferramentas de IA, verificar a instalação e começar a usar em projetos reais.
+
+### 2. Funcionamento Da Orquestração
+
+![Fluxo de funcionamento da orquestração com hierarquia, skills, hooks e DEV](docs/assets/runtime-flow.gif)
+
+Durante o uso, a IA deve ler primeiro os contratos compactos, respeitar a hierarquia, escolher a menor skill útil, executar com hooks e registrar o que importa em `DEV/WORKLOG.md` quando houver trabalho substancial.
+
+### 3. Atualização Segura
+
+![Fluxo de atualização segura do Orquestrador Maestro](docs/assets/update-flow.gif)
+
+O projeto público funciona como snapshot sanitizado. O mantenedor evolui a fonte local, exporta, valida, documenta no changelog, publica no GitHub/npm e o usuário atualiza com os comandos da CLI.
+
+## Instalação Recomendada
+
+Para instalar direto pelo npm:
+
+```bash
+npm install -g @iapro/orquestrador-maestro-cli
+orquestrador-maestro install
+orquestrador-maestro verify
+```
+
+Para atualizar depois:
+
+```bash
+npm update -g @iapro/orquestrador-maestro-cli
+orquestrador-maestro update
+orquestrador-maestro verify
+```
+
+Se preferir Git/ZIP, use as seções de instalação completa abaixo. O npm é o caminho mais simples para quem só quer instalar e manter atualizado.
+
+## Modelo Mental
+
+- **Maestro**: o usuário define objetivo, limite, prioridade e autorizações.
+- **Orquestrador**: a IA executa seguindo regras, hierarquia, roteamento de skills, hooks e verificação.
+- **Skills**: playbooks especializados que entram só quando ajudam a tarefa.
+- **Hooks**: lembretes operacionais para segurança, documentação, economia de contexto e validação.
+- **DEV/**: memória operacional local do projeto, usada para reduzir repetição e economizar tokens.
+- **Snapshot público**: este repositório publica apenas a parte instalável e sanitizada, sem dados privados.
+
+## Sumário
+
+- [Iniciativa Grupo IAPro](#iniciativa-grupo-iapro)
+- [Requisitos e Compatibilidade](#requisitos-e-compatibilidade)
+- [Contribuição Da Comunidade](#contribuição-da-comunidade)
+- [Melhorias Recentes](#melhorias-recentes)
+- [Visão Geral](#visão-geral)
+- [Instalação Via npm](#instalação-via-npm)
+- [Como Funciona](#como-funciona)
+- [Hierarquia DEV Nos Projetos](#hierarquia-dev-nos-projetos)
+- [Atualizar Uma Instalação](#atualizar-uma-instalação)
+- [Segurança E Privacidade](#segurança-e-privacidade)
+- [Changelog](#changelog)
+
 ## Iniciativa Grupo IAPro
 
 O Orquestrador Maestro é uma iniciativa do Grupo IAPro, uma comunidade de WhatsApp e Discord para quem está construindo, estudando e aplicando IA no trabalho real: automações, agentes, desenvolvimento, produto, operações e novos fluxos com ferramentas de IA.
@@ -763,6 +830,7 @@ O validador público verifica:
     prompts/
     skills/
   docs/
+    assets/
   home/
     AGENTS.md
   orquestrador/
@@ -786,6 +854,8 @@ O validador público verifica:
     verify-install.ps1
     verify-install.sh
     validate-public.ps1
+    audit-dependencies.js
+    generate-readme-gifs.py
     sync-from-local.ps1
     init-project-dev.ps1
     init-project-dev.sh
@@ -809,6 +879,7 @@ O validador público verifica:
 - [docs/tool-profiles.md](docs/tool-profiles.md): hooks e perfis de ferramentas.
 - [docs/privacy-model.md](docs/privacy-model.md): modelo de privacidade e sanitização.
 - [docs/update-flow.md](docs/update-flow.md): como atualizar este repo a partir da máquina fonte.
+- [docs/assets/](docs/assets/): GIFs usados neste README para explicar instalação, funcionamento e atualização.
 
 ## Resolução de Problemas
 
@@ -873,6 +944,39 @@ Palavras-chave naturais do README:
 - DEV documentation hierarchy;
 - multi-agent workflow;
 - secure public AI configuration.
+
+## Changelog
+
+Este README mantém o changelog resumido do projeto para que a pessoa entenda rapidamente o que mudou antes de atualizar. Mudanças grandes também podem ter documentação dedicada em `docs/`, mas o resumo público deve continuar aqui.
+
+Padrão usado:
+
+```text
+### x.y.z - YYYY-MM-DD
+
+- Added: novo recurso, arquivo ou fluxo.
+- Changed: alteração de comportamento, documentação ou compatibilidade.
+- Fixed: correção de bug, instalação, validação ou texto.
+- Security: melhoria de privacidade, sanitização, dependência ou validação.
+- Migration: ação necessária para quem já usa o Orquestrador.
+```
+
+### 0.1.1 - 2026-05-25 (em preparação)
+
+- Added: GIFs explicativos no README para instalação, funcionamento da orquestração e atualização segura.
+- Added: script `scripts/generate-readme-gifs.py` para regenerar os assets visuais do README com layout consistente.
+- Added: scripts `npm run audit` e `npm run outdated:all` para auditar dependências do pacote raiz e exemplos com `package.json`.
+- Changed: README reorganizado para explicar primeiro o modelo mental, a hierarquia, o uso de `DEV/` e o fluxo de atualização.
+- Changed: dependências de exemplos e skills atualizadas dentro da faixa compatível com Node.js 18+.
+- Security: auditoria npm zerada nos pacotes com lockfile, mantendo fora upgrades incompatíveis como `better-sqlite3@12` e migrações maiores como `express@5`.
+- Migration: sem quebra esperada; usuários podem atualizar com `npm update -g @iapro/orquestrador-maestro-cli`, depois `orquestrador-maestro update` e `orquestrador-maestro verify`.
+
+### 0.1.0 - 2026-05-25
+
+- Added: primeira versão npm pública do `@iapro/orquestrador-maestro-cli`.
+- Added: comandos `install`, `update`, `verify`, `list-targets` e `uninstall`.
+- Added: snapshot público com Orquestrador, Codex skills, perfis de ferramentas, hooks e documentação de instalação.
+- Security: validação pública para bloquear tokens, logs, caches, backups, memórias locais, caminhos reais de usuário e arquivos privados.
 
 ## Publicação
 
