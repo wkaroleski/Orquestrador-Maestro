@@ -5,7 +5,13 @@ param(
   [switch]$NoToolProfiles,
   [switch]$CoreOnly,
   [switch]$SkipCommunitySkills,
-  [switch]$SkipSkillSync
+  [switch]$SkipSkillSync,
+  [string[]]$Only = @(),
+  [switch]$DryRun,
+  [switch]$ListTargets,
+  [switch]$Uninstall,
+  [switch]$NonInteractive,
+  [switch]$VerbosePaths
 )
 
 $ErrorActionPreference = "Stop"
@@ -39,6 +45,24 @@ if ($SkipCommunitySkills) {
 }
 if ($SkipSkillSync) {
   $argsList += "-SkipSkillSync"
+}
+foreach ($component in $Only) {
+  $argsList += @("-Only", $component)
+}
+if ($DryRun) {
+  $argsList += "-DryRun"
+}
+if ($ListTargets) {
+  $argsList += "-ListTargets"
+}
+if ($Uninstall) {
+  $argsList += "-Uninstall"
+}
+if ($NonInteractive) {
+  $argsList += "-NonInteractive"
+}
+if ($VerbosePaths) {
+  $argsList += "-VerbosePaths"
 }
 
 & powershell @argsList

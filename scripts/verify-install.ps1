@@ -1,7 +1,9 @@
 [CmdletBinding()]
 param(
   [string]$HomePath = [Environment]::GetFolderPath("UserProfile"),
-  [switch]$SkipToolProfiles
+  [switch]$SkipToolProfiles,
+  [switch]$CoreOnly,
+  [switch]$VerbosePaths
 )
 
 $ErrorActionPreference = "Stop"
@@ -57,25 +59,27 @@ Assert-FileContains -Path (Join-Path $HomePath "AGENTS.md") -Pattern "DEV/WORKLO
 Assert-FileContains -Path (Join-Path $orquestrador "rules.md") -Pattern "DEV/WORKLOG\.md" -Label "Orquestrador rules"
 Assert-FileContains -Path (Join-Path $orquestrador "PROJECT_DEV_HIERARCHY.md") -Pattern "DEV/WORKLOG\.md" -Label "Project DEV hierarchy"
 
-Assert-Path -Path (Join-Path $codex "skills") -Label "Codex skills"
-Assert-Path -Path (Join-Path $codex "agents") -Label "Codex agents"
-Assert-Path -Path (Join-Path $codex "prompts") -Label "Codex prompts"
+if (-not $CoreOnly) {
+  Assert-Path -Path (Join-Path $codex "skills") -Label "Codex skills"
+  Assert-Path -Path (Join-Path $codex "agents") -Label "Codex agents"
+  Assert-Path -Path (Join-Path $codex "prompts") -Label "Codex prompts"
 
-$compatRoots = @(
-  ".agents\skills",
-  ".claude\skills",
-  ".opencode\skills",
-  ".cursor\skills",
-  ".gemini\skills",
-  ".windsurf\skills",
-  ".antigravity-skills\skills"
-)
+  $compatRoots = @(
+    ".agents\skills",
+    ".claude\skills",
+    ".opencode\skills",
+    ".cursor\skills",
+    ".gemini\skills",
+    ".windsurf\skills",
+    ".antigravity-skills\skills"
+  )
 
-foreach ($root in $compatRoots) {
-  Assert-Path -Path (Join-Path $HomePath $root) -Label "Compatibility skill root $root"
+  foreach ($root in $compatRoots) {
+    Assert-Path -Path (Join-Path $HomePath $root) -Label "Compatibility skill root $root"
+  }
 }
 
-if (-not $SkipToolProfiles) {
+if ((-not $CoreOnly) -and (-not $SkipToolProfiles)) {
   Assert-Path -Path (Join-Path $HomePath ".codex\AGENTS.md") -Label "Codex AGENTS profile"
   Assert-Path -Path (Join-Path $HomePath ".config\opencode\AGENTS.md") -Label "OpenCode global AGENTS profile"
   Assert-Path -Path (Join-Path $HomePath ".config\opencode\opencode.json") -Label "OpenCode global config"
@@ -139,7 +143,7 @@ if (-not $SkipToolProfiles) {
 }
 
 $summary = [pscustomobject]@{
-  HomePath = $HomePath
+  HomePath = if ($VerbosePaths) { $HomePath } else { "[redacted]" }
   OrquestradorSkills = Count-Dirs -Path (Join-Path $orquestrador "skills")
   CodexSkills = Count-Dirs -Path (Join-Path $codex "skills")
   CodexAgents = Count-Files -Path (Join-Path $codex "agents")
@@ -148,7 +152,8 @@ $summary = [pscustomobject]@{
   ClaudeSkills = Count-Dirs -Path (Join-Path $HomePath ".claude\skills")
   OpenCodeSkills = Count-Dirs -Path (Join-Path $HomePath ".opencode\skills")
   AntigravitySkills = Count-Dirs -Path (Join-Path $HomePath ".antigravity-skills\skills")
-  ToolProfilesChecked = -not $SkipToolProfiles
+  ToolProfilesChecked = (-not $CoreOnly) -and (-not $SkipToolProfiles)
+  CoreOnly = $CoreOnly
 }
 
 if ($issues.Count -gt 0) {

@@ -5,7 +5,13 @@ param(
   [switch]$SkipSkillSync,
   [switch]$SkipExtraSkills,
   [switch]$SkipCommunitySkills,
-  [switch]$InstallToolProfiles
+  [switch]$InstallToolProfiles,
+  [string[]]$Only = @(),
+  [switch]$DryRun,
+  [switch]$ListTargets,
+  [switch]$Uninstall,
+  [switch]$NonInteractive,
+  [switch]$VerbosePaths
 )
 
 $ErrorActionPreference = "Stop"
@@ -22,6 +28,51 @@ $BackupRoot = Join-Path $HomePath ".orquestrador-public-backups"
 $Stamp = Get-Date -Format "yyyyMMdd-HHmmss"
 $BackupDir = Join-Path $BackupRoot $Stamp
 
+$SelectedComponents = @(
+  $Only |
+    ForEach-Object { $_ -split "," } |
+    ForEach-Object { $_.Trim().ToLowerInvariant() } |
+    Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+) | Select-Object -Unique
+
+$AllowedComponents = @(
+  "all",
+  "core",
+  "orquestrador",
+  "global-agents",
+  "skills",
+  "community-skills",
+  "codex",
+  "agents",
+  "claude",
+  "opencode",
+  "cursor",
+  "gemini",
+  "windsurf",
+  "antigravity",
+  "tool-profiles",
+  "codex-skills",
+  "codex-agents",
+  "codex-prompts",
+  "prompts"
+)
+
+foreach ($component in $SelectedComponents) {
+  if ($AllowedComponents -notcontains $component) {
+    throw "Unknown component for -Only: $component. Supported values: $($AllowedComponents -join ', ')"
+  }
+}
+
+function Test-SelectedComponent {
+  param([string[]]$Names)
+  if ($SelectedComponents.Count -eq 0) { return $true }
+  if ($SelectedComponents -contains "all") { return $true }
+  foreach ($name in $Names) {
+    if ($SelectedComponents -contains $name.ToLowerInvariant()) { return $true }
+  }
+  return $false
+}
+
 function Get-FullPath {
   param([string]$Path)
   return [System.IO.Path]::GetFullPath($Path)
@@ -29,9 +80,19 @@ function Get-FullPath {
 
 function Test-PathUnderRoot {
   param([string]$Path, [string]$Root)
-  $resolvedPath = Get-FullPath -Path $Path
-  $resolvedRoot = Get-FullPath -Path $Root
-  return $resolvedPath.StartsWith($resolvedRoot, [StringComparison]::OrdinalIgnoreCase)
+  $resolvedPath = (Get-FullPath -Path $Path).TrimEnd(
+    [System.IO.Path]::DirectorySeparatorChar,
+    [System.IO.Path]::AltDirectorySeparatorChar
+  )
+  $resolvedRoot = (Get-FullPath -Path $Root).TrimEnd(
+    [System.IO.Path]::DirectorySeparatorChar,
+    [System.IO.Path]::AltDirectorySeparatorChar
+  )
+  if ($resolvedPath.Equals($resolvedRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    return $true
+  }
+  $rootWithSeparator = $resolvedRoot + [System.IO.Path]::DirectorySeparatorChar
+  return $resolvedPath.StartsWith($rootWithSeparator, [StringComparison]::OrdinalIgnoreCase)
 }
 
 function Get-RelativePath {
@@ -107,13 +168,16 @@ function Add-InstallTarget {
     [System.Collections.Generic.List[object]]$Targets,
     [string]$Source,
     [string]$Destination,
-    [string]$Label
+    [string]$Label,
+    [string]$Component = ""
   )
   if (Test-Path -LiteralPath $Source) {
     $Targets.Add([pscustomobject]@{
       Source = $Source
       Destination = $Destination
       Label = $Label
+      Component = $Component
+      Kind = "directory"
     })
   }
 }
@@ -123,15 +187,89 @@ function Add-InstallFileTarget {
     [System.Collections.Generic.List[object]]$Targets,
     [string]$Source,
     [string]$Destination,
-    [string]$Label
+    [string]$Label,
+    [string]$Component = ""
   )
   if (Test-Path -LiteralPath $Source) {
     $Targets.Add([pscustomobject]@{
       Source = $Source
       Destination = $Destination
       Label = $Label
+      Component = $Component
+      Kind = "file"
     })
   }
+}
+
+function Write-InstallPlan {
+  param(
+    [object[]]$CoreTargets,
+    [object[]]$DirectoryTargets,
+    [object[]]$FileTargets,
+    [string]$Mode
+  )
+  $rows = New-Object System.Collections.Generic.List[object]
+  foreach ($target in @($CoreTargets + $DirectoryTargets + $FileTargets)) {
+    $exists = Test-Path -LiteralPath $target.Destination
+    if ($VerbosePaths) {
+      $rows.Add([pscustomobject]@{
+        Mode = $Mode
+        Target = $target.Label
+        Component = $target.Component
+        Kind = $target.Kind
+        Exists = $exists
+        Source = $target.Source
+        Destination = $target.Destination
+      })
+    } else {
+      $rows.Add([pscustomobject]@{
+        Mode = $Mode
+        Target = $target.Label
+        Component = $target.Component
+        Kind = $target.Kind
+        Exists = $exists
+      })
+    }
+  }
+  $rows | Format-Table -AutoSize
+}
+
+function Remove-EmptyParentsUnderRoot {
+  param([string]$Path, [string]$Root)
+  $rootFull = (Get-FullPath -Path $Root).TrimEnd(
+    [System.IO.Path]::DirectorySeparatorChar,
+    [System.IO.Path]::AltDirectorySeparatorChar
+  )
+  $current = Get-FullPath -Path $Path
+  while ((Test-Path -LiteralPath $current) -and
+    (Test-PathUnderRoot -Path $current -Root $rootFull) -and
+    (-not $current.TrimEnd(
+      [System.IO.Path]::DirectorySeparatorChar,
+      [System.IO.Path]::AltDirectorySeparatorChar
+    ).Equals($rootFull, [StringComparison]::OrdinalIgnoreCase))) {
+    if (@(Get-ChildItem -LiteralPath $current -Force -ErrorAction SilentlyContinue).Count -gt 0) {
+      break
+    }
+    Remove-Item -LiteralPath $current -Force
+    $current = Split-Path -Parent $current
+  }
+}
+
+function Uninstall-MappedDirectory {
+  param([string]$SourceDir, [string]$DestinationDir)
+  if (-not (Test-Path -LiteralPath $DestinationDir)) { return }
+  if (-not (Test-PathUnderRoot -Path $DestinationDir -Root $HomePath)) {
+    throw "Refusing to uninstall target outside home: $DestinationDir"
+  }
+  foreach ($sourceFile in Get-ChildItem -LiteralPath $SourceDir -Recurse -File -Force) {
+    $relative = Get-RelativePath -BasePath $SourceDir -Path $sourceFile.FullName
+    $dest = Join-Path $DestinationDir $relative
+    if (Test-Path -LiteralPath $dest) {
+      Remove-Item -LiteralPath $dest -Force
+      Remove-EmptyParentsUnderRoot -Path (Split-Path -Parent $dest) -Root $DestinationDir
+    }
+  }
+  Remove-EmptyParentsUnderRoot -Path $DestinationDir -Root $HomePath
 }
 
 if (-not (Test-Path -LiteralPath $SourceOrquestrador)) {
@@ -141,11 +279,32 @@ if (-not (Test-Path -LiteralPath $SourceAgents)) {
   throw "Missing home AGENTS template: $SourceAgents. Run scripts\sync-from-local.ps1 first."
 }
 
-if ((Test-Path -LiteralPath $TargetOrquestrador) -and -not $Force) {
+if ((Test-Path -LiteralPath $TargetOrquestrador) -and -not $Force -and -not $DryRun -and -not $ListTargets -and -not $Uninstall) {
   throw "Target already exists: $TargetOrquestrador. Re-run with -Force to overwrite after backup."
 }
-if ((Test-Path -LiteralPath $TargetAgents) -and -not $Force) {
+if ((Test-Path -LiteralPath $TargetAgents) -and -not $Force -and -not $DryRun -and -not $ListTargets -and -not $Uninstall) {
   throw "Target already exists: $TargetAgents. Re-run with -Force to overwrite after backup."
+}
+
+$includeCore = if ($Uninstall) { Test-SelectedComponent -Names @("core", "orquestrador", "global-agents") } else { $true }
+$coreTargets = @()
+if ($includeCore) {
+  $coreTargets = @(
+    [pscustomobject]@{
+      Source = $SourceOrquestrador
+      Destination = $TargetOrquestrador
+      Label = ".orquestrador"
+      Component = "core"
+      Kind = "directory"
+    },
+    [pscustomobject]@{
+      Source = $SourceAgents
+      Destination = $TargetAgents
+      Label = "AGENTS.md"
+      Component = "core"
+      Kind = "file"
+    }
+  )
 }
 
 $extraTargets = New-Object System.Collections.Generic.List[object]
@@ -153,50 +312,118 @@ $extraFileTargets = New-Object System.Collections.Generic.List[object]
 if (-not $SkipExtraSkills) {
   if (-not $SkipCommunitySkills) {
     $communityRoots = @(
-      ".codex\skills",
-      ".agents\skills",
-      ".claude\skills",
-      ".opencode\skills",
-      ".cursor\skills",
-      ".gemini\skills",
-      ".windsurf\skills",
-      ".antigravity-skills\skills"
+      @{ Root = ".codex\skills"; Component = "codex" },
+      @{ Root = ".agents\skills"; Component = "agents" },
+      @{ Root = ".claude\skills"; Component = "claude" },
+      @{ Root = ".opencode\skills"; Component = "opencode" },
+      @{ Root = ".cursor\skills"; Component = "cursor" },
+      @{ Root = ".gemini\skills"; Component = "gemini" },
+      @{ Root = ".windsurf\skills"; Component = "windsurf" },
+      @{ Root = ".antigravity-skills\skills"; Component = "antigravity" }
     )
-    foreach ($root in $communityRoots) {
-      Add-InstallTarget -Targets $extraTargets -Source $SourceCommunitySkills -Destination (Join-Path $HomePath $root) -Label $root.Replace("\", "__")
+    foreach ($entry in $communityRoots) {
+      if (Test-SelectedComponent -Names @("skills", "community-skills", $entry.Component)) {
+        Add-InstallTarget -Targets $extraTargets -Source $SourceCommunitySkills -Destination (Join-Path $HomePath $entry.Root) -Label ("community__" + $entry.Root.Replace("\", "__")) -Component $entry.Component
+      }
     }
   }
-  Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "skills") -Destination (Join-Path $HomePath ".codex\skills") -Label ".codex__skills"
-  Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "agents") -Destination (Join-Path $HomePath ".codex\agents") -Label ".codex__agents"
-  Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "prompts") -Destination (Join-Path $HomePath ".codex\prompts") -Label ".codex__prompts"
+  if (Test-SelectedComponent -Names @("codex", "codex-skills", "skills")) {
+    Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "skills") -Destination (Join-Path $HomePath ".codex\skills") -Label ".codex__skills" -Component "codex"
+  }
+  if (Test-SelectedComponent -Names @("codex", "codex-agents", "agents")) {
+    Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "agents") -Destination (Join-Path $HomePath ".codex\agents") -Label ".codex__agents" -Component "codex"
+  }
+  if (Test-SelectedComponent -Names @("codex", "codex-prompts", "prompts")) {
+    Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "prompts") -Destination (Join-Path $HomePath ".codex\prompts") -Label ".codex__prompts" -Component "codex"
+  }
 }
 
 if ($InstallToolProfiles) {
   $toolProfileTargets = @(
-    @{ Source = "codex"; Destination = ".codex"; Label = ".codex__profile" },
-    @{ Source = "opencode"; Destination = ".opencode"; Label = ".opencode" },
-    @{ Source = "opencode-global"; Destination = ".config\opencode"; Label = ".config__opencode" },
-    @{ Source = "claude"; Destination = ".claude"; Label = ".claude" },
-    @{ Source = "cursor"; Destination = ".cursor"; Label = ".cursor" },
-    @{ Source = "gemini"; Destination = ".gemini"; Label = ".gemini" },
-    @{ Source = "windsurf"; Destination = ".windsurf"; Label = ".windsurf" },
-    @{ Source = "windsurf-global"; Destination = ".codeium\windsurf\memories"; Label = ".codeium__windsurf__memories" },
-    @{ Source = "antigravity"; Destination = ".antigravity"; Label = ".antigravity" },
-    @{ Source = "ai-standards"; Destination = ".ai-standards"; Label = ".ai-standards" }
+    @{ Source = "codex"; Destination = ".codex"; Label = ".codex__profile"; Component = "codex" },
+    @{ Source = "opencode"; Destination = ".opencode"; Label = ".opencode"; Component = "opencode" },
+    @{ Source = "opencode-global"; Destination = ".config\opencode"; Label = ".config__opencode"; Component = "opencode" },
+    @{ Source = "claude"; Destination = ".claude"; Label = ".claude"; Component = "claude" },
+    @{ Source = "cursor"; Destination = ".cursor"; Label = ".cursor"; Component = "cursor" },
+    @{ Source = "gemini"; Destination = ".gemini"; Label = ".gemini"; Component = "gemini" },
+    @{ Source = "windsurf"; Destination = ".windsurf"; Label = ".windsurf"; Component = "windsurf" },
+    @{ Source = "windsurf-global"; Destination = ".codeium\windsurf\memories"; Label = ".codeium__windsurf__memories"; Component = "windsurf" },
+    @{ Source = "antigravity"; Destination = ".antigravity"; Label = ".antigravity"; Component = "antigravity" },
+    @{ Source = "ai-standards"; Destination = ".ai-standards"; Label = ".ai-standards"; Component = "antigravity" }
   )
   foreach ($target in $toolProfileTargets) {
-    Add-InstallTarget `
-      -Targets $extraTargets `
-      -Source (Join-Path $SourceToolProfiles $target.Source) `
-      -Destination (Join-Path $HomePath $target.Destination) `
-      -Label $target.Label
+    if (Test-SelectedComponent -Names @("tool-profiles", $target.Component)) {
+      Add-InstallTarget `
+        -Targets $extraTargets `
+        -Source (Join-Path $SourceToolProfiles $target.Source) `
+        -Destination (Join-Path $HomePath $target.Destination) `
+        -Label $target.Label `
+        -Component $target.Component
+    }
   }
 
-  Add-InstallFileTarget `
-    -Targets $extraFileTargets `
-    -Source (Join-Path $SourceToolProfiles "antigravity-home\antigravity-rules.json") `
-    -Destination (Join-Path $HomePath "antigravity-rules.json") `
-    -Label "antigravity-rules.json"
+  if (Test-SelectedComponent -Names @("tool-profiles", "antigravity")) {
+    Add-InstallFileTarget `
+      -Targets $extraFileTargets `
+      -Source (Join-Path $SourceToolProfiles "antigravity-home\antigravity-rules.json") `
+      -Destination (Join-Path $HomePath "antigravity-rules.json") `
+      -Label "antigravity-rules.json" `
+      -Component "antigravity"
+  }
+}
+
+if ($ListTargets -or $DryRun) {
+  $mode = if ($Uninstall) { "uninstall-plan" } elseif ($DryRun) { "dry-run" } else { "list" }
+  Write-InstallPlan -CoreTargets $coreTargets -DirectoryTargets $extraTargets.ToArray() -FileTargets $extraFileTargets.ToArray() -Mode $mode
+  if ($DryRun -or $ListTargets) {
+    return
+  }
+}
+
+if ($Uninstall) {
+  if ($includeCore) {
+    Backup-Path -Path $TargetOrquestrador -Label ".orquestrador"
+    Backup-Path -Path $TargetAgents -Label "AGENTS.md"
+  }
+  foreach ($target in $extraTargets) {
+    Backup-Path -Path $target.Destination -Label $target.Label
+  }
+  foreach ($target in $extraFileTargets) {
+    Backup-Path -Path $target.Destination -Label $target.Label
+  }
+
+  if ($includeCore -and (Test-Path -LiteralPath $TargetOrquestrador)) {
+    if (-not (Test-PathUnderRoot -Path $TargetOrquestrador -Root $HomePath)) {
+      throw "Refusing to remove target outside home: $TargetOrquestrador"
+    }
+    Remove-Item -LiteralPath $TargetOrquestrador -Recurse -Force
+  }
+  if ($includeCore -and (Test-Path -LiteralPath $TargetAgents)) {
+    if (-not (Test-PathUnderRoot -Path $TargetAgents -Root $HomePath)) {
+      throw "Refusing to remove target outside home: $TargetAgents"
+    }
+    Remove-Item -LiteralPath $TargetAgents -Force
+  }
+  foreach ($target in $extraTargets) {
+    Uninstall-MappedDirectory -SourceDir $target.Source -DestinationDir $target.Destination
+  }
+  foreach ($target in $extraFileTargets) {
+    if (Test-Path -LiteralPath $target.Destination) {
+      if (-not (Test-PathUnderRoot -Path $target.Destination -Root $HomePath)) {
+        throw "Refusing to remove target outside home: $($target.Destination)"
+      }
+      Remove-Item -LiteralPath $target.Destination -Force
+    }
+  }
+
+  [pscustomobject]@{
+    HomePath = if ($VerbosePaths) { $HomePath } else { "[redacted]" }
+    UninstalledCore = $includeCore
+    Backup = if (Test-Path -LiteralPath $BackupDir) { if ($VerbosePaths) { $BackupDir } else { "[created]" } } else { $null }
+    ExtraTargets = $extraTargets.Count
+    FileTargets = $extraFileTargets.Count
+  } | Format-List
+  return
 }
 
 Backup-Path -Path $TargetOrquestrador -Label ".orquestrador"
@@ -243,10 +470,10 @@ if (-not $SkipSkillSync) {
 }
 
 [pscustomobject]@{
-  HomePath = $HomePath
-  InstalledOrquestrador = $TargetOrquestrador
-  InstalledAgents = $TargetAgents
-  Backup = if (Test-Path -LiteralPath $BackupDir) { $BackupDir } else { $null }
+  HomePath = if ($VerbosePaths) { $HomePath } else { "[redacted]" }
+  InstalledOrquestrador = if ($VerbosePaths) { $TargetOrquestrador } else { ".orquestrador" }
+  InstalledAgents = if ($VerbosePaths) { $TargetAgents } else { "AGENTS.md" }
+  Backup = if (Test-Path -LiteralPath $BackupDir) { if ($VerbosePaths) { $BackupDir } else { "[created]" } } else { $null }
   SkillSync = -not $SkipSkillSync
   ToolProfiles = $InstallToolProfiles
   ExtraSkillTargets = $extraTargets.Count

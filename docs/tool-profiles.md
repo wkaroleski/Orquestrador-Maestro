@@ -89,3 +89,19 @@ Todos esses pontos de entrada mandam a ferramenta usar o `AGENTS.md` global, o O
 No Linux/macOS, os mesmos pontos ficam sob `$HOME`, como `$HOME/AGENTS.md`, `$HOME/.config/opencode/opencode.json`, `$HOME/.claude/CLAUDE.md`, `$HOME/.cursor/AGENTS.md`, `$HOME/.gemini/GEMINI.md`, `$HOME/.codeium/windsurf/memories/global_rules.md` e `$HOME/.ai-standards`.
 
 Se uma ferramenta estiver em uma versão que só aceita regra global por UI ou conta em nuvem, copie o conteúdo de `%USERPROFILE%\AGENTS.md` no Windows ou `$HOME/AGENTS.md` no Linux/macOS para a regra global dessa ferramenta.
+
+## Matriz De Capacidades
+
+A fonte estruturada da matriz é `orquestrador/PROGRAM_ENTRYPOINTS.json`. A tabela abaixo resume o comportamento público esperado:
+
+| Ferramenta | Componente `Only` | Autoativação | Hook/profile instalado | Reescrita de comando |
+|---|---|---|---|---|
+| Codex | `codex` | Sim | `AGENTS.md`, skills, agentes e prompts | Não |
+| OpenCode | `opencode` | Sim | `AGENTS.md`, `opencode.json`, hooks e skills | Não |
+| Claude Code | `claude` | Sim | `CLAUDE.md`, `SYSTEM_PROMPT.md`, hooks e skills | Não por padrão |
+| Cursor | `cursor` | Sim | `AGENTS.md`, regra MDC, hooks e skills | Não |
+| Gemini CLI | `gemini` | Sim | `GEMINI.md`, hooks e skills | Não |
+| Windsurf | `windsurf` | Sim | `global_rules.md`, hooks e skills | Não |
+| Antigravity | `antigravity` | Sim | `antigravity-rules.json`, `.antigravity`, `.ai-standards` e skills | Não |
+
+A inspiração do RTK deve ser tratada como futuro wrapper opt-in para saídas compactas, não como hook automático instalado no fluxo padrão. Isso evita alterar comandos do usuário sem consentimento.

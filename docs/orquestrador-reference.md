@@ -3,6 +3,7 @@
 Este documento explica a lógica interna do Orquestrador Maestro: como ele escolhe skills, como os hooks funcionam, quais arquivos controlam o comportamento e como uma IA deve usar o pacote depois da instalação.
 
 Para a lista completa de skills publicadas, use também [skill-catalog.md](skill-catalog.md).
+Para a estratégia de economia de contexto, use [context-economy.md](context-economy.md).
 
 ## Ideia Central
 
@@ -195,6 +196,26 @@ Os agentes em `codex/agents/` são perfis de delegação. Eles não substituem o
 O `install.ps1` da raiz é um wrapper conservador para Windows. Por padrão ele chama `scripts/install.ps1` com `-Force` e instala perfis de ferramentas, a menos que o usuário passe `-NoForce`, `-NoToolProfiles` ou `-CoreOnly`.
 
 O `install.sh` da raiz é o wrapper equivalente para Linux/macOS. Por padrão ele chama `scripts/install.sh` com `--force` e instala perfis de ferramentas, a menos que o usuário passe `--no-force`, `--no-tool-profiles` ou `--core-only`.
+
+Os wrappers também aceitam prévia e manutenção segura:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -DryRun
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -ListTargets
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -Only codex
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -Uninstall -DryRun
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --dry-run
+bash install.sh --list-targets
+bash install.sh --only codex
+bash install.sh --uninstall --dry-run
+```
+
+Por padrão, `DryRun` e `ListTargets` mostram IDs simbólicos. Paths completos ficam restritos a `-VerbosePaths` ou `--verbose-paths`.
 
 Os motores `scripts/install.ps1` e `scripts/install.sh`:
 

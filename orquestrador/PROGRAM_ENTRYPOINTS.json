@@ -3,6 +3,12 @@
   "owner": "{{USER_NAME}}",
   "home": "{{USER_HOME}}",
   "principle": "Keep each tool's native entrypoints stable; sync compact canonical content into the paths each tool already reads.",
+  "capabilityModel": {
+    "install": "Installers copy fixed symbolic targets only; they never accept arbitrary source or destination paths from CLI flags.",
+    "activation": "Entrypoints point each tool back to AGENTS.md, .orquestrador/rules.md, .orquestrador/maestro.md, and project DEV documentation when present.",
+    "contextEconomy": "Tools should load compact contracts, indexes, routers, and task-specific skills before opening large catalogs or full DEV trees.",
+    "uninstall": "Uninstall is conservative: core files can be removed, shared skill/tool directories remove only files mapped from this public snapshot."
+  },
   "canonical": {
     "rules": "{{USER_HOME}}/.orquestrador/rules.md",
     "maestro": "{{USER_HOME}}/.orquestrador/maestro.md",
@@ -23,6 +29,15 @@
   },
   "programs": {
     "codex": {
+      "component": "codex",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "AGENTS.md and user skill discovery",
+        "commandRewrite": false,
+        "statusline": "external/OMX when installed",
+        "settingsMerge": "file copy with backup",
+        "verify": "scripts/verify-install.ps1 or scripts/verify-install.sh"
+      },
       "primary": [
         "{{USER_HOME}}/.codex/config.toml",
         "{{USER_HOME}}/.codex/AGENTS.md",
@@ -32,6 +47,15 @@
       "notes": "Codex discovers user skills from .codex/skills and project/global AGENTS.md files."
     },
     "opencode": {
+      "component": "opencode",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "global AGENTS.md, opencode.json instructions, hooks.md",
+        "commandRewrite": false,
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "OpenCode config includes ~/.orquestrador/rules.md and ~/.orquestrador/maestro.md"
+      },
       "primary": [
         "{{USER_HOME}}/.config/opencode/AGENTS.md",
         "{{USER_HOME}}/.config/opencode/opencode.json",
@@ -49,6 +73,15 @@
       "notes": "OpenCode keeps its own .opencode entrypoints; legacy .agents/skills remains populated for compatibility."
     },
     "antigravity": {
+      "component": "antigravity",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "antigravity-rules.json plus .ai-standards",
+        "commandRewrite": false,
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "Antigravity JSON files parse and reference .orquestrador/.ai-standards"
+      },
       "primary": [
         "{{USER_HOME}}/antigravity-rules.json",
         "{{USER_HOME}}/.antigravity/antigravity.json",
@@ -59,6 +92,15 @@
       "optionalEndpoint": "ws://localhost:3001"
     },
     "claude": {
+      "component": "claude",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "CLAUDE.md, SYSTEM_PROMPT.md, hooks.md, skills",
+        "commandRewrite": "not installed by default; future compact command wrappers must be opt-in",
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "Claude global memory includes DEV/WORKLOG.md guidance"
+      },
       "primary": [
         "{{USER_HOME}}/.claude/CLAUDE.md",
         "{{USER_HOME}}/.claude/SYSTEM_PROMPT.md",
@@ -68,6 +110,15 @@
       "notes": "Claude Code loads user memory from .claude/CLAUDE.md."
     },
     "cursor": {
+      "component": "cursor",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "AGENTS.md, MDC rule, hooks.md, skills",
+        "commandRewrite": false,
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "Cursor AGENTS/rule files include DEV/WORKLOG.md guidance"
+      },
       "primary": [
         "{{USER_HOME}}/.cursor/AGENTS.md",
         "{{USER_HOME}}/.cursor/rules/orquestrador-maestro.mdc",
@@ -77,6 +128,15 @@
       "notes": "Cursor supports AGENTS.md and rule files; the installer writes both as portable local entrypoints."
     },
     "gemini": {
+      "component": "gemini",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "GEMINI.md, hooks.md, skills",
+        "commandRewrite": false,
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "Gemini global context includes DEV/WORKLOG.md guidance"
+      },
       "primary": [
         "{{USER_HOME}}/.gemini/GEMINI.md",
         "{{USER_HOME}}/.gemini/hooks.md"
@@ -85,6 +145,15 @@
       "notes": "Gemini CLI loads global context from .gemini/GEMINI.md by default."
     },
     "windsurf": {
+      "component": "windsurf",
+      "capabilities": {
+        "autoActivates": true,
+        "hookSupport": "Windsurf/Cascade global rules, hooks.md, skills",
+        "commandRewrite": false,
+        "statusline": false,
+        "settingsMerge": "file copy with backup",
+        "verify": "Windsurf global rules include DEV/WORKLOG.md guidance"
+      },
       "primary": [
         "{{USER_HOME}}/.codeium/windsurf/memories/global_rules.md",
         "{{USER_HOME}}/.windsurf/hooks.md"

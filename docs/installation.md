@@ -10,6 +10,18 @@ Este guia é para quem baixou o repositório e quer instalar o Orquestrador no p
 
 ## Instalação Completa Recomendada
 
+Para ver o plano antes de alterar qualquer arquivo:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -DryRun
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --dry-run
+```
+
 ### Windows
 
 ```powershell
@@ -102,6 +114,8 @@ Install verification passed.
 O comando também mostra contagens de skills, agentes e prompts instalados.
 
 ## Instalações Alternativas
+
+Todas as flags estão detalhadas em [installer-options.md](installer-options.md).
 
 Só núcleo Orquestrador:
 

@@ -17,6 +17,7 @@ Este repo compartilha comportamento e estrutura, não o conteúdo privado da má
 
 - Caches e runtimes de ferramentas.
 - Logs, backups, relatórios de doctor, memórias e histórico de execução.
+- Artefatos operacionais locais como `.omx/`, `.local/` e `DEV/` deste clone.
 - Configurações com projetos locais, tokens, chaves, credenciais ou caminhos reais.
 - Arquivos temporários e cópias `.bak`.
 - Dependências vendorizadas como `node_modules` e artefatos de build/runtime.
@@ -47,4 +48,5 @@ A validação procura:
 - Nome de usuário local.
 - Padrões comuns de segredo, como tokens GitHub, OpenAI, AWS e Slack.
 - Diretórios proibidos como `logs` e `backups`.
+- Raízes locais privadas como `.omx/`, `.local/` e `DEV/`.
 - JSON inválido no snapshot.

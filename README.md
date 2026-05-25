@@ -39,6 +39,32 @@ O que foi aproveitado e melhorado:
 
 Antes da integração, os scripts foram ajustados para evitar dependência de `readlink -f`, funcionar no Bash antigo do macOS, copiar community skills e Codex skills para o mesmo destino sem perder fontes, manter proteção antes de remoções recursivas e aceitar `--home-path` para testes isolados.
 
+Também foi integrada a PR [#2 - feat: add canonical skill management and validation scripts](https://github.com/FernandoBolzan/Orquestrador-Maestro/pull/2), criada por [`kivervinicius`](https://github.com/kivervinicius) e mergeada em 2026-05-23. Essa contribuição consolidou o fluxo canônico de skills:
+
+- scripts `scripts/new-canonical-skill.ps1` e `scripts/new-canonical-skill.sh` para criar novas skills canônicas;
+- `scripts/skill-catalog.js` para apoiar catálogo, criação e validação de skills;
+- `orquestrador/SKILLS_MANIFEST.json` como registro canônico de skills e comportamento de espelhamento;
+- `orquestrador/sync-skills.ps1` e `orquestrador/sync-skills.sh` lendo o manifesto em vez de listas rígidas;
+- validação em `scripts/validate-skills.ps1` e `scripts/validate-skills.sh`;
+- documentação atualizada em `docs/skill-catalog.md`, `docs/update-flow.md` e `orquestrador/SKILLS_ORGANIZATION.md`.
+
+Na prática, a PR #2 deixou o projeto mais fácil de manter: novas skills passam por um caminho repetível de criação, manifesto, sincronização, validação e documentação.
+
+## Melhorias Recentes
+
+A versão atual também incorporou aprendizados de projetos como [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) e [`juliusbrussee/caveman`](https://github.com/juliusbrussee/caveman), adaptados ao objetivo do Orquestrador Maestro: instalar uma configuração pública, auditável e reutilizável para vários agentes de IA.
+
+Principais melhorias:
+
+- instalador previsível com `DryRun`, `ListTargets`, `Only`, `Uninstall`, `NonInteractive` e `VerbosePaths` no PowerShell e no Bash;
+- saída segura por padrão, com caminhos locais redigidos nos relatórios de instalação e remoção;
+- validação pública reforçada contra arquivos locais, temporários, caches, memórias privadas e raízes como `.omx/`, `.local/` e `DEV/`;
+- smoke tests em home temporário para validar instalação, verificação, listagem e desinstalação sem tocar no usuário real;
+- matriz de entrypoints em `orquestrador/PROGRAM_ENTRYPOINTS.json` para Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity;
+- documentação de economia de contexto para orientar IAs a lerem primeiro regras, índices, roteadores e `DEV/` antes de carregar arquivos longos.
+
+Para entender os detalhes, veja [docs/installer-options.md](docs/installer-options.md), [docs/context-economy.md](docs/context-economy.md), [docs/privacy-model.md](docs/privacy-model.md) e [docs/orquestrador-reference.md](docs/orquestrador-reference.md).
+
 ## Visão Geral
 
 O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI ou Windsurf. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
@@ -79,6 +105,18 @@ Download em ZIP:
 Se baixar como ZIP, extraia a pasta antes de executar os comandos abaixo.
 
 ## Instalação Rápida
+
+Prévia sem alterar arquivos:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -DryRun
+```
+
+Linux/macOS:
+
+```bash
+bash install.sh --dry-run
+```
 
 ### Windows
 
@@ -542,6 +580,8 @@ Mostre achados com arquivo e linha antes do resumo.
 
 ## Opções De Instalação
 
+Guia completo das flags: [docs/installer-options.md](docs/installer-options.md).
+
 Instalação padrão:
 
 ```powershell
@@ -715,8 +755,10 @@ O validador público verifica:
 ## Documentação Principal
 
 - [docs/installation.md](docs/installation.md): instalação completa, destinos criados e resolução de problemas.
+- [docs/installer-options.md](docs/installer-options.md): flags do instalador, dry-run, listagem, `Only`, uninstall e teste em home temporário.
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
+- [docs/context-economy.md](docs/context-economy.md): economia de contexto inspirada em RTK/Caveman, leitura em camadas e roadmap de wrappers compactos.
 - [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
 - [docs/ai-agent-operating-guide.md](docs/ai-agent-operating-guide.md): como as IAs devem resolver tarefas usando o Orquestrador.
 - [docs/project-dev-hierarchy.md](docs/project-dev-hierarchy.md): hierarquia `DEV/` para documentação e memória de projetos.

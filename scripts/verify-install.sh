@@ -2,10 +2,12 @@
 set -euo pipefail
 
 # Orquestrador Maestro - Unix install verification
-# Usage: bash scripts/verify-install.sh [--home-path PATH] [--skip-tool-profiles]
+# Usage: bash scripts/verify-install.sh [--home-path PATH] [--skip-tool-profiles] [--core-only]
 
 HOME_PATH="${HOME:-}"
 SKIP_TOOL_PROFILES=false
+CORE_ONLY=false
+VERBOSE_PATHS=false
 ISSUES=()
 
 while [ "$#" -gt 0 ]; do
@@ -20,6 +22,12 @@ while [ "$#" -gt 0 ]; do
       ;;
     --skip-tool-profiles)
       SKIP_TOOL_PROFILES=true
+      ;;
+    --core-only)
+      CORE_ONLY=true
+      ;;
+    --verbose-paths)
+      VERBOSE_PATHS=true
       ;;
     --help|-h)
       sed -n '2,4p' "$0"
@@ -94,25 +102,27 @@ assert_file_contains "$HOME_PATH/AGENTS.md" "DEV/WORKLOG\\.md" "Global AGENTS.md
 assert_file_contains "$ORQUESTRADOR/rules.md" "DEV/WORKLOG\\.md" "Orquestrador rules"
 assert_file_contains "$ORQUESTRADOR/PROJECT_DEV_HIERARCHY.md" "DEV/WORKLOG\\.md" "Project DEV hierarchy"
 
-assert_path "$CODEX/skills" "Codex skills"
-assert_path "$CODEX/agents" "Codex agents"
-assert_path "$CODEX/prompts" "Codex prompts"
+if [ "$CORE_ONLY" = false ]; then
+  assert_path "$CODEX/skills" "Codex skills"
+  assert_path "$CODEX/agents" "Codex agents"
+  assert_path "$CODEX/prompts" "Codex prompts"
 
-COMPAT_ROOTS=(
-  ".agents/skills"
-  ".claude/skills"
-  ".opencode/skills"
-  ".cursor/skills"
-  ".gemini/skills"
-  ".windsurf/skills"
-  ".antigravity-skills/skills"
-)
+  COMPAT_ROOTS=(
+    ".agents/skills"
+    ".claude/skills"
+    ".opencode/skills"
+    ".cursor/skills"
+    ".gemini/skills"
+    ".windsurf/skills"
+    ".antigravity-skills/skills"
+  )
 
-for root in "${COMPAT_ROOTS[@]}"; do
-  assert_path "$HOME_PATH/$root" "Compatibility skill root $root"
-done
+  for root in "${COMPAT_ROOTS[@]}"; do
+    assert_path "$HOME_PATH/$root" "Compatibility skill root $root"
+  done
+fi
 
-if [ "$SKIP_TOOL_PROFILES" = false ]; then
+if [ "$CORE_ONLY" = false ] && [ "$SKIP_TOOL_PROFILES" = false ]; then
   assert_path "$HOME_PATH/.codex/AGENTS.md" "Codex AGENTS profile"
   assert_path "$HOME_PATH/.config/opencode/AGENTS.md" "OpenCode global AGENTS profile"
   assert_path "$HOME_PATH/.config/opencode/opencode.json" "OpenCode global config"
@@ -163,16 +173,21 @@ if [ "${#ISSUES[@]}" -gt 0 ]; then
   exit 1
 fi
 
-if [ "$SKIP_TOOL_PROFILES" = true ]; then
+if [ "$CORE_ONLY" = true ] || [ "$SKIP_TOOL_PROFILES" = true ]; then
   TOOL_PROFILES_CHECKED=false
 else
   TOOL_PROFILES_CHECKED=true
 fi
 
 echo "Install verification passed."
-echo "HomePath: $HOME_PATH"
+if [ "$VERBOSE_PATHS" = true ]; then
+  echo "HomePath: $HOME_PATH"
+else
+  echo "HomePath: [redacted]"
+fi
 echo "OrquestradorSkills: $(count_dirs "$ORQUESTRADOR/skills")"
 echo "CodexSkills: $(count_dirs "$CODEX/skills")"
 echo "CodexAgents: $(count_files "$CODEX/agents")"
 echo "CodexPrompts: $(count_files "$CODEX/prompts")"
 echo "ToolProfilesChecked: $TOOL_PROFILES_CHECKED"
+echo "CoreOnly: $CORE_ONLY"

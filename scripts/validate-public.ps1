@@ -36,7 +36,7 @@ function Get-RelativePath {
 function Test-ExcludedScanPath {
   param([string]$RelativePath)
   $rel = $RelativePath.Replace("\", "/")
-  if ($rel -match "(^|/)(\.git|\.local|DEV|node_modules|dist|build)(/|$)") { return $true }
+  if ($rel -match "(^|/)(\.git|\.local|\.omx|DEV|node_modules|dist|build)(/|$)") { return $true }
   return $false
 }
 
@@ -89,6 +89,18 @@ foreach ($file in $forbiddenFiles) {
   }
 }
 
+$git = Get-Command git -ErrorAction SilentlyContinue
+if ($git) {
+  foreach ($privateRoot in @(".omx", ".local", "DEV")) {
+    $tracked = @(& git -C $repoRootFull ls-files -- $privateRoot 2>$null)
+    if ($LASTEXITCODE -eq 0 -and $tracked.Count -gt 0) {
+      foreach ($trackedPath in $tracked) {
+        Add-Issue -Kind "tracked-private-root" -Path $trackedPath -Detail "Private local runtime roots must not be tracked."
+      }
+    }
+  }
+}
+
 $secretPatterns = [ordered]@{
   "github-token" = "(?i)(ghp_|github_pat_)[A-Za-z0-9_]{20,}";
   "openai-key" = "(?i)(sk-proj-[A-Za-z0-9_-]{48,}|sk-svcacct-[A-Za-z0-9_-]{48,}|sk-[A-Za-z0-9]{32,})";
@@ -120,8 +132,8 @@ foreach ($file in Get-ChildItem -LiteralPath $repoRootFull -Recurse -File -Force
     Add-Issue -Kind "generated-database" -Path $relative -Detail "Generated databases must not be published."
   }
 
-  if ($leaf -like "*.bak*" -or $leaf -like "*.log") {
-    Add-Issue -Kind "forbidden-file-kind" -Path $relative -Detail "Backup/log files must not be published."
+  if ($leaf -like "*.bak*" -or $leaf -like "*.log" -or $leaf -like ".temp-*") {
+    Add-Issue -Kind "forbidden-file-kind" -Path $relative -Detail "Backup/log/temp files must not be published."
   }
 
   if (-not (Test-TextFile -Path $file.FullName)) { continue }
