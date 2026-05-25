@@ -50,6 +50,8 @@ Também foi integrada a PR [#2 - feat: add canonical skill management and valida
 
 Na prática, a PR #2 deixou o projeto mais fácil de manter: novas skills passam por um caminho repetível de criação, manifesto, sincronização, validação e documentação.
 
+Crédito também ao Bruno, integrante da comunidade Grupo IAPro, pela curadoria e pelo papo que trouxe as referências de RTK e Caveman para a discussão. Essa contribuição ajudou a priorizar melhorias de economia de contexto, redução de leitura desnecessária, uso mais consciente da pasta `DEV/` e organização do Orquestrador para evitar gasto excessivo de tokens.
+
 ## Melhorias Recentes
 
 A versão atual também incorporou aprendizados de projetos como [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) e [`juliusbrussee/caveman`](https://github.com/juliusbrussee/caveman), adaptados ao objetivo do Orquestrador Maestro: instalar uma configuração pública, auditável e reutilizável para vários agentes de IA.
