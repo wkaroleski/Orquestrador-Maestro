@@ -1,0 +1,68 @@
+{
+  "name": "@iapro/orquestrador-maestro-cli",
+  "version": "0.1.0",
+  "description": "CLI npm para instalar, atualizar, verificar e remover o Orquestrador Maestro no usuario atual.",
+  "bin": {
+    "orquestrador-maestro": "bin/orquestrador-maestro.js"
+  },
+  "files": [
+    "bin/",
+    "codex/agents/",
+    "codex/prompts/",
+    "codex/skills/",
+    "docs/",
+    "home/AGENTS.md",
+    "install.ps1",
+    "install.sh",
+    "orquestrador/*.json",
+    "orquestrador/*.md",
+    "orquestrador/*.ps1",
+    "orquestrador/*.sh",
+    "orquestrador/bin/",
+    "orquestrador/blueprints/",
+    "orquestrador/personas/",
+    "orquestrador/skills/",
+    "scripts/*.js",
+    "scripts/*.ps1",
+    "scripts/*.sh",
+    "skill-library/MANIFEST.json",
+    "skill-library/community-skills/",
+    "tool-profiles/",
+    "README.md"
+  ],
+  "scripts": {
+    "pack:dry-run": "npm pack --dry-run",
+    "validate": "powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-public.ps1 && powershell -NoProfile -ExecutionPolicy Bypass -File ./scripts/validate-skills.ps1"
+  },
+  "config": {
+    "telemetryEndpoint": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FernandoBolzan/Orquestrador-Maestro.git"
+  },
+  "keywords": [
+    "iapro",
+    "orquestrador",
+    "maestro",
+    "ai-agents",
+    "agent-orchestration",
+    "codex",
+    "claude-code",
+    "opencode",
+    "cursor",
+    "gemini-cli",
+    "windsurf",
+    "antigravity",
+    "skills",
+    "hooks"
+  ],
+  "author": "Grupo IAPro",
+  "homepage": "https://github.com/FernandoBolzan/Orquestrador-Maestro#readme",
+  "bugs": {
+    "url": "https://github.com/FernandoBolzan/Orquestrador-Maestro/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

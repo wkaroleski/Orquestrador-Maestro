@@ -106,6 +106,46 @@ Download em ZIP:
 
 Se baixar como ZIP, extraia a pasta antes de executar os comandos abaixo.
 
+## Instalação Via npm
+
+Também é possível distribuir o Orquestrador Maestro como pacote npm:
+
+```bash
+npm install -g @iapro/orquestrador-maestro-cli
+```
+
+Depois instale no home do usuário:
+
+```bash
+orquestrador-maestro install
+orquestrador-maestro verify
+```
+
+Para atualizar:
+
+```bash
+npm update -g @iapro/orquestrador-maestro-cli
+orquestrador-maestro update
+orquestrador-maestro verify
+```
+
+O pacote instala o comando `orquestrador-maestro`, mas não altera o home automaticamente durante o `npm install`. A alteração acontece quando o usuário roda `orquestrador-maestro install` ou `orquestrador-maestro update`, o que deixa o fluxo mais auditável e seguro.
+
+O CLI tem telemetria anônima para medir comandos como `install`, `update`, `verify`, `dry-run` e `uninstall`. Ela não envia telefone, nome de usuário, caminho local, prompts, logs, tokens ou conteúdo de projeto. Para usar em produção, configure um endpoint HTTPS antes de publicar o pacote ou depois no usuário:
+
+```bash
+orquestrador-maestro telemetry endpoint https://seu-dominio.example/api/orquestrador-telemetry
+orquestrador-maestro telemetry test
+```
+
+Para desabilitar:
+
+```bash
+orquestrador-maestro telemetry disable
+```
+
+Guia completo: [docs/npm-package.md](docs/npm-package.md).
+
 ## Instalação Rápida
 
 Prévia sem alterar arquivos:
@@ -761,6 +801,7 @@ O validador público verifica:
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
 - [docs/context-economy.md](docs/context-economy.md): economia de contexto inspirada em RTK/Caveman, leitura em camadas e roadmap de wrappers compactos.
+- [docs/npm-package.md](docs/npm-package.md): pacote `@iapro/orquestrador-maestro-cli`, comandos npm, update e publicação.
 - [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
 - [docs/ai-agent-operating-guide.md](docs/ai-agent-operating-guide.md): como as IAs devem resolver tarefas usando o Orquestrador.
 - [docs/project-dev-hierarchy.md](docs/project-dev-hierarchy.md): hierarquia `DEV/` para documentação e memória de projetos.
@@ -826,6 +867,8 @@ Palavras-chave naturais do README:
 - Windsurf global rules;
 - Windows PowerShell installer;
 - Linux/macOS Bash installer;
+- npm package;
+- `@iapro/orquestrador-maestro-cli`;
 - project memory;
 - DEV documentation hierarchy;
 - multi-agent workflow;

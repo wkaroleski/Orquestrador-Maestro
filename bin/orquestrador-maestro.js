@@ -1,0 +1,507 @@
+#!/usr/bin/env node
+"use strict";
+
+const { spawnSync } = require("node:child_process");
+const crypto = require("node:crypto");
+const fs = require("node:fs");
+const http = require("node:http");
+const https = require("node:https");
+const os = require("node:os");
+const path = require("node:path");
+
+const rootDir = path.resolve(__dirname, "..");
+const packageJson = require(path.join(rootDir, "package.json"));
+const telemetryTimeoutMs = 1200;
+
+const installFlagDefs = {
+  "--home-path": { ps: "-HomePath", sh: "--home-path", value: true },
+  "--no-force": { ps: "-NoForce", sh: "--no-force" },
+  "--no-tool-profiles": { ps: "-NoToolProfiles", sh: "--no-tool-profiles" },
+  "--core-only": { ps: "-CoreOnly", sh: "--core-only" },
+  "--skip-community-skills": { ps: "-SkipCommunitySkills", sh: "--skip-community-skills" },
+  "--skip-skill-sync": { ps: "-SkipSkillSync", sh: "--skip-skill-sync" },
+  "--only": { ps: "-Only", sh: "--only", value: true },
+  "--dry-run": { ps: "-DryRun", sh: "--dry-run" },
+  "--list-targets": { ps: "-ListTargets", sh: "--list-targets" },
+  "--uninstall": { ps: "-Uninstall", sh: "--uninstall" },
+  "--non-interactive": { ps: "-NonInteractive", sh: "--non-interactive" },
+  "--verbose-paths": { ps: "-VerbosePaths", sh: "--verbose-paths" }
+};
+
+const verifyFlagDefs = {
+  "--home-path": { ps: "-HomePath", sh: "--home-path", value: true },
+  "--skip-tool-profiles": { ps: "-SkipToolProfiles", sh: "--skip-tool-profiles" },
+  "--core-only": { ps: "-CoreOnly", sh: "--core-only" },
+  "--verbose-paths": { ps: "-VerbosePaths", sh: "--verbose-paths" }
+};
+
+function printHelp() {
+  console.log(`Orquestrador Maestro CLI ${packageJson.version}
+
+Uso:
+  orquestrador-maestro install [opcoes]
+  orquestrador-maestro update [opcoes]
+  orquestrador-maestro verify [opcoes]
+  orquestrador-maestro uninstall [opcoes]
+  orquestrador-maestro list-targets [opcoes]
+  orquestrador-maestro dry-run [opcoes]
+  orquestrador-maestro telemetry [status|enable|disable|endpoint|test]
+  orquestrador-maestro version
+
+Opcoes de install/update/uninstall:
+  --home-path <path>          Instala em outro home para teste
+  --core-only                 Instala somente .orquestrador e AGENTS.md
+  --only <component>          Limita a um componente: core, codex, agents,
+                              claude, opencode, cursor, gemini, windsurf,
+                              antigravity
+  --no-tool-profiles          Nao instala perfis globais das ferramentas
+  --skip-community-skills     Nao copia a biblioteca comunitaria
+  --skip-skill-sync           Nao roda o sync de skills
+  --dry-run                   Mostra o plano sem alterar arquivos
+  --list-targets              Lista os destinos conhecidos
+  --non-interactive           Evita prompts interativos
+  --verbose-paths             Mostra caminhos reais nos relatorios
+
+Opcoes de verify:
+  --home-path <path>
+  --core-only
+  --skip-tool-profiles
+  --verbose-paths
+
+Exemplos:
+  npm install -g @iapro/orquestrador-maestro-cli
+  orquestrador-maestro install
+  orquestrador-maestro verify
+  npm update -g @iapro/orquestrador-maestro-cli
+  orquestrador-maestro update
+`);
+}
+
+function normalizeArgs(args) {
+  return args.flatMap((arg) => {
+    if (arg.startsWith("--") && arg.includes("=")) {
+      const index = arg.indexOf("=");
+      return [arg.slice(0, index), arg.slice(index + 1)];
+    }
+    return [arg];
+  });
+}
+
+function translateArgs(args, defs, target) {
+  const normalized = normalizeArgs(args);
+  const translated = [];
+
+  for (let i = 0; i < normalized.length; i += 1) {
+    const arg = normalized[i];
+    const def = defs[arg];
+    if (!def) {
+      throw new Error(`Parametro desconhecido: ${arg}`);
+    }
+
+    translated.push(def[target]);
+    if (def.value) {
+      const value = normalized[i + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error(`Parametro ${arg} exige um valor.`);
+      }
+      translated.push(value);
+      i += 1;
+    }
+  }
+
+  return translated;
+}
+
+function run(command, args) {
+  const result = spawnSync(command, args, {
+    cwd: rootDir,
+    stdio: "inherit",
+    shell: false
+  });
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  return typeof result.status === "number" ? result.status : 1;
+}
+
+function commandExists(filePath) {
+  return fs.existsSync(filePath);
+}
+
+function runInstall(args, injectedFlags = []) {
+  const isWindows = process.platform === "win32";
+  const script = path.join(rootDir, isWindows ? "install.ps1" : "install.sh");
+  if (!commandExists(script)) {
+    throw new Error(`Instalador nao encontrado: ${script}`);
+  }
+
+  if (isWindows) {
+    const translated = translateArgs([...args, ...injectedFlags], installFlagDefs, "ps");
+    return run("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script, ...translated]);
+  }
+
+  const translated = translateArgs([...args, ...injectedFlags], installFlagDefs, "sh");
+  return run("bash", [script, ...translated]);
+}
+
+function runVerify(args) {
+  const isWindows = process.platform === "win32";
+  const script = path.join(rootDir, "scripts", isWindows ? "verify-install.ps1" : "verify-install.sh");
+  if (!commandExists(script)) {
+    throw new Error(`Verificador nao encontrado: ${script}`);
+  }
+
+  if (isWindows) {
+    const translated = translateArgs(args, verifyFlagDefs, "ps");
+    return run("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script, ...translated]);
+  }
+
+  const translated = translateArgs(args, verifyFlagDefs, "sh");
+  return run("bash", [script, ...translated]);
+}
+
+function getTelemetryConfigPath() {
+  if (process.platform === "win32") {
+    const base = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
+    return path.join(base, "OrquestradorMaestro", "telemetry.json");
+  }
+
+  const base = process.env.XDG_CONFIG_HOME || path.join(os.homedir(), ".config");
+  return path.join(base, "orquestrador-maestro", "telemetry.json");
+}
+
+function defaultTelemetryEndpoint() {
+  return process.env.ORQUESTRADOR_MAESTRO_TELEMETRY_ENDPOINT ||
+    (packageJson.config && packageJson.config.telemetryEndpoint) ||
+    "";
+}
+
+function defaultTelemetryConfig() {
+  return {
+    enabled: true,
+    endpoint: defaultTelemetryEndpoint(),
+    anonymousId: crypto.randomUUID(),
+    createdAt: new Date().toISOString()
+  };
+}
+
+function readTelemetryConfig() {
+  const configPath = getTelemetryConfigPath();
+  if (!fs.existsSync(configPath)) {
+    return defaultTelemetryConfig();
+  }
+
+  try {
+    const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
+    return {
+      ...defaultTelemetryConfig(),
+      ...config,
+      endpoint: config.endpoint || defaultTelemetryEndpoint()
+    };
+  } catch {
+    return defaultTelemetryConfig();
+  }
+}
+
+function writeTelemetryConfig(config) {
+  const configPath = getTelemetryConfigPath();
+  fs.mkdirSync(path.dirname(configPath), { recursive: true });
+  fs.writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+}
+
+function telemetryDisabledByEnv() {
+  const value = String(process.env.ORQUESTRADOR_MAESTRO_TELEMETRY || "").toLowerCase();
+  return value === "0" || value === "false" || value === "off" || value === "disabled";
+}
+
+function validateTelemetryEndpoint(endpoint) {
+  if (!endpoint) {
+    return "";
+  }
+
+  const url = new URL(endpoint);
+  const isLocalhost = url.hostname === "localhost" || url.hostname === "127.0.0.1" || url.hostname === "::1";
+  if (url.protocol !== "https:" && !(url.protocol === "http:" && isLocalhost)) {
+    throw new Error("Endpoint de telemetria deve usar HTTPS, exceto localhost para desenvolvimento.");
+  }
+  return url.toString();
+}
+
+function endpointLabel(endpoint) {
+  if (!endpoint) {
+    return "[not configured]";
+  }
+  try {
+    const url = new URL(endpoint);
+    return `${url.protocol}//${url.host}${url.pathname}`;
+  } catch {
+    return "[invalid]";
+  }
+}
+
+function sanitizeFlags(args) {
+  const normalized = normalizeArgs(args);
+  const flags = [];
+  for (const arg of normalized) {
+    if (arg.startsWith("--")) {
+      flags.push(arg);
+    }
+  }
+  return Array.from(new Set(flags)).sort();
+}
+
+function buildTelemetryPayload(command, args, exitCode, errorName) {
+  const config = readTelemetryConfig();
+  return {
+    schemaVersion: 1,
+    packageName: packageJson.name,
+    packageVersion: packageJson.version,
+    event: "cli_command",
+    command,
+    flags: sanitizeFlags(args),
+    exitCode,
+    success: exitCode === 0,
+    errorName: errorName || null,
+    platform: process.platform,
+    arch: process.arch,
+    nodeMajor: Number(process.versions.node.split(".")[0]),
+    ci: Boolean(process.env.CI),
+    anonymousId: config.anonymousId,
+    timestamp: new Date().toISOString()
+  };
+}
+
+function postTelemetry(endpoint, payload) {
+  return new Promise((resolve) => {
+    let url;
+    try {
+      url = new URL(endpoint);
+    } catch {
+      resolve({ sent: false, reason: "invalid-endpoint" });
+      return;
+    }
+
+    const body = JSON.stringify(payload);
+    const transport = url.protocol === "http:" ? http : https;
+    const request = transport.request({
+      method: "POST",
+      hostname: url.hostname,
+      port: url.port || undefined,
+      path: `${url.pathname}${url.search}`,
+      headers: {
+        "content-type": "application/json",
+        "content-length": Buffer.byteLength(body),
+        "user-agent": `${packageJson.name}/${packageJson.version}`
+      },
+      timeout: telemetryTimeoutMs
+    }, (response) => {
+      response.resume();
+      response.on("end", () => {
+        resolve({
+          sent: response.statusCode >= 200 && response.statusCode < 300,
+          reason: `http-${response.statusCode}`
+        });
+      });
+    });
+
+    request.on("timeout", () => {
+      request.destroy();
+      resolve({ sent: false, reason: "timeout" });
+    });
+    request.on("error", (error) => {
+      resolve({ sent: false, reason: error.code || "request-error" });
+    });
+    request.end(body);
+  });
+}
+
+async function sendTelemetry(payload) {
+  if (telemetryDisabledByEnv()) {
+    return { sent: false, reason: "disabled-by-env" };
+  }
+
+  const config = readTelemetryConfig();
+  if (!config.enabled) {
+    return { sent: false, reason: "disabled" };
+  }
+
+  let endpoint;
+  try {
+    endpoint = validateTelemetryEndpoint(config.endpoint || defaultTelemetryEndpoint());
+  } catch {
+    return { sent: false, reason: "invalid-endpoint" };
+  }
+
+  if (!endpoint) {
+    return { sent: false, reason: "no-endpoint" };
+  }
+
+  writeTelemetryConfig({ ...config, endpoint });
+  const result = await postTelemetry(endpoint, payload);
+  if (!result.sent && process.env.ORQUESTRADOR_MAESTRO_TELEMETRY_DEBUG) {
+    console.error(`Telemetry skipped: ${result.reason}`);
+  }
+  return result;
+}
+
+function printTelemetryStatus() {
+  const config = readTelemetryConfig();
+  const envDisabled = telemetryDisabledByEnv();
+  const endpoint = config.endpoint || defaultTelemetryEndpoint();
+  let status = "desabilitada";
+  if (config.enabled && !envDisabled && endpoint) {
+    status = "habilitada e enviando";
+  } else if (config.enabled && !envDisabled) {
+    status = "habilitada, aguardando endpoint";
+  }
+
+  console.log(`Telemetria: ${status}
+
+Endpoint: ${endpointLabel(endpoint)}
+Config: ${getTelemetryConfigPath()}
+AnonymousId: ${config.anonymousId}
+
+Payload permitido:
+  - comando executado
+  - flags sem valores
+  - versao do pacote
+  - plataforma, arquitetura e versao major do Node.js
+  - exit code e sucesso/falha
+  - identificador anonimo aleatorio
+
+Nunca coletar:
+  - telefone
+  - nome de usuario
+  - caminho local
+  - conteudo de projeto
+  - tokens, prompts, logs ou nomes de arquivos privados
+
+Para desabilitar:
+  orquestrador-maestro telemetry disable
+  ORQUESTRADOR_MAESTRO_TELEMETRY=0 orquestrador-maestro install`);
+}
+
+function parseTelemetryEndpoint(args) {
+  const normalized = normalizeArgs(args);
+  const index = normalized.indexOf("--endpoint");
+  if (index === -1) {
+    return "";
+  }
+  const endpoint = normalized[index + 1];
+  if (!endpoint || endpoint.startsWith("--")) {
+    throw new Error("Parametro --endpoint exige uma URL.");
+  }
+  return validateTelemetryEndpoint(endpoint);
+}
+
+async function handleTelemetryCommand(args) {
+  const [subcommand = "status", ...rest] = args;
+  const config = readTelemetryConfig();
+
+  if (subcommand === "status") {
+    printTelemetryStatus();
+    return 0;
+  }
+
+  if (subcommand === "enable") {
+    const endpoint = parseTelemetryEndpoint(rest) || config.endpoint || defaultTelemetryEndpoint();
+    writeTelemetryConfig({ ...config, enabled: true, endpoint });
+    console.log("Telemetria habilitada.");
+    if (!endpoint) {
+      console.log("Nenhum endpoint configurado. Use: orquestrador-maestro telemetry endpoint <url>");
+    }
+    return 0;
+  }
+
+  if (subcommand === "disable") {
+    writeTelemetryConfig({ ...config, enabled: false });
+    console.log("Telemetria desabilitada.");
+    return 0;
+  }
+
+  if (subcommand === "endpoint") {
+    const endpoint = validateTelemetryEndpoint(rest[0] || "");
+    if (!endpoint) {
+      throw new Error("Informe a URL do endpoint.");
+    }
+    writeTelemetryConfig({ ...config, endpoint });
+    console.log(`Endpoint de telemetria atualizado: ${endpointLabel(endpoint)}`);
+    return 0;
+  }
+
+  if (subcommand === "test") {
+    const payload = buildTelemetryPayload("telemetry:test", rest, 0, null);
+    const result = await sendTelemetry({ ...payload, event: "telemetry_test" });
+    console.log(result.sent ? "Evento de teste enviado." : `Evento de teste nao enviado: ${result.reason}`);
+    return result.sent ? 0 : 1;
+  }
+
+  throw new Error(`Subcomando de telemetria desconhecido: ${subcommand}`);
+}
+
+async function dispatch(command, args) {
+  if (command === "--help" || command === "-h" || command === "help") {
+    printHelp();
+    return 0;
+  }
+
+  if (args.includes("--help") || args.includes("-h")) {
+    printHelp();
+    return 0;
+  }
+
+  if (command === "--version" || command === "-v" || command === "version") {
+    console.log(packageJson.version);
+    return 0;
+  }
+
+  if (command === "install" || command === "update") {
+    return runInstall(args);
+  }
+
+  if (command === "uninstall") {
+    return runInstall(args, ["--uninstall"]);
+  }
+
+  if (command === "list-targets") {
+    return runInstall(args, ["--list-targets"]);
+  }
+
+  if (command === "dry-run") {
+    return runInstall(args, ["--dry-run"]);
+  }
+
+  if (command === "verify") {
+    return runVerify(args);
+  }
+
+  if (command === "telemetry") {
+    return handleTelemetryCommand(args);
+  }
+
+  throw new Error(`Comando desconhecido: ${command}`);
+}
+
+async function main() {
+  const [command = "--help", ...args] = process.argv.slice(2);
+  let exitCode = 0;
+  let errorName = null;
+
+  try {
+    exitCode = await dispatch(command, args);
+  } catch (error) {
+    errorName = error.name || "Error";
+    console.error(`Erro: ${error.message}`);
+    exitCode = 1;
+  }
+
+  if (["install", "update", "uninstall", "list-targets", "dry-run", "verify"].includes(command)) {
+    await sendTelemetry(buildTelemetryPayload(command, args, exitCode, errorName));
+  }
+
+  process.exit(exitCode);
+}
+
+main();
