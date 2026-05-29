@@ -163,6 +163,29 @@ function Backup-Path {
   Copy-Item -LiteralPath $Path -Destination $dest -Recurse -Force
 }
 
+function Backup-MappedDirectory {
+  param([string]$SourceDir, [string]$DestinationDir, [string]$Label)
+  if (-not (Test-Path -LiteralPath $DestinationDir)) { return }
+  New-Item -ItemType Directory -Force -Path $BackupDir | Out-Null
+  $backupTarget = Join-Path $BackupDir $Label
+  foreach ($sourceFile in Get-ChildItem -LiteralPath $SourceDir -Recurse -File -Force) {
+    $relative = Get-RelativePath -BasePath $SourceDir -Path $sourceFile.FullName
+    $existingFile = Join-Path $DestinationDir $relative
+    if (Test-Path -LiteralPath $existingFile) {
+      $backupFile = Join-Path $backupTarget $relative
+      New-Item -ItemType Directory -Force -Path (Split-Path -Parent $backupFile) | Out-Null
+      Copy-Item -LiteralPath $existingFile -Destination $backupFile -Force
+    }
+  }
+}
+
+function Backup-MappedFile {
+  param([string]$DestinationFile, [string]$Label)
+  if (-not (Test-Path -LiteralPath $DestinationFile)) { return }
+  New-Item -ItemType Directory -Force -Path $BackupDir | Out-Null
+  Copy-Item -LiteralPath $DestinationFile -Destination (Join-Path $BackupDir $Label) -Force
+}
+
 function Add-InstallTarget {
   param(
     [System.Collections.Generic.List[object]]$Targets,
@@ -432,14 +455,14 @@ $backedUpExtraTargets = @{}
 foreach ($target in $extraTargets) {
   $key = [System.IO.Path]::GetFullPath($target.Destination).ToLowerInvariant()
   if (-not $backedUpExtraTargets.ContainsKey($key)) {
-    Backup-Path -Path $target.Destination -Label $target.Label
+    Backup-MappedDirectory -SourceDir $target.Source -DestinationDir $target.Destination -Label $target.Label
     $backedUpExtraTargets[$key] = $true
   }
 }
 foreach ($target in $extraFileTargets) {
   $key = [System.IO.Path]::GetFullPath($target.Destination).ToLowerInvariant()
   if (-not $backedUpExtraTargets.ContainsKey($key)) {
-    Backup-Path -Path $target.Destination -Label $target.Label
+    Backup-MappedFile -DestinationFile $target.Destination -Label $target.Label
     $backedUpExtraTargets[$key] = $true
   }
 }

@@ -1000,6 +1000,7 @@ Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam tempo
 - Added: `CONTRIBUTING.md` com checklist seguro para PRs, validação, privacidade, skills e changelog.
 - Added: `docs/research/repo-radar-2026-05.md` com radar de repositórios recentes, licenças, padrões úteis e decisões de aproveitamento.
 - Changed: CLI ajustado para telemetria desabilitada por padrão; endpoint configurado sem `telemetry enable` explícito não envia eventos, e configurações legadas sem consentimento versionado são migradas para desabilitadas.
+- Changed: instalador ajustado para fazer backup apenas dos arquivos mapeados em perfis de ferramenta, evitando falha com caches/logs ativos do Codex.
 - Changed: README ampliado com radar de maio de 2026, explicando canais de atualização, telemetria, harness determinístico, subagentes, engenharia de contexto e SkillOps.
 - Changed: documentação de economia de contexto alinhada ao radar recente e aos próximos templates `DEV/`.
 - Security: reforço de que referências externas são usadas como padrões, não como cópia de código, e que telemetria/sessões devem ser opt-in, desativáveis e sem dados locais.
