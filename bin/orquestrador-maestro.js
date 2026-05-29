@@ -12,6 +12,7 @@ const path = require("node:path");
 const rootDir = path.resolve(__dirname, "..");
 const packageJson = require(path.join(rootDir, "package.json"));
 const telemetryTimeoutMs = 1200;
+const telemetryConsentVersion = 1;
 
 const installFlagDefs = {
   "--home-path": { ps: "-HomePath", sh: "--home-path", value: true },
@@ -180,10 +181,26 @@ function defaultTelemetryEndpoint() {
 
 function defaultTelemetryConfig() {
   return {
-    enabled: true,
+    enabled: false,
     endpoint: defaultTelemetryEndpoint(),
     anonymousId: crypto.randomUUID(),
-    createdAt: new Date().toISOString()
+    createdAt: new Date().toISOString(),
+    consentVersion: 0
+  };
+}
+
+function normalizeTelemetryConfig(config) {
+  const rawConfig = config && typeof config === "object" ? config : {};
+  const hasCurrentConsent =
+    rawConfig.enabled === true &&
+    rawConfig.consentVersion === telemetryConsentVersion;
+
+  return {
+    ...defaultTelemetryConfig(),
+    ...rawConfig,
+    enabled: hasCurrentConsent,
+    endpoint: rawConfig.endpoint || defaultTelemetryEndpoint(),
+    consentVersion: hasCurrentConsent ? telemetryConsentVersion : (rawConfig.consentVersion || 0)
   };
 }
 
@@ -195,11 +212,7 @@ function readTelemetryConfig() {
 
   try {
     const config = JSON.parse(fs.readFileSync(configPath, "utf8"));
-    return {
-      ...defaultTelemetryConfig(),
-      ...config,
-      endpoint: config.endpoint || defaultTelemetryEndpoint()
-    };
+    return normalizeTelemetryConfig(config);
   } catch {
     return defaultTelemetryConfig();
   }
@@ -380,7 +393,11 @@ Nunca coletar:
 
 Para desabilitar:
   orquestrador-maestro telemetry disable
-  ORQUESTRADOR_MAESTRO_TELEMETRY=0 orquestrador-maestro install`);
+  ORQUESTRADOR_MAESTRO_TELEMETRY=0 orquestrador-maestro install
+
+Para habilitar:
+  orquestrador-maestro telemetry endpoint https://seu-dominio.example/api/orquestrador-telemetry
+  orquestrador-maestro telemetry enable`);
 }
 
 function parseTelemetryEndpoint(args) {
@@ -407,7 +424,13 @@ async function handleTelemetryCommand(args) {
 
   if (subcommand === "enable") {
     const endpoint = parseTelemetryEndpoint(rest) || config.endpoint || defaultTelemetryEndpoint();
-    writeTelemetryConfig({ ...config, enabled: true, endpoint });
+    writeTelemetryConfig({
+      ...config,
+      enabled: true,
+      endpoint,
+      consentVersion: telemetryConsentVersion,
+      consentedAt: new Date().toISOString()
+    });
     console.log("Telemetria habilitada.");
     if (!endpoint) {
       console.log("Nenhum endpoint configurado. Use: orquestrador-maestro telemetry endpoint <url>");

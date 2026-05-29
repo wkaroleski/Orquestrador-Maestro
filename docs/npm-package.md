@@ -56,6 +56,24 @@ orquestrador-maestro update
 orquestrador-maestro verify
 ```
 
+## Canal De Release
+
+O canal público atual é o `latest` do npm. Esse é o único caminho recomendado para usuários finais:
+
+```bash
+npm install -g @iapro/orquestrador-maestro-cli@latest
+```
+
+Canais como `preview`, `beta` ou `nightly` só devem ser criados quando o projeto tiver:
+
+- changelog separado por canal;
+- validação automatizada do pacote;
+- instruções claras de rollback;
+- política de compatibilidade para instaladores e entrypoints;
+- aviso explícito de risco para quem já usa o Orquestrador em projetos reais.
+
+Enquanto isso não existir, a regra é simples: publicar versões estáveis no `latest` e documentar toda migração no README.
+
 ## Comandos
 
 ```bash
@@ -104,7 +122,7 @@ orquestrador-maestro verify --home-path "$env:TEMP\orquestrador-test" --core-onl
 
 ## Telemetria
 
-O CLI tem telemetria anônima de runtime para medir uso real do pacote quando houver endpoint configurado.
+O CLI tem suporte a telemetria anônima de runtime para medir uso real do pacote. Ela fica desabilitada por padrão. Nenhum evento é enviado sem endpoint configurado e sem habilitação explícita do usuário com `orquestrador-maestro telemetry enable`. Configurações antigas sem consentimento versionado são carregadas como desabilitadas e precisam de novo `telemetry enable`.
 
 Eventos coletáveis:
 
@@ -150,16 +168,16 @@ Configurar endpoint:
 orquestrador-maestro telemetry endpoint https://seu-dominio.example/api/orquestrador-telemetry
 ```
 
-Enviar evento de teste:
-
-```bash
-orquestrador-maestro telemetry test
-```
-
 Habilitar:
 
 ```bash
 orquestrador-maestro telemetry enable
+```
+
+Enviar evento de teste:
+
+```bash
+orquestrador-maestro telemetry test
 ```
 
 Desabilitar:
@@ -181,13 +199,13 @@ $env:ORQUESTRADOR_MAESTRO_TELEMETRY = "0"
 orquestrador-maestro install
 ```
 
-O endpoint também pode ser configurado por variável de ambiente:
+O endpoint também pode ser configurado por variável de ambiente, mas isso não habilita telemetria sozinho:
 
 ```bash
 ORQUESTRADOR_MAESTRO_TELEMETRY_ENDPOINT=https://seu-dominio.example/api/orquestrador-telemetry
 ```
 
-Antes do publish, o mantenedor pode gravar o endpoint padrão em `package.json`:
+Antes do publish, o mantenedor pode gravar um endpoint sugerido em `package.json`, mas a telemetria continuará exigindo `orquestrador-maestro telemetry enable` no usuário:
 
 ```json
 {
@@ -197,7 +215,7 @@ Antes do publish, o mantenedor pode gravar o endpoint padrão em `package.json`:
 }
 ```
 
-Sem endpoint, a telemetria fica pronta no CLI, mas nenhum evento é enviado.
+Sem endpoint e sem `telemetry enable`, a telemetria fica pronta no CLI, mas nenhum evento é enviado.
 
 Exemplo de evento:
 

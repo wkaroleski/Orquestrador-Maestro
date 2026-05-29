@@ -36,7 +36,7 @@ O instalador substitui esses placeholders por valores da máquina de destino qua
 
 ## Telemetria
 
-O CLI npm pode enviar telemetria anônima quando houver endpoint configurado. O objetivo é medir uso técnico do pacote, não identificar pessoas.
+O CLI npm pode enviar telemetria anônima somente depois de o usuário configurar um endpoint e habilitar explicitamente com `orquestrador-maestro telemetry enable`. O objetivo é medir uso técnico do pacote, não identificar pessoas. Sem endpoint e sem habilitação explícita, nenhum evento é enviado. Configurações antigas sem consentimento versionado são consideradas desabilitadas até novo opt-in explícito.
 
 Permitido:
 
@@ -56,7 +56,14 @@ Proibido:
 - conteúdo de projeto;
 - tokens, prompts, logs ou nomes de arquivos privados.
 
-A telemetria pode ser desabilitada com:
+A telemetria pode ser habilitada com:
+
+```bash
+orquestrador-maestro telemetry endpoint https://seu-dominio.example/api/orquestrador-telemetry
+orquestrador-maestro telemetry enable
+```
+
+E pode ser desabilitada com:
 
 ```bash
 orquestrador-maestro telemetry disable

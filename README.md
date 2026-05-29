@@ -63,6 +63,7 @@ Se preferir Git/ZIP, use as seções de instalação completa abaixo. O npm é o
 - [Requisitos e Compatibilidade](#requisitos-e-compatibilidade)
 - [Contribuição Da Comunidade](#contribuição-da-comunidade)
 - [Melhorias Recentes](#melhorias-recentes)
+- [Radar De Maio 2026](#radar-de-maio-2026)
 - [Visão Geral](#visão-geral)
 - [Instalação Via npm](#instalação-via-npm)
 - [Como Funciona](#como-funciona)
@@ -134,6 +135,30 @@ Principais melhorias:
 
 Para entender os detalhes, veja [docs/installer-options.md](docs/installer-options.md), [docs/context-economy.md](docs/context-economy.md), [docs/privacy-model.md](docs/privacy-model.md) e [docs/orquestrador-reference.md](docs/orquestrador-reference.md).
 
+## Radar De Maio 2026
+
+A atualização mais recente revisou projetos públicos de agentes, harness engineering, MCP, skills e memória com atividade verificada no GitHub entre abril e maio de 2026. O objetivo não é copiar código, e sim transformar bons padrões em documentação, validação e próximos passos próprios do Orquestrador.
+
+O que ficou como direção técnica:
+
+- **canais e atualização**: projetos como [`openai/codex`](https://github.com/openai/codex) e [`google-gemini/gemini-cli`](https://github.com/google-gemini/gemini-cli) reforçam que CLI pública precisa ter instalação simples, update previsível, changelog claro e canais de release bem explicados antes de criar variantes como `latest`, `preview` ou `nightly`;
+- **telemetria explícita**: [`google-gemini/gemini-cli`](https://github.com/google-gemini/gemini-cli), [`ChromeDevTools/chrome-devtools-mcp`](https://github.com/ChromeDevTools/chrome-devtools-mcp) e [`entireio/cli`](https://github.com/entireio/cli) reforçam que telemetria e coleta de sessão devem ter documentação objetiva, botão de desligar, payload permitido e proibição clara de dados privados;
+- **harness determinístico**: [`coleam00/archon`](https://github.com/coleam00/archon), [`ai-boost/awesome-harness-engineering`](https://github.com/ai-boost/awesome-harness-engineering) e [`aiming-lab/AutoHarness`](https://github.com/aiming-lab/AutoHarness) apontam para fases, gates, artefatos, validação e planos/checkpoints como parte do produto, não como detalhe interno;
+- **subagentes portáveis**: [`shinpr/sub-agents-mcp`](https://github.com/shinpr/sub-agents-mcp) mostra um caminho para definir agentes em Markdown e expor execução por MCP, mantendo o padrão do Orquestrador de criar perfis reutilizáveis sem prender tudo a uma única ferramenta;
+- **engenharia de contexto**: [`bonigarcia/context-engineering`](https://github.com/bonigarcia/context-engineering), [`deepset-ai/haystack`](https://github.com/deepset-ai/haystack), [`sbhooley/ainativelang`](https://github.com/sbhooley/ainativelang) e [`MemTensor/MemOS`](https://github.com/MemTensor/MemOS) reforçam o modelo de contexto em camadas: instruções, memória, ferramentas, estado, roteamento, custo, auditoria e governança;
+- **SkillOps**: [`gotalab/skillport`](https://github.com/gotalab/skillport) entra como referência estável para a ideia de gerenciar skills uma vez e servir em múltiplas ferramentas via CLI ou MCP.
+
+O radar completo, com data de atividade, licença e decisão de aproveitamento, está em [docs/research/repo-radar-2026-05.md](docs/research/repo-radar-2026-05.md).
+
+Na prática, isso deixa o roadmap público mais claro:
+
+1. manter `npm install -g` e `orquestrador-maestro update` como caminho simples;
+2. só adicionar canais `preview` ou `nightly` quando houver cadência real de release;
+3. manter telemetria anônima, documentada, desativável e sem caminhos locais;
+4. evoluir `DEV/` com templates de plano, implementação, verificação e handoff;
+5. estudar MCP/subagentes como camada opcional, sem quebrar a instalação atual;
+6. documentar cada referência externa antes de transformar qualquer padrão em código.
+
 ## Visão Geral
 
 O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI ou Windsurf. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
@@ -198,10 +223,13 @@ orquestrador-maestro verify
 
 O pacote instala o comando `orquestrador-maestro`, mas não altera o home automaticamente durante o `npm install`. A alteração acontece quando o usuário roda `orquestrador-maestro install` ou `orquestrador-maestro update`, o que deixa o fluxo mais auditável e seguro.
 
-O CLI tem telemetria anônima para medir comandos como `install`, `update`, `verify`, `dry-run` e `uninstall`. Ela não envia telefone, nome de usuário, caminho local, prompts, logs, tokens ou conteúdo de projeto. Para usar em produção, configure um endpoint HTTPS antes de publicar o pacote ou depois no usuário:
+O CLI tem suporte a telemetria anônima para medir comandos como `install`, `update`, `verify`, `dry-run` e `uninstall`. Ela fica desabilitada por padrão e só envia eventos depois de o usuário configurar um endpoint e habilitar explicitamente. Configurações antigas sem consentimento versionado são tratadas como desabilitadas até o usuário rodar `orquestrador-maestro telemetry enable` novamente. Ela não envia telefone, nome de usuário, caminho local, prompts, logs, tokens ou conteúdo de projeto.
+
+Para habilitar:
 
 ```bash
 orquestrador-maestro telemetry endpoint https://seu-dominio.example/api/orquestrador-telemetry
+orquestrador-maestro telemetry enable
 orquestrador-maestro telemetry test
 ```
 
@@ -822,6 +850,7 @@ O validador público verifica:
 ```text
 .
   AGENTS.md
+  CONTRIBUTING.md
   README.md
   install.ps1
   install.sh
@@ -831,6 +860,7 @@ O validador público verifica:
     skills/
   docs/
     assets/
+    research/
   home/
     AGENTS.md
   orquestrador/
@@ -871,6 +901,7 @@ O validador público verifica:
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
 - [docs/context-economy.md](docs/context-economy.md): economia de contexto inspirada em RTK/Caveman, leitura em camadas e roadmap de wrappers compactos.
+- [docs/research/repo-radar-2026-05.md](docs/research/repo-radar-2026-05.md): radar de repositórios recentes e padrões extraíveis para próximas melhorias.
 - [docs/npm-package.md](docs/npm-package.md): pacote `@iapro/orquestrador-maestro-cli`, comandos npm, update e publicação.
 - [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
 - [docs/ai-agent-operating-guide.md](docs/ai-agent-operating-guide.md): como as IAs devem resolver tarefas usando o Orquestrador.
@@ -880,6 +911,7 @@ O validador público verifica:
 - [docs/privacy-model.md](docs/privacy-model.md): modelo de privacidade e sanitização.
 - [docs/update-flow.md](docs/update-flow.md): como atualizar este repo a partir da máquina fonte.
 - [docs/assets/](docs/assets/): GIFs usados neste README para explicar instalação, funcionamento e atualização.
+- [CONTRIBUTING.md](CONTRIBUTING.md): checklist de contribuição, privacidade, validação e padrão de changelog.
 
 ## Resolução de Problemas
 
@@ -949,7 +981,7 @@ Palavras-chave naturais do README:
 
 Este README mantém o changelog resumido do projeto para que a pessoa entenda rapidamente o que mudou antes de atualizar. Mudanças grandes também podem ter documentação dedicada em `docs/`, mas o resumo público deve continuar aqui.
 
-Padrão usado:
+Padrão usado para releases publicadas:
 
 ```text
 ### x.y.z - YYYY-MM-DD
@@ -961,7 +993,19 @@ Padrão usado:
 - Migration: ação necessária para quem já usa o Orquestrador.
 ```
 
-### 0.1.1 - 2026-05-25 (em preparação)
+Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam temporariamente em `### Unreleased`. No publish seguinte, essa seção deve virar a próxima versão semver.
+
+### Unreleased
+
+- Added: `CONTRIBUTING.md` com checklist seguro para PRs, validação, privacidade, skills e changelog.
+- Added: `docs/research/repo-radar-2026-05.md` com radar de repositórios recentes, licenças, padrões úteis e decisões de aproveitamento.
+- Changed: CLI ajustado para telemetria desabilitada por padrão; endpoint configurado sem `telemetry enable` explícito não envia eventos, e configurações legadas sem consentimento versionado são migradas para desabilitadas.
+- Changed: README ampliado com radar de maio de 2026, explicando canais de atualização, telemetria, harness determinístico, subagentes, engenharia de contexto e SkillOps.
+- Changed: documentação de economia de contexto alinhada ao radar recente e aos próximos templates `DEV/`.
+- Security: reforço de que referências externas são usadas como padrões, não como cópia de código, e que telemetria/sessões devem ser opt-in, desativáveis e sem dados locais.
+- Migration: quem já tinha telemetria habilitada em config antiga precisará habilitar novamente após atualizar o CLI; esta mudança ainda está no GitHub e só chega ao npm no próximo publish.
+
+### 0.1.1 - 2026-05-25
 
 - Added: GIFs explicativos no README para instalação, funcionamento da orquestração e atualização segura.
 - Added: script `scripts/generate-readme-gifs.py` para regenerar os assets visuais do README com layout consistente.
