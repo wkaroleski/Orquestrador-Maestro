@@ -195,6 +195,8 @@ Os agentes em `codex/agents/` são perfis de delegação. Eles não substituem o
 
 O `install.ps1` da raiz é um wrapper conservador para Windows. Por padrão ele chama `scripts/install.ps1` com `-Force` e instala perfis de ferramentas, a menos que o usuário passe `-NoForce`, `-NoToolProfiles` ou `-CoreOnly`.
 
+No Windows, o backup é seletivo: o instalador copia para `.orquestrador-public-backups` apenas os arquivos que o pacote conhece e pode substituir. Ele não faz backup recursivo de caches vivos, plugins, `.tmp`, marketplace staging, bancos SQLite ou logs internos das ferramentas.
+
 O `install.sh` da raiz é o wrapper equivalente para Linux/macOS. Por padrão ele chama `scripts/install.sh` com `--force` e instala perfis de ferramentas, a menos que o usuário passe `--no-force`, `--no-tool-profiles` ou `--core-only`.
 
 Os wrappers também aceitam prévia e manutenção segura:
@@ -203,6 +205,7 @@ Os wrappers também aceitam prévia e manutenção segura:
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -DryRun
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -ListTargets
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -Only codex
+orquestrador-maestro install --only codex,cursor,claude
 powershell -NoProfile -ExecutionPolicy Bypass -File .\install.ps1 -Uninstall -DryRun
 ```
 

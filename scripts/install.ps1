@@ -405,14 +405,14 @@ if ($ListTargets -or $DryRun) {
 
 if ($Uninstall) {
   if ($includeCore) {
-    Backup-Path -Path $TargetOrquestrador -Label ".orquestrador"
-    Backup-Path -Path $TargetAgents -Label "AGENTS.md"
+    Backup-MappedDirectory -SourceDir $SourceOrquestrador -DestinationDir $TargetOrquestrador -Label ".orquestrador"
+    Backup-MappedFile -DestinationFile $TargetAgents -Label "AGENTS.md"
   }
   foreach ($target in $extraTargets) {
-    Backup-Path -Path $target.Destination -Label $target.Label
+    Backup-MappedDirectory -SourceDir $target.Source -DestinationDir $target.Destination -Label $target.Label
   }
   foreach ($target in $extraFileTargets) {
-    Backup-Path -Path $target.Destination -Label $target.Label
+    Backup-MappedFile -DestinationFile $target.Destination -Label $target.Label
   }
 
   if ($includeCore -and (Test-Path -LiteralPath $TargetOrquestrador)) {
@@ -449,8 +449,8 @@ if ($Uninstall) {
   return
 }
 
-Backup-Path -Path $TargetOrquestrador -Label ".orquestrador"
-Backup-Path -Path $TargetAgents -Label "AGENTS.md"
+Backup-MappedDirectory -SourceDir $SourceOrquestrador -DestinationDir $TargetOrquestrador -Label ".orquestrador"
+Backup-MappedFile -DestinationFile $TargetAgents -Label "AGENTS.md"
 $backedUpExtraTargets = @{}
 foreach ($target in $extraTargets) {
   $key = [System.IO.Path]::GetFullPath($target.Destination).ToLowerInvariant()

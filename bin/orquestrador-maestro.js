@@ -21,7 +21,7 @@ const installFlagDefs = {
   "--core-only": { ps: "-CoreOnly", sh: "--core-only" },
   "--skip-community-skills": { ps: "-SkipCommunitySkills", sh: "--skip-community-skills" },
   "--skip-skill-sync": { ps: "-SkipSkillSync", sh: "--skip-skill-sync" },
-  "--only": { ps: "-Only", sh: "--only", value: true },
+  "--only": { ps: "-Only", sh: "--only", value: true, splitComma: true },
   "--dry-run": { ps: "-DryRun", sh: "--dry-run" },
   "--list-targets": { ps: "-ListTargets", sh: "--list-targets" },
   "--uninstall": { ps: "-Uninstall", sh: "--uninstall" },
@@ -91,6 +91,7 @@ function normalizeArgs(args) {
 function translateArgs(args, defs, target) {
   const normalized = normalizeArgs(args);
   const translated = [];
+  const arrayValues = new Map();
 
   for (let i = 0; i < normalized.length; i += 1) {
     const arg = normalized[i];
@@ -99,15 +100,36 @@ function translateArgs(args, defs, target) {
       throw new Error(`Parametro desconhecido: ${arg}`);
     }
 
-    translated.push(def[target]);
     if (def.value) {
       const value = normalized[i + 1];
       if (!value || value.startsWith("--")) {
         throw new Error(`Parametro ${arg} exige um valor.`);
       }
-      translated.push(value);
+      const values = def.splitComma
+        ? value.split(/[,\s]+/).map((entry) => entry.trim()).filter(Boolean)
+        : [value];
+      if (values.length === 0) {
+        throw new Error(`Parametro ${arg} exige um valor.`);
+      }
+      if (def.splitComma && target === "ps") {
+        const collected = arrayValues.get(arg) || [];
+        collected.push(...values);
+        arrayValues.set(arg, collected);
+      } else if (def.splitComma) {
+        for (const item of values) {
+          translated.push(def[target], item);
+        }
+      } else {
+        translated.push(def[target], value);
+      }
       i += 1;
+    } else {
+      translated.push(def[target]);
     }
+  }
+
+  for (const [arg, values] of arrayValues.entries()) {
+    translated.push(defs[arg][target], values.join(","));
   }
 
   return translated;
