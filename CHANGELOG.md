@@ -4,6 +4,8 @@ All notable changes to Orquestrador Maestro are documented here.
 
 ## Unreleased
 
+## 0.1.2 - 2026-06-29
+
 ### Added
 - `skill-cobranca-automatizada-saas-abacatepay` as a new canonical billing skill in `orquestrador/skills/`, with routed triggers for cobrança automatizada, régua de cobrança, fatura, dunning, trial expiration, invoice portal, and billing admin flows.
 - `orquestrador-maestro changelog` to expose the bundled release notes and the recommended update flow for existing installs.
@@ -36,7 +38,7 @@ All notable changes to Orquestrador Maestro are documented here.
 - The new CLI commands stay inside the same privacy model: no local paths, project contents, tokens, or personal identifiers are required to read release notes or run diagnostics.
 
 ### Migration
-- After the next npm publish, users should update with:
+- Users should update with:
   - `npm update -g @iapro/orquestrador-maestro-cli`
   - `orquestrador-maestro changelog`
   - `orquestrador-maestro update`

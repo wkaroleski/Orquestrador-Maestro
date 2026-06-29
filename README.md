@@ -1134,7 +1134,7 @@ Padrão usado para releases publicadas:
 
 Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam temporariamente em `### Unreleased`. No publish seguinte, essa seção deve virar a próxima versão semver.
 
-### Unreleased
+### 0.1.2 - 2026-06-29
 
 - Added: `CHANGELOG.md` como histórico canônico empacotado com a CLI e exposto para usuário final pelo comando `orquestrador-maestro changelog`.
 - Added: comando `orquestrador-maestro doctor` para executar o diagnóstico operacional empacotado depois de instalar ou atualizar.
@@ -1153,7 +1153,7 @@ Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam tempo
 - Changed: README ampliado com radar de maio de 2026, explicando canais de atualização, telemetria, harness determinístico, subagentes, engenharia de contexto e SkillOps.
 - Changed: documentação de economia de contexto alinhada ao radar recente e aos próximos templates `DEV/`.
 - Security: reforço de que referências externas são usadas como padrões, não como cópia de código, e que telemetria, sessões e bibliotecas privadas devem permanecer opt-in, desativáveis e fora do repositório público.
-- Migration: quem já tinha telemetria habilitada em config antiga precisará habilitar novamente após atualizar o CLI; esta mudança ainda está no GitHub e só chega ao npm no próximo publish.
+- Migration: quem já tinha telemetria habilitada em config antiga precisará habilitar novamente após atualizar o CLI; esta mudança chega ao npm a partir da versão `0.1.2`.
 
 - Changed: `orquestrador-maestro update` agora compacta as raízes nativas de skills em Claude, Codex, OpenCode, Cursor, Gemini, Windsurf, `.agents` e Antigravity, preservando o excedente em `.orquestrador/skill-library/disabled-native`.
 - Fixed: o conjunto nativo mínimo do Codex agora preserva `orquestrador-maestro`, `doctor` e `ralplan`, evitando divergência entre a política enxuta de skills e os perfis instalados.
