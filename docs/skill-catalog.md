@@ -50,17 +50,18 @@ ou:
 
 Se a skill deve ser usada junto com outras, atualize `orquestrador/SKILL_CHAINS.json` manualmente e rode a validação novamente.
 
-`SKILLS_MANIFEST.json` é a fonte de verdade para skills canônicas. O campo `mirrorEverywhere` controla quais skills entram nos espelhos usados por Codex, Claude, OpenCode, Cursor, Gemini, Windsurf, Antigravity e `.agents`.
+`SKILLS_MANIFEST.json` é a fonte de verdade para skills canônicas. O campo `mirrorEverywhere` controla quais skills entram nas raízes nativas mínimas usadas por Codex, Claude, OpenCode, Cursor, Gemini, Windsurf, Antigravity e `.agents`.
 
 ## Skills Canônicas Do Orquestrador
 
 Fonte principal editável. O sync copia essas skills para os espelhos compatíveis.
 
-Total: 22
+Total: 23
 
 | Skill | Categoria | Risco | O que faz |
 |---|---|---|---|
 | `skill-abacatepay-integration` | payments | medium | Integrate AbacatePay PIX/card billing, customers, QRCode PIX, billing webhooks, CPF/CNPJ validation, BRL SaaS checkout, payment receipts, refunds, cancellations, and entitlement sync for Brazilian SaaS products. |
+| `skill-cobranca-automatizada-saas-abacatepay` | payments | high | Use for automated SaaS billing with AbacatePay, including dunning rules, invoice portal, trial expiration, billing notifications, admin billing CRUD, and billing metrics. |
 | `skill-aionui-cowork-orchestration` | orchestration | medium | Use when integrating AionUi into the {{USER_NAME}} orchestrator workflow, coordinating Codex, Claude, Gemini, OpenCode, or other CLI agents through AionUi without breaking local skills, hooks, MCPs, permissions, or existing Codex workflows. |
 | `skill-ai-orchestration` | ai | medium | Use for server-side AI orchestration in SaaS products, including OpenAI, Gemini, Claude, ElevenLabs, streaming, transcription, structured extraction, prompt contracts, token budgets, model routing, queues, retries, observability, consent, validation, and safe API key handling. |
 | `skill-elevenlabs-voice-cloning` | ai | high | Use for ElevenLabs voice generation and voice cloning integrations, including Brazilian Portuguese TTS, explicit voice consent, server-side API keys, secure audio uploads, asynchronous jobs, validation, retryable synthesis, and safe handling of biometric voice data. |

@@ -62,7 +62,7 @@ Por padrão, `DryRun`, `ListTargets`, instalação, uninstall e verificação mo
 | `--no-force` | Não força sobrescrita do core. |
 | `--no-tool-profiles` | Não instala perfis das ferramentas. |
 | `--core-only` | Instala apenas o core. |
-| `--skip-community-skills` | Não copia a biblioteca comunitária. |
+| `--skip-community-skills` | Não copia a biblioteca comunitária para `.orquestrador/skill-library/community-skills`. |
 | `--skip-skill-sync` | Não roda sync ao final. |
 | `--only ID` | Limita extras a um componente simbólico. |
 | `--dry-run` | Mostra o plano sem efeitos colaterais. |

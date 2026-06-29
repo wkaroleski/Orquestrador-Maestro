@@ -49,7 +49,7 @@ Use placeholders como `%USERPROFILE%`, `$HOME`, `{{USER_HOME}}`, `{{USER_NAME}}`
 1. Abra uma issue ou descreva claramente o problema no PR.
 2. Faça a menor mudança que resolve o caso.
 3. Atualize README ou docs quando o comportamento público mudar.
-4. Atualize o changelog do README quando a mudança for relevante para usuários.
+4. Atualize `CHANGELOG.md` e o resumo do changelog no README quando a mudança for relevante para usuários.
 5. Rode validação.
 6. Explique no PR: o que mudou, por que mudou, como foi verificado e risco restante.
 
@@ -71,7 +71,9 @@ Não edite apenas os espelhos em `.codex`, `.claude`, `.opencode`, `.cursor`, `.
 
 ## Padrão De Changelog
 
-O changelog resumido fica no `README.md` para que usuários entendam a atualização antes de instalar. Use:
+O histórico canônico fica em `CHANGELOG.md`. O `README.md` mantém o resumo rápido e a data da revisão pública mais recente para quem está avaliando a atualização antes de instalar.
+
+Use em `CHANGELOG.md`:
 
 ```text
 ### x.y.z - YYYY-MM-DD
@@ -83,7 +85,7 @@ O changelog resumido fica no `README.md` para que usuários entendam a atualiza�
 - Migration: ação necessária para quem já usa o Orquestrador.
 ```
 
-Mudanças já mergeadas, mas ainda não publicadas no npm, devem ficar em `### Unreleased` sem data. Quando houver publish, renomeie a seção para a próxima versão semver e alinhe `package.json`.
+Mudanças já mergeadas, mas ainda não publicadas no npm, devem ficar em `## Unreleased`. Quando houver publish, renomeie a seção para a próxima versão semver e alinhe `package.json`.
 
 ## Licenças E Referências
 

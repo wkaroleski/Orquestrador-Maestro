@@ -36,6 +36,10 @@ const verifyFlagDefs = {
   "--verbose-paths": { ps: "-VerbosePaths", sh: "--verbose-paths" }
 };
 
+const initDevFlagDefs = {
+  "--project-path": { ps: "-ProjectPath", sh: "--project-path", value: true }
+};
+
 function printHelp() {
   console.log(`Orquestrador Maestro CLI ${packageJson.version}
 
@@ -43,6 +47,11 @@ Uso:
   orquestrador-maestro install [opcoes]
   orquestrador-maestro update [opcoes]
   orquestrador-maestro verify [opcoes]
+  orquestrador-maestro doctor [opcoes]
+  orquestrador-maestro init-dev [--project-path PATH]
+  orquestrador-maestro compact-worklog [--project-path PATH] [--keep N]
+  orquestrador-maestro check-dev-gates [--project-path PATH] [--max-entries N] [--strict]
+  orquestrador-maestro changelog [--full]
   orquestrador-maestro uninstall [opcoes]
   orquestrador-maestro list-targets [opcoes]
   orquestrador-maestro dry-run [opcoes]
@@ -56,7 +65,7 @@ Opcoes de install/update/uninstall:
                               claude, opencode, cursor, gemini, windsurf,
                               antigravity
   --no-tool-profiles          Nao instala perfis globais das ferramentas
-  --skip-community-skills     Nao copia a biblioteca comunitaria
+  --skip-community-skills     Nao copia a biblioteca comunitaria offload
   --skip-skill-sync           Nao roda o sync de skills
   --dry-run                   Mostra o plano sem alterar arquivos
   --list-targets              Lista os destinos conhecidos
@@ -69,12 +78,35 @@ Opcoes de verify:
   --skip-tool-profiles
   --verbose-paths
 
+Opcoes de doctor:
+  --home-path <path>          Diagnostica outro home
+
+Opcoes de init-dev:
+  --project-path <path>       Cria a hierarquia DEV recomendada no projeto
+
+Opcoes de compact-worklog:
+  --project-path <path>       Projeto que contem DEV/WORKLOG.md
+  --keep <n>                  Mantem as N entradas mais recentes no WORKLOG
+
+Opcoes de check-dev-gates:
+  --project-path <path>       Projeto que contem a hierarquia DEV
+  --max-entries <n>           Falha se DEV/WORKLOG.md passar do limite
+  --strict                    Exige entrada substantiva e bullets minimos
+
+Opcoes de changelog:
+  --full                      Mostra o historico completo embutido no pacote
+
 Exemplos:
   npm install -g @iapro/orquestrador-maestro-cli
   orquestrador-maestro install
   orquestrador-maestro verify
+  orquestrador-maestro changelog
   npm update -g @iapro/orquestrador-maestro-cli
   orquestrador-maestro update
+  orquestrador-maestro doctor
+  orquestrador-maestro init-dev --project-path .
+  orquestrador-maestro compact-worklog --project-path . --keep 12
+  orquestrador-maestro check-dev-gates --project-path . --strict
 `);
 }
 
@@ -185,6 +217,81 @@ function runVerify(args) {
   return run("bash", [script, ...translated]);
 }
 
+function parseDoctorArgs(args) {
+  const normalized = normalizeArgs(args);
+  let homePath = "";
+
+  for (let i = 0; i < normalized.length; i += 1) {
+    const arg = normalized[i];
+    if (arg === "--home-path") {
+      const value = normalized[i + 1];
+      if (!value || value.startsWith("--")) {
+        throw new Error("Parametro --home-path exige um valor.");
+      }
+      homePath = value;
+      i += 1;
+      continue;
+    }
+    throw new Error(`Parametro desconhecido: ${arg}`);
+  }
+
+  return homePath;
+}
+
+function runDoctor(args) {
+  const script = path.join(rootDir, "orquestrador", "doctor.ps1");
+  if (!commandExists(script)) {
+    throw new Error(`Diagnostico nao encontrado: ${script}`);
+  }
+
+  const homePath = parseDoctorArgs(args);
+  const psArgs = ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script];
+  if (homePath) {
+    psArgs.push("-HomePath", homePath);
+  }
+
+  if (process.platform === "win32") {
+    return run("powershell", psArgs);
+  }
+
+  for (const command of ["pwsh", "powershell"]) {
+    try {
+      return run(command, psArgs);
+    } catch (error) {
+      if (error && error.code === "ENOENT") {
+        continue;
+      }
+      throw error;
+    }
+  }
+
+  throw new Error("O comando doctor requer PowerShell. Instale pwsh ou use orquestrador-maestro verify.");
+}
+
+function runInitDev(args) {
+  const isWindows = process.platform === "win32";
+  const script = path.join(rootDir, "orquestrador", "bin", isWindows ? "init-project-dev.ps1" : "init-project-dev.sh");
+  if (!commandExists(script)) {
+    throw new Error(`Inicializador DEV nao encontrado: ${script}`);
+  }
+
+  if (isWindows) {
+    const translated = translateArgs(args, initDevFlagDefs, "ps");
+    return run("powershell", ["-NoProfile", "-ExecutionPolicy", "Bypass", "-File", script, ...translated]);
+  }
+
+  const translated = translateArgs(args, initDevFlagDefs, "sh");
+  return run("bash", [script, ...translated]);
+}
+
+function runDevContextHelper(helperCommand, args) {
+  const script = path.join(rootDir, "orquestrador", "bin", "dev-context-tools.js");
+  if (!commandExists(script)) {
+    throw new Error(`Helper DEV nao encontrado: ${script}`);
+  }
+  return run(process.execPath, [script, helperCommand, ...args]);
+}
+
 function getTelemetryConfigPath() {
   if (process.platform === "win32") {
     const base = process.env.APPDATA || path.join(os.homedir(), "AppData", "Roaming");
@@ -285,6 +392,39 @@ function sanitizeFlags(args) {
     }
   }
   return Array.from(new Set(flags)).sort();
+}
+
+function readBundledFile(relativePath) {
+  const filePath = path.join(rootDir, relativePath);
+  if (!commandExists(filePath)) {
+    throw new Error(`Arquivo nao encontrado no pacote: ${relativePath}`);
+  }
+  return fs.readFileSync(filePath, "utf8");
+}
+
+function extractMarkdownSections(markdown, limit) {
+  const normalized = markdown.replace(/\r\n/g, "\n");
+  const lines = normalized.split("\n");
+  const header = lines[0] && lines[0].startsWith("# ") ? lines[0] : "";
+  const body = header ? lines.slice(1) : lines;
+  const captured = [];
+  let sectionCount = 0;
+  let capturing = false;
+
+  for (const line of body) {
+    if (line.startsWith("## ")) {
+      if (capturing && sectionCount >= limit) {
+        break;
+      }
+      sectionCount += 1;
+      capturing = sectionCount <= limit;
+    }
+    if (capturing) {
+      captured.push(line);
+    }
+  }
+
+  return [header, captured.join("\n").trim()].filter(Boolean).join("\n\n").trim();
 }
 
 function buildTelemetryPayload(command, args, exitCode, errorName) {
@@ -486,6 +626,34 @@ async function handleTelemetryCommand(args) {
   throw new Error(`Subcomando de telemetria desconhecido: ${subcommand}`);
 }
 
+function handleChangelogCommand(args) {
+  const normalized = normalizeArgs(args);
+  for (const arg of normalized) {
+    if (arg !== "--full") {
+      throw new Error(`Parametro desconhecido: ${arg}`);
+    }
+  }
+
+  const changelog = readBundledFile("CHANGELOG.md");
+  const shouldPrintFull = normalized.includes("--full");
+  const excerpt = shouldPrintFull ? changelog.trim() : extractMarkdownSections(changelog, 2);
+
+  console.log(excerpt);
+  console.log(`
+Fluxo recomendado para quem ja tem o Orquestrador instalado:
+  npm update -g @iapro/orquestrador-maestro-cli
+  orquestrador-maestro changelog
+  orquestrador-maestro update
+  orquestrador-maestro verify
+  orquestrador-maestro doctor`);
+
+  if (process.platform !== "win32") {
+    console.log("Obs.: em Linux/macOS, doctor requer pwsh ou powershell instalado.");
+  }
+
+  return 0;
+}
+
 async function dispatch(command, args) {
   if (command === "--help" || command === "-h" || command === "help") {
     printHelp();
@@ -522,6 +690,26 @@ async function dispatch(command, args) {
     return runVerify(args);
   }
 
+  if (command === "doctor") {
+    return runDoctor(args);
+  }
+
+  if (command === "init-dev") {
+    return runInitDev(args);
+  }
+
+  if (command === "compact-worklog") {
+    return runDevContextHelper("compact-worklog", args);
+  }
+
+  if (command === "check-dev-gates") {
+    return runDevContextHelper("check-dev-gates", args);
+  }
+
+  if (command === "changelog") {
+    return handleChangelogCommand(args);
+  }
+
   if (command === "telemetry") {
     return handleTelemetryCommand(args);
   }
@@ -542,7 +730,7 @@ async function main() {
     exitCode = 1;
   }
 
-  if (["install", "update", "uninstall", "list-targets", "dry-run", "verify"].includes(command)) {
+  if (["install", "update", "uninstall", "list-targets", "dry-run", "verify", "doctor", "init-dev", "compact-worklog", "check-dev-gates", "changelog"].includes(command)) {
     await sendTelemetry(buildTelemetryPayload(command, args, exitCode, errorName));
   }
 

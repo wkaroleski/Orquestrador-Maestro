@@ -126,6 +126,7 @@ SOURCE_COMMUNITY_SKILLS="$REPO_ROOT/skill-library/community-skills"
 SOURCE_TOOL_PROFILES="$REPO_ROOT/tool-profiles"
 
 TARGET_ORQUESTRADOR="$HOME_PATH/.orquestrador"
+TARGET_SKILL_LIBRARY="$TARGET_ORQUESTRADOR/skill-library"
 TARGET_AGENTS="$HOME_PATH/AGENTS.md"
 BACKUP_ROOT="$HOME_PATH/.orquestrador-public-backups"
 STAMP="$(date +"%Y%m%d-%H%M%S")"
@@ -406,28 +407,13 @@ fi
 
 if [ "$SKIP_EXTRA_SKILLS" = false ]; then
   if [ "$SKIP_COMMUNITY_SKILLS" = false ]; then
-    COMMUNITY_ROOTS=(
-      ".codex/skills|codex"
-      ".agents/skills|agents"
-      ".claude/skills|claude"
-      ".opencode/skills|opencode"
-      ".cursor/skills|cursor"
-      ".gemini/skills|gemini"
-      ".windsurf/skills|windsurf"
-      ".antigravity-skills/skills|antigravity"
-    )
-    for entry in "${COMMUNITY_ROOTS[@]}"; do
-      IFS='|' read -r root component <<EOF
-$entry
-EOF
-      if selected_component skills community-skills "$component"; then
-        add_target "$SOURCE_COMMUNITY_SKILLS" "$HOME_PATH/$root" "community__${root//\//__}" "$component"
-      fi
-    done
+    if selected_component skills community-skills codex agents claude opencode cursor gemini windsurf antigravity; then
+      add_target "$SOURCE_COMMUNITY_SKILLS" "$TARGET_SKILL_LIBRARY/community-skills" ".orquestrador__skill-library__community-skills" "community-skills"
+    fi
   fi
 
   if selected_component codex codex-skills skills; then
-    add_target "$SOURCE_CODEX/skills" "$HOME_PATH/.codex/skills" ".codex__skills" "codex"
+    add_target "$SOURCE_CODEX/skills" "$TARGET_SKILL_LIBRARY/codex-skills" ".orquestrador__skill-library__codex-skills" "codex"
   fi
   if selected_component codex codex-agents agents; then
     add_target "$SOURCE_CODEX/agents" "$HOME_PATH/.codex/agents" ".codex__agents" "codex"
@@ -592,7 +578,11 @@ EOF
   copy_with_placeholders "$src" "$dest"
 done
 
-chmod +x "$TARGET_ORQUESTRADOR/sync-skills.sh" "$TARGET_ORQUESTRADOR/bin/init-project-dev.sh" 2>/dev/null || true
+chmod +x \
+  "$TARGET_ORQUESTRADOR/sync-skills.sh" \
+  "$TARGET_ORQUESTRADOR/bin/init-project-dev.sh" \
+  "$TARGET_ORQUESTRADOR/bin/compact-worklog.sh" \
+  "$TARGET_ORQUESTRADOR/bin/check-dev-gates.sh" 2>/dev/null || true
 
 if [ "$SKIP_SKILL_SYNC" = false ]; then
   SYNC_SCRIPT="$TARGET_ORQUESTRADOR/sync-skills.sh"

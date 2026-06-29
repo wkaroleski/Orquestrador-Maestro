@@ -13,9 +13,11 @@ The user is the maestro. Codex and other agents act as the orquestrador.
 
 ## Project DEV Context
 
-When a project has a `DEV/` directory, use it as local project memory after reading the nearest project `AGENTS.md` and before selecting global skills. Start with `DEV/AGENTS.md`, `DEV/README.md`, `DEV/INDEX.md`, `DEV/PROJECT.md`, or `DEV/CONTEXT.md`, then open only the files relevant to the task.
+When a project has a `DEV/` directory, use it as local project memory after reading the nearest project `AGENTS.md` and before selecting global skills. Start with `DEV/AGENTS.md`, `DEV/README.md`, `DEV/INDEX.md`, `DEV/HANDOFF.md`, `DEV/CONTEXT.md`, and `DEV/SPECS/ACTIVE.md`, then open only the files relevant to the task.
 
-Create and update durable project documentation under `DEV/` by default. After substantive work, update `DEV/WORKLOG.md` with a compact work hook. Update `DEV/INDEX.md` and `DEV/CONTEXT.md` when the documentation map or project state changes.
+Create and update durable project documentation under `DEV/` by default. After substantive work, update `DEV/WORKLOG.md`, `DEV/VERIFY.md`, and `DEV/HANDOFF.md`. Update `DEV/INDEX.md` and `DEV/CONTEXT.md` when the documentation map or project state changes, and update `DEV/SPECS/ACTIVE.md` when scope, acceptance, or status changes.
+
+If the user or the project points to a private reference library outside the repo, read that pack's index first and only then open specific files. Do not treat a whole Drive export or PDF folder as automatic context.
 
 ## Token Discipline
 
@@ -23,6 +25,8 @@ Create and update durable project documentation under `DEV/` by default. After s
 - Avoid loading every skill directory.
 - Avoid repeating long instructions across tools.
 - Keep entrypoint files short and stable.
+- Prefer `HANDOFF.md` and `SPECS/ACTIVE.md` over replaying long chat history.
+- Keep `WORKLOG.md` short enough to be read in one pass.
 
 ## Global Changes
 

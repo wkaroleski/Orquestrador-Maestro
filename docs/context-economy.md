@@ -1,108 +1,127 @@
 # Economia De Contexto
 
-O Orquestrador Maestro foi desenhado para reduzir tokens por organização, não por compressão agressiva de tudo. A IA deve carregar primeiro contratos curtos, índices e roteadores; só depois abre arquivos maiores quando houver evidência de necessidade.
+O Orquestrador Maestro foi desenhado para reduzir tokens por organizacao, nao por compressao cega. A IA deve carregar primeiro contratos curtos, indices e roteadores; so depois abre arquivos maiores quando houver evidencia de necessidade.
 
-As referências externas mais úteis aqui são duas ideias:
+As referencias externas mais uteis aqui continuam sendo duas ideias:
 
-- RTK: compactar saídas de comandos antes que elas entrem no contexto da IA.
-- Caveman: comprimir linguagem operacional e instalar ativações consistentes em várias ferramentas.
+- RTK: compactar saidas de comandos antes que elas entrem no contexto da IA.
+- Caveman: comprimir linguagem operacional e manter ativacoes consistentes em varias ferramentas.
 
-No Orquestrador, isso vira uma regra prática: contexto mínimo suficiente, com reidratação sob demanda.
-
-## Atualização Maio 2026
-
-O radar recente em [docs/research/repo-radar-2026-05.md](research/repo-radar-2026-05.md) reforçou que economia de contexto não deve depender só de resumo automático. Os padrões mais úteis são:
-
-- **contratos curtos antes de documentos longos**: `AGENTS.md`, `rules.md`, `maestro.md`, índices e roteadores precisam responder "o que ler agora" antes de qualquer catálogo grande;
-- **gates explícitos**: tarefas longas devem ter plano, execução, verificação e handoff em arquivos pequenos, para evitar que a próxima IA reconstrua tudo do zero;
-- **telemetria e rastreio opt-in**: qualquer sessão, trace ou métrica deve ser local-first, redigida e desativável, sem prompts, tokens, caminhos privados ou logs completos;
-- **subagentes como isolamento de contexto**: subagentes ajudam quando recebem escopo estreito, posse clara e devolvem achados resumidos, não quando todos leem o mesmo repositório inteiro;
-- **MCP como camada opcional**: integrações MCP devem vir com templates por cliente e alertas de privacidade, especialmente quando a ferramenta expõe navegador, terminal ou arquivos;
-- **release channels com disciplina**: canais como `preview` e `nightly` só fazem sentido quando houver automação, changelog e validação suficientes para o usuário entender o risco.
-
-Esses pontos mantêm o Orquestrador como uma camada de engenharia de contexto: ele organiza o que a IA precisa saber, quando deve saber e como deve registrar o mínimo útil para a próxima execução.
+No Orquestrador, isso virou uma regra pratica: contexto minimo suficiente, com reidratacao sob demanda.
 
 ## Camadas De Leitura
 
 Ordem recomendada para qualquer IA instalada:
 
-1. `AGENTS.md` global do usuário.
+1. `AGENTS.md` global do usuario.
 2. `.orquestrador/rules.md`.
 3. `.orquestrador/maestro.md`.
 4. `AGENTS.md` do projeto atual.
-5. `DEV/README.md`, `DEV/INDEX.md` ou `DEV/CONTEXT.md`, se existirem.
-6. Roteadores compactos de skill.
-7. `SKILL.md` específico da tarefa.
-8. Referências internas da skill somente quando necessárias.
+5. `DEV/README.md` ou `DEV/INDEX.md`.
+6. `DEV/HANDOFF.md`.
+7. `DEV/CONTEXT.md`.
+8. `DEV/SPECS/ACTIVE.md`.
+9. Roteadores compactos de skill.
+10. `SKILL.md` especifico da tarefa.
+11. Referencias internas da skill somente quando necessarias.
 
-A IA não deve abrir `skill-library/community-skills/` inteira, nem carregar a árvore `DEV/` completa por padrão.
+A IA nao deve abrir `skill-library/community-skills/` inteira, nem carregar a arvore `DEV/` completa por padrao.
 
 ## Arquivos Que Economizam Tokens
 
 | Arquivo | Uso esperado |
 |---|---|
-| `SKILLS_INDEX.md` | Descobrir grupos de skills sem abrir o catálogo completo. |
-| `SKILL_ALIASES.json` | Traduzir termos do usuário para uma skill canônica. |
+| `SKILLS_INDEX.md` | Descobrir grupos de skills sem abrir o catalogo completo. |
+| `SKILL_ALIASES.json` | Traduzir termos do usuario para uma skill canonica. |
 | `SKILLS_ROUTER.json` | Confirmar skill, gatilhos, custo e risco. |
 | `SKILL_CHAINS.json` | Saber quais skills auxiliares podem ser chamadas. |
-| `SKILL_EXECUTION_PROFILES.json` | Limitar profundidade, paralelismo e validação. |
-| `DEV/INDEX.md` | Mapear documentação local do projeto. |
-| `DEV/CONTEXT.md` | Recuperar estado atual sem reler todo o projeto. |
-| `DEV/WORKLOG.md` | Entender alterações recentes em poucas linhas. |
+| `DEV/INDEX.md` | Mapear a documentacao local do projeto. |
+| `DEV/HANDOFF.md` | Recuperar o snapshot atual sem reler historico. |
+| `DEV/CONTEXT.md` | Recuperar estado, comandos, riscos e restricoes vivas. |
+| `DEV/SPECS/ACTIVE.md` | Entender objetivo, escopo, aceite e verificacao esperada. |
+| `DEV/WORKLOG.md` | Entender alteracoes recentes em poucas linhas. |
+| `DEV/VERIFY.md` | Ver a ultima evidencia de conclusao sem reabrir logs completos. |
 
-## Saídas De Comandos
+## Hooks Compactos
 
-A inspiração do RTK deve entrar como uma camada opcional. O Orquestrador não deve instalar reescrita automática de comandos por padrão.
+Para economizar tokens de forma consistente, os hooks precisam ser shims, nao catalogos:
 
-Padrão recomendado:
+- `orquestrador/hooks.md` faz preflight, orcamento de contexto, verificacao e sync;
+- hooks de ferramenta como Claude, Cursor, Gemini, Windsurf e OpenCode so apontam para `SKILL_EXECUTION_PROFILES.json`, `SKILL_ALIASES.json`, `SKILLS_ROUTER.json` e `SKILL_CHAINS.json`;
+- o catalogo de gatilhos fica no roteador, nao repetido em cada `hooks.md`;
+- o contexto de projeto fica em `HANDOFF + CONTEXT + ACTIVE SPEC`, nao em uma conversa gigantesca.
 
-- Começar por comandos compactos: `git status --short`, `git diff --stat`, `rg --files`, `rg "termo"`.
-- Para testes, priorizar falhas e resumos antes de logs completos.
-- Guardar saída longa em arquivo local quando útil e resumir só o necessário na resposta.
-- Usar saída completa apenas quando o diagnóstico depender dela.
+Regra pratica:
 
-Roadmap seguro:
+1. hook curto;
+2. router primeiro;
+3. `SKILL.md` so sob demanda;
+4. `DEV/` so pelo indice e pelos arquivos de controle;
+5. `WORKLOG.md` curto e arquivado periodicamente.
 
-1. Criar wrappers opt-in para `status`, `diff`, `test`, `lint`, `tree` e `read`.
-2. Preservar exit code e stderr.
-3. Ter flag de saída bruta.
-4. Não registrar comandos com segredos.
-5. Não ativar hooks de reescrita sem consentimento explícito.
+## Raizes Nativas Enxutas
 
-## Compressão De DEV
+Outro custo fixo importante nao vem do hook, e sim da pasta nativa de skills que algumas ferramentas inspecionam a cada sessao.
 
-Uma futura skill de compressão pode resumir documentos longos em `DEV/`, desde que preserve:
+Padrao atual do Orquestrador:
 
-- comandos;
-- paths;
-- URLs;
-- blocos de código;
-- decisões;
-- riscos;
-- referências de arquivos;
-- datas e autores quando forem relevantes.
+- `.orquestrador/skill-library/community-skills` guarda a biblioteca comunitaria completa;
+- `.orquestrador/skill-library/codex-skills` guarda o catalogo completo de workflows OMX/Codex;
+- `.codex/skills` fica com um subconjunto essencial de workflows + `.system`;
+- `.claude/skills`, `.opencode/skills`, `.cursor/skills`, `.gemini/skills`, `.windsurf/skills`, `.agents/skills` e `.antigravity-skills/skills` ficam so com as skills canonicas do manifesto.
 
-Ela não deve comprimir `.env`, configs com credenciais, lockfiles, bancos locais, logs privados ou código-fonte.
+Se uma dessas raizes voltar a ter centenas de diretorios, o custo por sessao sobe de novo mesmo com hooks compactos. Por isso `sync-skills` agora tambem offloada o excesso para `.orquestrador/skill-library/disabled-native`.
 
-## Templates DEV Recomendados
+## Saidas De Comandos
 
-Para tarefas longas, a próxima evolução do Orquestrador deve favorecer arquivos pequenos e previsíveis:
+A inspiracao do RTK entra como camada opt-in. O Orquestrador nao reescreve tudo por padrao.
+
+Padrao recomendado:
+
+- comecar por comandos compactos: `git status --short`, `git diff --stat`, `rg --files`, `rg "termo"`;
+- para testes, priorizar falhas e resumos antes de logs completos;
+- guardar saida longa em arquivo local quando util e resumir so o necessario na resposta;
+- usar saida completa apenas quando o diagnostico depender dela.
+
+## Combo Deterministico: Spec + Worklog + Script + Gate
+
+Para evitar projeto girando em circulos por horas, a combinacao recomendada agora e:
+
+1. `DEV/SPECS/ACTIVE.md`: fixa objetivo, escopo, aceite e plano de verificacao.
+2. `DEV/WORKLOG.md`: registra mudancas recentes em poucas linhas.
+3. `DEV/VERIFY.md`: registra comandos, resultado e pendencias.
+4. `DEV/HANDOFF.md`: concentra o snapshot atual para a proxima sessao.
+5. `compact-worklog`: move historico velho para `DEV/HANDOFFS/WORKLOG_ARCHIVE.md` e atualiza o handoff.
+6. `check-dev-gates`: valida se a estrutura ainda esta compacta e utilizavel.
+
+Com isso, a proxima IA nao depende de reler a conversa inteira nem um `WORKLOG` enorme. Ela recupera contexto por contrato, nao por adivinhacao.
+
+## DEV Implementado
+
+O modelo recomendado deixou de ser "futuro desejado" e passou a ser a estrutura publicada pelo inicializador:
 
 | Arquivo | Finalidade |
 |---|---|
-| `DEV/PLAN.md` | Objetivo, limites, tarefas e comandos de verificação antes da execução. |
-| `DEV/IMPLEMENT.md` | Decisões tomadas, desvios do plano e arquivos tocados. |
-| `DEV/VERIFY.md` | Comandos executados, resultado, falhas e evidência final. |
-| `DEV/HANDOFF.md` | Contexto mínimo para outra IA continuar sem reler tudo. |
+| `DEV/HANDOFF.md` | Snapshot curto da sessao atual, pronto para a proxima IA. |
+| `DEV/SPECS/ACTIVE.md` | Contrato da tarefa ativa. |
+| `DEV/WORKLOG.md` | Historico curto das ultimas entradas. |
+| `DEV/VERIFY.md` | Evidencia da ultima verificacao. |
+| `DEV/HANDOFFS/WORKLOG_ARCHIVE.md` | Historico mais antigo movido para fora do caminho padrao de leitura. |
 
-Esses templates devem complementar `DEV/WORKLOG.md`, não substituir. O `WORKLOG` continua sendo o índice cronológico curto; os outros arquivos entram quando a tarefa precisa de mais rastreabilidade.
+Comandos:
+
+```bash
+orquestrador-maestro init-dev --project-path .
+orquestrador-maestro compact-worklog --project-path . --keep 12
+orquestrador-maestro check-dev-gates --project-path . --max-entries 12 --strict
+```
 
 ## Regra Para Agentes
 
-Quando o contexto estiver grande, a IA deve responder com:
+Quando o contexto estiver grande, a IA deve responder com algo equivalente a:
 
 ```text
-Vou consultar o índice e abrir apenas os documentos necessários.
+Vou consultar o indice, o handoff e a spec ativa, e abrir apenas os documentos necessarios.
 ```
 
-Depois disso, ela deve citar quais arquivos abriu e por quê. Isso mantém rastreabilidade sem gastar tokens em leitura ampla.
+Depois disso, ela deve citar quais arquivos abriu e por que. Isso mantem rastreabilidade sem gastar tokens em leitura ampla.

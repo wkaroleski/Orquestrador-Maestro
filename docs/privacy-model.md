@@ -8,7 +8,7 @@ Este repo compartilha comportamento e estrutura, não o conteúdo privado da má
 - Índices e roteadores de skills.
 - Skills canônicas sob `orquestrador/skills`.
 - Skills, agentes e prompts Codex sob `codex/`.
-- Biblioteca comunitária deduplicada sob `skill-library/community-skills/`.
+- Biblioteca comunitária deduplicada sob `skill-library/community-skills/`, instalada fora das raízes nativas em `.orquestrador/skill-library/community-skills`.
 - Hooks e perfis textuais selecionados sob `tool-profiles/`.
 - Scripts de manutenção que usam caminhos relativos ao home do usuário.
 - Um `AGENTS.md` global sanitizado para instalação.
@@ -18,6 +18,7 @@ Este repo compartilha comportamento e estrutura, não o conteúdo privado da má
 - Caches e runtimes de ferramentas.
 - Logs, backups, relatórios de doctor, memórias e histórico de execução.
 - Artefatos operacionais locais como `.omx/`, `.local/` e `DEV/` deste clone.
+- Bibliotecas externas, exports de Google Drive, PDFs privados e reference packs locais.
 - Configurações com projetos locais, tokens, chaves, credenciais ou caminhos reais.
 - Arquivos temporários e cópias `.bak`.
 - Dependências vendorizadas como `node_modules` e artefatos de build/runtime.
@@ -33,6 +34,17 @@ O snapshot público usa placeholders:
 - `<PRIVATE_TERM>`: termo privado removido durante o sync.
 
 O instalador substitui esses placeholders por valores da máquina de destino quando copia os arquivos para o home do usuário.
+
+## Reference Packs Locais
+
+Quando o usuário tiver uma biblioteca própria de PDFs, docs ou exports do Drive, o caminho seguro é manter isso em packs locais indexados, fora deste repositório público.
+
+Documentação:
+
+- [docs/reference-packs.md](reference-packs.md)
+- `{{USER_HOME}}/.orquestrador/REFERENCE_PACKS.md` depois da instalação
+
+Esses packs são permitidos como contexto local, mas não fazem parte do snapshot publicável.
 
 ## Telemetria
 

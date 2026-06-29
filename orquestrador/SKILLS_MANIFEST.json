@@ -221,6 +221,16 @@
       "triggers": ["google workspace", "google drive", "google sheets", "google calendar", "workspace sync", "oauth google"],
       "aliases": ["google workspace", "google calendar", "meet"],
       "status": "canonical"
+    },
+    "skill-cobranca-automatizada-saas-abacatepay": {
+      "description": "Automatic SaaS billing engine with AbacatePay (PIX + card), dunning (regua de cobranca), trial management, invoice portal, Resend email and Evolution API WhatsApp notifications, admin CRUD, and billing metrics.",
+      "category": "payments",
+      "risk": "high",
+      "source": "local-saas-billing-patterns",
+      "mirrorEverywhere": true,
+      "triggers": ["cobranca", "cobrança", "billing automatizado", "regua de cobranca", "régua de cobrança", "fatura", "invoice", "dunning", "abacatepay cobranca", "billing cron", "trial expiration", "invoice portal", "notificacao cobranca", "notificação cobrança", "billing metrics", "mrr", "billing admin", "planos", "plans"],
+      "aliases": ["cobranca", "billing automatizado", "regua de cobranca"],
+      "status": "canonical"
     }
   }
 }

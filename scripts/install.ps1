@@ -23,6 +23,7 @@ $SourceCodex = Join-Path $RepoRoot "codex"
 $SourceCommunitySkills = Join-Path $RepoRoot "skill-library\community-skills"
 $SourceToolProfiles = Join-Path $RepoRoot "tool-profiles"
 $TargetOrquestrador = Join-Path $HomePath ".orquestrador"
+$TargetSkillLibrary = Join-Path $TargetOrquestrador "skill-library"
 $TargetAgents = Join-Path $HomePath "AGENTS.md"
 $BackupRoot = Join-Path $HomePath ".orquestrador-public-backups"
 $Stamp = Get-Date -Format "yyyyMMdd-HHmmss"
@@ -334,24 +335,22 @@ $extraTargets = New-Object System.Collections.Generic.List[object]
 $extraFileTargets = New-Object System.Collections.Generic.List[object]
 if (-not $SkipExtraSkills) {
   if (-not $SkipCommunitySkills) {
-    $communityRoots = @(
-      @{ Root = ".codex\skills"; Component = "codex" },
-      @{ Root = ".agents\skills"; Component = "agents" },
-      @{ Root = ".claude\skills"; Component = "claude" },
-      @{ Root = ".opencode\skills"; Component = "opencode" },
-      @{ Root = ".cursor\skills"; Component = "cursor" },
-      @{ Root = ".gemini\skills"; Component = "gemini" },
-      @{ Root = ".windsurf\skills"; Component = "windsurf" },
-      @{ Root = ".antigravity-skills\skills"; Component = "antigravity" }
-    )
-    foreach ($entry in $communityRoots) {
-      if (Test-SelectedComponent -Names @("skills", "community-skills", $entry.Component)) {
-        Add-InstallTarget -Targets $extraTargets -Source $SourceCommunitySkills -Destination (Join-Path $HomePath $entry.Root) -Label ("community__" + $entry.Root.Replace("\", "__")) -Component $entry.Component
-      }
+    if (Test-SelectedComponent -Names @("skills", "community-skills", "codex", "agents", "claude", "opencode", "cursor", "gemini", "windsurf", "antigravity")) {
+      Add-InstallTarget `
+        -Targets $extraTargets `
+        -Source $SourceCommunitySkills `
+        -Destination (Join-Path $TargetSkillLibrary "community-skills") `
+        -Label ".orquestrador__skill-library__community-skills" `
+        -Component "community-skills"
     }
   }
   if (Test-SelectedComponent -Names @("codex", "codex-skills", "skills")) {
-    Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "skills") -Destination (Join-Path $HomePath ".codex\skills") -Label ".codex__skills" -Component "codex"
+    Add-InstallTarget `
+      -Targets $extraTargets `
+      -Source (Join-Path $SourceCodex "skills") `
+      -Destination (Join-Path $TargetSkillLibrary "codex-skills") `
+      -Label ".orquestrador__skill-library__codex-skills" `
+      -Component "codex"
   }
   if (Test-SelectedComponent -Names @("codex", "codex-agents", "agents")) {
     Add-InstallTarget -Targets $extraTargets -Source (Join-Path $SourceCodex "agents") -Destination (Join-Path $HomePath ".codex\agents") -Label ".codex__agents" -Component "codex"
