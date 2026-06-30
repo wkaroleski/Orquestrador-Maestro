@@ -6,6 +6,9 @@ As referencias externas mais uteis aqui continuam sendo duas ideias:
 
 - RTK: compactar saidas de comandos antes que elas entrem no contexto da IA.
 - Caveman: comprimir linguagem operacional e manter ativacoes consistentes em varias ferramentas.
+- Ponytail: exigir a menor implementacao suficiente antes de criar abstracoes, dependencias ou codigo extra.
+- React Doctor: usar gates deterministicos e diagnosticos objetivos quando a tecnologia tem ferramenta especializada.
+- Headroom: tratar compressao como camada opt-in, reversivel e mensuravel, com recuperacao dos originais sob demanda.
 
 No Orquestrador, isso virou uma regra pratica: contexto minimo suficiente, com reidratacao sob demanda.
 
@@ -95,6 +98,19 @@ Para evitar projeto girando em circulos por horas, a combinacao recomendada agor
 6. `check-dev-gates`: valida se a estrutura ainda esta compacta e utilizavel.
 
 Com isso, a proxima IA nao depende de reler a conversa inteira nem um `WORKLOG` enorme. Ela recupera contexto por contrato, nao por adivinhacao.
+
+## Gates De Otimizacao
+
+A economia de contexto tambem depende de reduzir trabalho inutil antes dele existir.
+
+| Gate | Quando usar | Efeito esperado |
+|---|---|---|
+| Implementacao minima suficiente | Antes de criar pacote, abstracao, componente novo ou subagente | Reduz diff, dependencia, manutencao e leitura futura |
+| Gate especializado | Quando o stack tem diagnostico proprio, como React | Troca revisao subjetiva por achados verificaveis |
+| Compressao opt-in | Quando outputs, logs, RAG ou historico passam do tamanho util | Mantem contexto curto e permite reidratacao do original |
+| DEV gate | Antes de handoff ou tarefa longa | Garante spec, handoff, verify e worklog compactos |
+
+Esses gates nao substituem a verificacao do projeto. Eles evitam que a IA gaste tokens resolvendo o problema errado, com contexto demais ou com solucao maior que o necessario.
 
 ## DEV Implementado
 

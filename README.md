@@ -30,7 +30,7 @@ O projeto público funciona como snapshot sanitizado. O mantenedor evolui a font
 
 ## Instalação Recomendada
 
-Última revisão pública deste README: 2026-06-28.
+Última revisão pública deste README: 2026-06-30.
 
 Para instalar direto pelo npm:
 
@@ -127,6 +127,8 @@ Na prática, a PR #2 deixou o projeto mais fácil de manter: novas skills passam
 
 Crédito também ao Bruno, integrante da comunidade Grupo IAPro, pela curadoria e pelo papo que trouxe as referências de RTK e Caveman para a discussão. Essa contribuição ajudou a priorizar melhorias de economia de contexto, redução de leitura desnecessária, uso mais consciente da pasta `DEV/` e organização do Orquestrador para evitar gasto excessivo de tokens.
 
+Hector Noya e Felinto, integrantes do Grupo IAPro, também ficam registrados como colaboradores da comunidade nesta evolução do Orquestrador. Eles contribuíram com a curadoria e discussão das referências Ponytail, React Doctor e Headroom, ajudando a direcionar melhorias de gate de menor implementação suficiente, revisão React mais determinística e compressão/retrieval opt-in para contexto pesado.
+
 ## Melhorias Recentes
 
 A versão atual também incorporou aprendizados de projetos como [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) e [`juliusbrussee/caveman`](https://github.com/juliusbrussee/caveman), adaptados ao objetivo do Orquestrador Maestro: instalar uma configuração pública, auditável e reutilizável para vários agentes de IA.
@@ -169,12 +171,15 @@ Na prática, isso deixa o roadmap público mais claro:
 
 ## Radar De Junho 2026
 
-A revisão pública de junho de 2026 cruzou quatro fontes adicionais para melhorar produto, documentação e fluxo de atualização sem transformar o repositório em depósito de material externo:
+A revisão pública de junho de 2026 cruzou fontes adicionais para melhorar produto, documentação, fluxo de atualização, UX/UI e economia real de contexto sem transformar o repositório em depósito de material externo:
 
 - [`tenfoldmarc/website-builder-setup`](https://github.com/tenfoldmarc/website-builder-setup): reforçou a necessidade de onboarding orientado a resultado, passos curtos e UX de instalação mais explícita;
 - [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video): reforçou a separação entre README operacional, `CHANGELOG.md` canônico, empacotamento claro e fluxo de release previsível;
 - [`anthropics/claude-cookbooks`](https://github.com/anthropics/claude-cookbooks): reforçou organização por registro, guias de contribuição, categorias estáveis e documentação que ajuda a IA a achar o playbook certo sem carregar tudo;
 - pasta pública do Google Drive [`CS Fundamentals (Lets Code)`](https://drive.google.com/drive/folders/18FBvExqEtt9mtNKKP65f_ETdtS7nCG1G): útil como biblioteca externa de referência, mas inadequada para ser vendorizada neste snapshot público.
+- [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail): reforçou o gate de menor implementação suficiente para evitar overengineering, dependências desnecessárias e subagentes produzindo código demais;
+- [`millionco/react-doctor`](https://github.com/millionco/react-doctor): reforçou a ideia de gate React determinístico, com audit local, configuração explícita e foco em problemas novos introduzidos por uma mudança;
+- [`headroomlabs-ai/headroom`](https://github.com/headroomlabs-ai/headroom): reforçou o roadmap de compressão opt-in e reversível para outputs longos, logs, RAG, arquivos e histórico de sessão.
 
 O que virou melhoria concreta neste projeto:
 
@@ -183,7 +188,8 @@ O que virou melhoria concreta neste projeto:
 - o CLI ganha `orquestrador-maestro doctor` para rodar o diagnóstico operacional empacotado depois da instalação ou atualização;
 - o fluxo recomendado para usuário instalado fica explícito: `npm update -g`, `changelog`, `update`, `verify` e `doctor`;
 - referências grandes e privadas passam a ter contrato formal de uso local via `REFERENCE_PACKS.md`, em vez de cópia para dentro do repositório público;
-- a trilha de UX/UI fica mais objetiva para agentes: usar primeiro `skill-open-design-ui`, depois `skill-modern-ui-patterns` e `skill-frontend-ux-guardrails` quando a tarefa realmente pedir interface.
+- a trilha de UX/UI fica mais objetiva para agentes: usar primeiro `skill-open-design-ui`, depois `skill-modern-ui-patterns` e `skill-frontend-ux-guardrails` quando a tarefa realmente pedir interface;
+- o roadmap de contexto passa a separar três frentes: escrever menos quando o simples resolve, auditar React com gate especializado quando o projeto pedir e comprimir contexto pesado só de forma opt-in, mensurável e recuperável.
 
 O detalhamento desta revisão está em [docs/research/repo-radar-2026-06.md](docs/research/repo-radar-2026-06.md).
 
@@ -532,6 +538,7 @@ As skills canônicas ficam em `orquestrador/skills/` e são espelhadas para as p
 | `skill-saas-factory` | Skill guarda-chuva para planejar, construir ou revisar SaaS. Coordena arquitetura, produto, pagamento, admin, segurança e analytics. |
 | `skill-saas-admin-dashboard` | Padroniza painel admin com usuários, tenants, planos, billing, logs, métricas, filtros e operações de suporte. |
 | `skill-cobranca-automatizada-saas-abacatepay` | Motor de cobrança automatizada com AbacatePay, régua de cobrança, faturas, trial, portal público e notificações de cobrança. |
+| `skill-lgpd-brasil` | LGPD e privacidade para produtos brasileiros: mapa de dados, bases legais, consentimento, RIPD, direitos do titular e incidentes. |
 | `skill-abacatepay-integration` | Guia integração com AbacatePay, incluindo PIX/cartão, CPF/CNPJ, webhooks, recibos, reembolso e entitlements. |
 | `skill-stripe-integration` | Guia Stripe Checkout, Billing, subscriptions, portal, invoices, trials, coupons, webhooks e estado de assinatura. |
 | `skill-saas-core-limits` | Define limites de plano, cotas, entitlements, grace period, bloqueios e contadores de uso. |
@@ -1036,7 +1043,7 @@ O validador público verifica:
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.
 - [docs/context-economy.md](docs/context-economy.md): economia de contexto inspirada em RTK/Caveman, leitura em camadas e roadmap de wrappers compactos.
 - [docs/research/repo-radar-2026-05.md](docs/research/repo-radar-2026-05.md): radar de repositórios recentes e padrões extraíveis para próximas melhorias.
-- [docs/research/repo-radar-2026-06.md](docs/research/repo-radar-2026-06.md): radar de junho de 2026 com UX/UI, changelog canônico, doctor/changelog no CLI e uso seguro de bibliotecas externas.
+- [docs/research/repo-radar-2026-06.md](docs/research/repo-radar-2026-06.md): radar de junho de 2026 com UX/UI, changelog canônico, doctor/changelog no CLI, uso seguro de bibliotecas externas, gate de implementação mínima, gate React e compressão opt-in de contexto.
 - [docs/npm-package.md](docs/npm-package.md): pacote `@iapro/orquestrador-maestro-cli`, comandos npm, update e publicação.
 - [docs/reference-packs.md](docs/reference-packs.md): padrão para bibliotecas locais e privadas de referência sem publicar conteúdo externo junto do snapshot.
 - [docs/skill-catalog.md](docs/skill-catalog.md): catálogo das skills canônicas, Codex e comunitárias publicadas.
@@ -1133,6 +1140,13 @@ Padrão usado para releases publicadas:
 ```
 
 Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam temporariamente em `### Unreleased`. No publish seguinte, essa seção deve virar a próxima versão semver.
+
+### Unreleased
+
+- Added: radar de junho ampliado com Ponytail, React Doctor e Headroom como referências para implementação mínima, gate React e compressão opt-in de contexto.
+- Added: registro de Hector Noya e Felinto, integrantes do Grupo IAPro, como colaboradores comunitários da melhoria ligada a Ponytail, React Doctor e Headroom.
+- Changed: `docs/context-economy.md` agora explicita gates de otimização para reduzir código desnecessário, revisão subjetiva e contexto pesado.
+- Changed: `docs/research/repo-radar-2026-06.md` foi expandido com decisões práticas sem copiar código, prompts, assets ou conteúdo dos projetos externos.
 
 ### 0.1.2 - 2026-06-29
 

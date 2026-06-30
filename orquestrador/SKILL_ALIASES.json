@@ -77,6 +77,13 @@
     "voz": "skill-elevenlabs-voice-cloning",
     "google workspace": "skill-google-workspace-sync",
     "google calendar": "skill-google-workspace-sync",
-    "meet": "skill-google-workspace-sync"
+    "meet": "skill-google-workspace-sync",
+    "lgpd": "skill-lgpd-brasil",
+    "lgpd brasil": "skill-lgpd-brasil",
+    "lei geral de protecao de dados": "skill-lgpd-brasil",
+    "anpd": "skill-lgpd-brasil",
+    "ripd": "skill-lgpd-brasil",
+    "dpo": "skill-lgpd-brasil",
+    "encarregado lgpd": "skill-lgpd-brasil"
   }
 }

@@ -56,7 +56,7 @@ Se a skill deve ser usada junto com outras, atualize `orquestrador/SKILL_CHAINS.
 
 Fonte principal editável. O sync copia essas skills para os espelhos compatíveis.
 
-Total: 23
+Total: 24
 
 | Skill | Categoria | Risco | O que faz |
 |---|---|---|---|
@@ -68,6 +68,7 @@ Total: 23
 | `skill-evolution-api` | communication | medium | Use for WhatsApp automation with Evolution API, including instance lifecycle, QR pairing, inbound and outbound messages, webhooks, consent, tenant isolation, queues, idempotency, rate limits, retries, audit logs, and reliable delivery. |
 | `skill-frontend-ux-guardrails` | frontend | medium | Apply frontend UX quality gates for SaaS dashboards, product screens, modals, tables, forms, responsive layouts, overflow fixes, accessibility, visual validation, spelling, and reduction of UI rework. |
 | `skill-google-workspace-sync` | integrations | high | Use for Google Workspace integrations with OAuth, Calendar, Meet, FreeBusy, Drive, Sheets, webhooks, least-privilege scopes, encrypted refresh tokens, idempotent writes, reconciliation jobs, consent revocation, validation, and sync audit trails. |
+| `skill-lgpd-brasil` | compliance | high | Use for Brazilian LGPD privacy and data-governance work, including data maps, legal basis selection, consent, privacy notices, RIPD, rights requests, retention, vendor risk, incident response, and international transfers. |
 | `skill-live-processing` | media | medium | Use for live stream and VOD ingestion pipelines, including YouTube, Twitch, uploads, capture jobs, queues, transcription, clip generation, media storage, retries, idempotent workers, consent, validation, observability, and safe server-side provider credentials. |
 | `skill-manual-video-processing` | media | medium | Use for manual video or audio uploads in SaaS apps, including upload UX, direct storage, validation, malware checks, quota enforcement, asynchronous processing jobs, transcription, clip extraction, review flows, signed URLs, consent, and secure media access. |
 | `skill-modern-ui-patterns` | frontend | low | Use for professional SaaS UI implementation and refinement in React, TypeScript, Tailwind, dashboards, admin panels, tables, forms, settings, billing, onboarding, responsive layouts, component states, and design-system consistency. |
@@ -88,7 +89,7 @@ Total: 23
 
 Skills instaladas no diretório ativo do Codex. Inclui workflows OMX/Codex e espelho das skills canônicas.
 
-Total: 47
+Total: 48
 
 | Skill | Categoria | Risco | O que faz |
 |---|---|---|---|
@@ -118,6 +119,7 @@ Total: 47
 | `skill-evolution-api` | communication | medium | Use for WhatsApp automation with Evolution API, including instance lifecycle, QR pairing, inbound and outbound messages, webhooks, consent, tenant isolation, queues, idempotency, rate limits, retries, audit logs, and reliable delivery. |
 | `skill-frontend-ux-guardrails` | frontend | medium | Apply frontend UX quality gates for SaaS dashboards, product screens, modals, tables, forms, responsive layouts, overflow fixes, accessibility, visual validation, spelling, and reduction of UI rework. |
 | `skill-google-workspace-sync` | integrations | high | Use for Google Workspace integrations with OAuth, Calendar, Meet, FreeBusy, Drive, Sheets, webhooks, least-privilege scopes, encrypted refresh tokens, idempotent writes, reconciliation jobs, consent revocation, validation, and sync audit trails. |
+| `skill-lgpd-brasil` | compliance | high | Use for Brazilian LGPD privacy and data-governance work, including data maps, legal basis selection, consent, privacy notices, RIPD, rights requests, retention, vendor risk, incident response, and international transfers. |
 | `skill-live-processing` | media | medium | Use for live stream and VOD ingestion pipelines, including YouTube, Twitch, uploads, capture jobs, queues, transcription, clip generation, media storage, retries, idempotent workers, consent, validation, observability, and safe server-side provider credentials. |
 | `skill-manual-video-processing` | media | medium | Use for manual video or audio uploads in SaaS apps, including upload UX, direct storage, validation, malware checks, quota enforcement, asynchronous processing jobs, transcription, clip extraction, review flows, signed URLs, consent, and secure media access. |
 | `skill-modern-ui-patterns` | frontend | low | Use for professional SaaS UI implementation and refinement in React, TypeScript, Tailwind, dashboards, admin panels, tables, forms, settings, billing, onboarding, responsive layouts, component states, and design-system consistency. |
@@ -640,6 +642,7 @@ Total: 610
 | `skill-evolution-api` | communication | medium | Use for WhatsApp automation with Evolution API, including instance lifecycle, QR pairing, inbound and outbound messages, webhooks, consent, tenant isolation, queues, idempotency, rate limits, retries, audit logs, and reliable delivery. |
 | `skill-frontend-ux-guardrails` | frontend | medium | Apply frontend UX quality gates for SaaS dashboards, product screens, modals, tables, forms, responsive layouts, overflow fixes, accessibility, visual validation, spelling, and reduction of UI rework. |
 | `skill-google-workspace-sync` | integrations | high | Use for Google Workspace integrations with OAuth, Calendar, Meet, FreeBusy, Drive, Sheets, webhooks, least-privilege scopes, encrypted refresh tokens, idempotent writes, reconciliation jobs, consent revocation, validation, and sync audit trails. |
+| `skill-lgpd-brasil` | compliance | high | Use for Brazilian LGPD privacy and data-governance work, including data maps, legal basis selection, consent, privacy notices, RIPD, rights requests, retention, vendor risk, incident response, and international transfers. |
 | `skill-live-processing` | media | medium | Use for live stream and VOD ingestion pipelines, including YouTube, Twitch, uploads, capture jobs, queues, transcription, clip generation, media storage, retries, idempotent workers, consent, validation, observability, and safe server-side provider credentials. |
 | `skill-manual-video-processing` | media | medium | Use for manual video or audio uploads in SaaS apps, including upload UX, direct storage, validation, malware checks, quota enforcement, asynchronous processing jobs, transcription, clip extraction, review flows, signed URLs, consent, and secure media access. |
 | `skill-modern-ui-patterns` | frontend | low | Use for professional SaaS UI implementation and refinement in React, TypeScript, Tailwind, dashboards, admin panels, tables, forms, settings, billing, onboarding, responsive layouts, component states, and design-system consistency. |

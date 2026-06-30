@@ -4,6 +4,15 @@ All notable changes to Orquestrador Maestro are documented here.
 
 ## Unreleased
 
+### Added
+- `skill-lgpd-brasil` as a new canonical LGPD/privacy skill in `orquestrador/skills/`, with routing for dados pessoais, consentimento, RIPD, direitos do titular, retenção, incidentes, and transferências internacionais.
+- June 2026 radar now includes Ponytail, React Doctor, and Headroom as references for minimal implementation gates, deterministic React review, and opt-in context compression.
+- README community contribution section now records Hector Noya and Felinto from Grupo IAPro as collaborators in the Ponytail, React Doctor, and Headroom improvement track.
+
+### Changed
+- README, catalog, aliases, and router now surface the LGPD skill alongside the existing privacy-related and SaaS routing skills.
+- `docs/research/repo-radar-2026-06.md` was rewritten with clean UTF-8 text and expanded decisions for context optimization, React gates, and reversible compression.
+
 ## 0.1.2 - 2026-06-29
 
 ### Added
