@@ -10,6 +10,10 @@ CORE_ONLY=false
 VERBOSE_PATHS=false
 ISSUES=()
 
+count_args() {
+  echo "$#"
+}
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --home-path)
@@ -163,7 +167,7 @@ if [ "$CORE_ONLY" = false ]; then
   assert_path "$CODEX/agents" "Codex agents"
   assert_path "$CODEX/prompts" "Codex prompts"
 
-  for spec in "${NATIVE_ROOT_SPECS[@]}"; do
+  for spec in "${NATIVE_ROOT_SPECS[@]+"${NATIVE_ROOT_SPECS[@]}"}"; do
     IFS='|' read -r program root_path max_dirs <<EOF
 $spec
 EOF
@@ -234,9 +238,9 @@ if [ "$CORE_ONLY" = false ] && [ "$SKIP_TOOL_PROFILES" = false ]; then
   fi
 fi
 
-if [ "${#ISSUES[@]}" -gt 0 ]; then
+if [ "$(count_args "${ISSUES[@]+"${ISSUES[@]}"}")" -gt 0 ]; then
   echo "Install verification failed:"
-  for issue in "${ISSUES[@]}"; do
+  for issue in "${ISSUES[@]+"${ISSUES[@]}"}"; do
     echo "  - $issue"
   done
   exit 1

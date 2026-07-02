@@ -13,6 +13,9 @@ All notable changes to Orquestrador Maestro are documented here.
 - README, catalog, aliases, and router now surface the LGPD skill alongside the existing privacy-related and SaaS routing skills.
 - `docs/research/repo-radar-2026-06.md` was rewritten with clean UTF-8 text and expanded decisions for context optimization, React gates, and reversible compression.
 
+### Fixed
+- Unix installer and verifier scripts now guard empty Bash arrays so `install.sh` and `scripts/verify-install.sh` remain compatible with macOS `/bin/bash` 3.2 under `set -euo pipefail`.
+
 ## 0.1.2 - 2026-06-29
 
 ### Added
