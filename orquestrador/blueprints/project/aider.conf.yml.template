@@ -1,0 +1,11 @@
+# Aider loads this config from the project root.
+# Keep it compact: load the same operational contract used by the other tools.
+
+read:
+  - AGENTS.md
+  - .orquestrador/rules.md
+  - .orquestrador/maestro.md
+  - DEV/README.md
+  - DEV/INDEX.md
+  - DEV/CONTEXT.md
+  - DEV/WORKLOG.md

@@ -1,0 +1,23 @@
+# Copilot Instructions
+
+Use Orquestrador Maestro as the operating contract for `{{PROJECT_NAME}}`.
+
+Read in this order:
+
+1. `AGENTS.md`
+2. `.orquestrador/rules.md`
+3. `.orquestrador/maestro.md`
+4. `DEV/INDEX.md`
+5. `DEV/HANDOFF.md`
+6. `DEV/CONTEXT.md`
+7. `DEV/SPECS/ACTIVE.md`
+
+Rules:
+
+- Keep changes minimal and verify before claiming completion.
+- Prefer the smallest relevant skill or workflow.
+- Update `DEV/WORKLOG.md`, `DEV/VERIFY.md`, and `DEV/HANDOFF.md` after substantive work.
+- Do not commit or push unless the user explicitly asks.
+- If the project has a `DEV/` tree, read its compact entry files before opening task-specific docs.
+
+This file is intended for GitHub Copilot and VS Code-based workflows.

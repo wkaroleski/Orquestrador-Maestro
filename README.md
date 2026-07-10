@@ -8,7 +8,7 @@ Repositório: [github.com/FernandoBolzan/Orquestrador-Maestro](https://github.co
 
 O ponto central do Orquestrador Maestro é simples: ele não cria uma IA nova. Ele instala uma camada portátil de regras, skills, hooks, perfis e entrypoints para que as ferramentas de IA do usuário leiam o mesmo contrato operacional antes de agir.
 
-Na prática, o usuário instala uma vez, e Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity passam a encontrar o Orquestrador por padrão nas pastas corretas do próprio usuário.
+Na prática, o usuário instala uma vez, e Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity passam a encontrar o Orquestrador por padrão nas pastas corretas do próprio usuário. Para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf em nível de projeto, o `init-dev` cria o bootstrap de workspace no projeto aberto.
 
 ### 1. Instalação Portátil
 
@@ -140,6 +140,7 @@ Principais melhorias:
 - validação pública reforçada contra arquivos locais, temporários, caches, memórias privadas e raízes como `.omx/`, `.local/` e `DEV/`;
 - smoke tests em home temporário para validar instalação, verificação, listagem e desinstalação sem tocar no usuário real;
 - matriz de entrypoints em `orquestrador/PROGRAM_ENTRYPOINTS.json` para Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity;
+- bootstrap de workspace para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf via arquivos reconhecidos no projeto aberto;
 - documentação de economia de contexto para orientar IAs a lerem primeiro regras, índices, roteadores e `DEV/` antes de carregar arquivos longos;
 - novo fluxo determinístico de projeto com `DEV/SPECS/ACTIVE.md`, `DEV/HANDOFF.md`, `DEV/VERIFY.md`, `compact-worklog` e `check-dev-gates` para reduzir looping e contexto desperdiçado.
 
@@ -195,7 +196,7 @@ O detalhamento desta revisão está em [docs/research/repo-radar-2026-06.md](doc
 
 ## Visão Geral
 
-O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI ou Windsurf. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
+O Orquestrador Maestro é uma camada portátil de instruções para fazer várias IAs trabalharem com o mesmo contrato operacional no computador do usuário. Ele não é uma IA nova, nem substitui Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf, Continue, JetBrains AI Assistant, Aider ou Cline. Ele instala arquivos que essas ferramentas conseguem ler para padronizar:
 
 - onde a IA busca regras;
 - como ela identifica o papel do usuário como Maestro;
@@ -212,7 +213,7 @@ Este repositório é útil para quem quer:
 
 - configurar um ambiente de IA local com regras consistentes;
 - compartilhar uma base de skills e hooks sem expor dados pessoais;
-- usar Codex, Claude Code, OpenCode, Cursor, Gemini CLI e Windsurf com a mesma hierarquia;
+- usar Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf, VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider e Cline com a mesma hierarquia;
 - fazer agentes lerem a pasta `DEV/` dos projetos antes de gastar tokens em exploração longa;
 - manter um padrão repetível de instalação em qualquer usuário Windows, Linux ou macOS;
 - evoluir skills localmente e depois publicar um snapshot sanitizado.
