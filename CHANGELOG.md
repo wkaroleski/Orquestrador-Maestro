@@ -14,6 +14,8 @@ All notable changes to Orquestrador Maestro are documented here.
 
 ### Changed
 - README and tool-profile documentation now include Grok CLI installation, discovery, and verification.
+- Frontend skills now include an Impeccable-informed workflow with persistent design context, symptom-based command routing, product-versus-brand guidance, anti-pattern detection, quality scoring, and pre-ship audit/harden gates.
+- Frontend guidance now documents `PRODUCT.md` and `DESIGN.md`, named passes such as `typeset`, `layout`, `colorize`, `adapt`, `distill`, `quieter`, and `bolder`, plus optional `npx impeccable detect` validation.
 - README, catalog, aliases, and router now surface the LGPD skill alongside the existing privacy-related and SaaS routing skills.
 - `docs/research/repo-radar-2026-06.md` was rewritten with clean UTF-8 text and expanded decisions for context optimization, React gates, and reversible compression.
 

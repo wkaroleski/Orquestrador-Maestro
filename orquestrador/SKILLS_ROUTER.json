@@ -254,6 +254,9 @@
       "triggers": [
         "ux guardrails",
         "frontend polish",
+        "impeccable audit",
+        "impeccable harden",
+        "desloppify frontend",
         "responsive",
         "overflow",
         "layout quebrado",
@@ -271,6 +274,9 @@
       "triggers": [
         "modern ui",
         "ui patterns",
+        "impeccable typeset",
+        "impeccable layout",
+        "impeccable colorize",
         "componentes",
         "design system",
         "saas ui",
@@ -287,6 +293,10 @@
       "triggers": [
         "open design",
         "design tokens",
+        "impeccable shape",
+        "impeccable craft",
+        "impeccable critique",
+        "impeccable polish",
         "design ui",
         "visual qa",
         "component library",
