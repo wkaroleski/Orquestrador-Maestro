@@ -8,8 +8,45 @@
       "risk": "medium",
       "source": "local-project-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["criar saas", "novo saas", "saas factory", "dashboard saas", "admin dashboard", "painel admin", "landing saas", "pagina de login", "página de login", "cadastro saas", "sign up", "login saas", "onboarding saas", "auth saas", "assinatura", "subscription", "billing", "multi-tenant", "supabase saas", "abacatepay", "stripe", "plans", "planos", "entitlements", "limites"],
-      "aliases": ["criar saas", "novo saas", "saas", "landing saas", "pagina de login", "página de login", "cadastro saas", "login saas", "onboarding saas", "auth saas"],
+      "triggers": [
+        "criar saas",
+        "novo saas",
+        "saas factory",
+        "dashboard saas",
+        "admin dashboard",
+        "painel admin",
+        "landing saas",
+        "pagina de login",
+        "página de login",
+        "cadastro saas",
+        "sign up",
+        "login saas",
+        "onboarding saas",
+        "auth saas",
+        "assinatura",
+        "subscription",
+        "billing",
+        "multi-tenant",
+        "supabase saas",
+        "abacatepay",
+        "stripe",
+        "plans",
+        "planos",
+        "entitlements",
+        "limites"
+      ],
+      "aliases": [
+        "criar saas",
+        "novo saas",
+        "saas",
+        "landing saas",
+        "pagina de login",
+        "página de login",
+        "cadastro saas",
+        "login saas",
+        "onboarding saas",
+        "auth saas"
+      ],
       "status": "canonical"
     },
     "skill-saas-admin-dashboard": {
@@ -18,8 +55,22 @@
       "risk": "medium",
       "source": "local-project-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["admin panel", "painel administrativo", "dashboard administrativo", "users admin", "pagamentos admin", "planos admin", "logs admin", "sidebar admin", "metrics dashboard"],
-      "aliases": ["dashboard", "painel admin", "admin"],
+      "triggers": [
+        "admin panel",
+        "painel administrativo",
+        "dashboard administrativo",
+        "users admin",
+        "pagamentos admin",
+        "planos admin",
+        "logs admin",
+        "sidebar admin",
+        "metrics dashboard"
+      ],
+      "aliases": [
+        "dashboard",
+        "painel admin",
+        "admin"
+      ],
       "status": "canonical"
     },
     "skill-abacatepay-integration": {
@@ -28,8 +79,22 @@
       "risk": "medium",
       "source": "local-payment-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["abacatepay", "pix", "cpf", "cnpj", "billing.paid", "cobranca", "cobrança", "brl checkout", "pagamento brasileiro"],
-      "aliases": ["abacatepay", "pix", "pagamento br"],
+      "triggers": [
+        "abacatepay",
+        "pix",
+        "cpf",
+        "cnpj",
+        "billing.paid",
+        "cobranca",
+        "cobrança",
+        "brl checkout",
+        "pagamento brasileiro"
+      ],
+      "aliases": [
+        "abacatepay",
+        "pix",
+        "pagamento br"
+      ],
       "status": "canonical"
     },
     "skill-stripe-integration": {
@@ -38,8 +103,20 @@
       "risk": "medium",
       "source": "local-payment-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["stripe", "stripe checkout", "stripe billing", "customer portal", "invoice.paid", "checkout.session.completed", "customer.subscription", "webhook stripe"],
-      "aliases": ["stripe", "checkout"],
+      "triggers": [
+        "stripe",
+        "stripe checkout",
+        "stripe billing",
+        "customer portal",
+        "invoice.paid",
+        "checkout.session.completed",
+        "customer.subscription",
+        "webhook stripe"
+      ],
+      "aliases": [
+        "stripe",
+        "checkout"
+      ],
       "status": "canonical"
     },
     "skill-saas-core-limits": {
@@ -48,8 +125,22 @@
       "risk": "medium",
       "source": "local-project-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["limites saas", "entitlements", "quotas", "feature flags", "trial", "grace period", "blocked account", "plan limits", "uso do plano"],
-      "aliases": ["limites", "planos", "assinaturas"],
+      "triggers": [
+        "limites saas",
+        "entitlements",
+        "quotas",
+        "feature flags",
+        "trial",
+        "grace period",
+        "blocked account",
+        "plan limits",
+        "uso do plano"
+      ],
+      "aliases": [
+        "limites",
+        "planos",
+        "assinaturas"
+      ],
       "status": "canonical"
     },
     "skill-saas-security-scan": {
@@ -58,8 +149,19 @@
       "risk": "high",
       "source": "local-security-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["saas security scan", "sast", "secrets", "dependency audit", "repo security", "local scan"],
-      "aliases": ["security scan", "scan seguranca", "seguranca saas"],
+      "triggers": [
+        "saas security scan",
+        "sast",
+        "secrets",
+        "dependency audit",
+        "repo security",
+        "local scan"
+      ],
+      "aliases": [
+        "security scan",
+        "scan seguranca",
+        "seguranca saas"
+      ],
       "status": "canonical"
     },
     "skill-saas-dast-recon": {
@@ -68,8 +170,19 @@
       "risk": "high",
       "source": "local-security-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["dast", "preview scan", "staging scan", "zap", "nuclei", "authorized url scan"],
-      "aliases": ["dast", "zap", "nuclei"],
+      "triggers": [
+        "dast",
+        "preview scan",
+        "staging scan",
+        "zap",
+        "nuclei",
+        "authorized url scan"
+      ],
+      "aliases": [
+        "dast",
+        "zap",
+        "nuclei"
+      ],
       "status": "canonical"
     },
     "skill-security-hooks": {
@@ -78,8 +191,18 @@
       "risk": "medium",
       "source": "local-security-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["security hooks", "pre-commit", "pre-push", "ci security", "security gate"],
-      "aliases": ["hooks", "pre commit", "ci security"],
+      "triggers": [
+        "security hooks",
+        "pre-commit",
+        "pre-push",
+        "ci security",
+        "security gate"
+      ],
+      "aliases": [
+        "hooks",
+        "pre commit",
+        "ci security"
+      ],
       "status": "canonical"
     },
     "skill-supabase-rls": {
@@ -88,8 +211,21 @@
       "risk": "high",
       "source": "local-supabase-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["supabase", "rls", "row level security", "tenant isolation", "policies", "auth.uid", "service role", "storage policies"],
-      "aliases": ["supabase", "rls", "tenant isolation"],
+      "triggers": [
+        "supabase",
+        "rls",
+        "row level security",
+        "tenant isolation",
+        "policies",
+        "auth.uid",
+        "service role",
+        "storage policies"
+      ],
+      "aliases": [
+        "supabase",
+        "rls",
+        "tenant isolation"
+      ],
       "status": "canonical"
     },
     "skill-ai-orchestration": {
@@ -98,8 +234,23 @@
       "risk": "medium",
       "source": "local-ai-orchestration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["ai orchestration", "llm router", "openai", "gemini", "claude", "model fallback", "token budget", "agent routing", "ai gateway"],
-      "aliases": ["ia", "ai", "llm", "token budget"],
+      "triggers": [
+        "ai orchestration",
+        "llm router",
+        "openai",
+        "gemini",
+        "claude",
+        "model fallback",
+        "token budget",
+        "agent routing",
+        "ai gateway"
+      ],
+      "aliases": [
+        "ia",
+        "ai",
+        "llm",
+        "token budget"
+      ],
       "status": "canonical"
     },
     "skill-multiagent-orchestration": {
@@ -108,8 +259,35 @@
       "risk": "medium",
       "source": "local-orchestration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["multiagent", "multiagents", "subagent", "subagents", "multi agente", "multi agentes", "agentes paralelos", "parallel agents", "team execution", "swarm", "delegar", "delegacao", "delegação", "usar agentes", "use subagentes", "orquestrar agentes"],
-      "aliases": ["multiagent", "multiagents", "subagent", "subagents", "agentes paralelos", "team execution", "swarm", "delegar", "orquestrar agentes"],
+      "triggers": [
+        "multiagent",
+        "multiagents",
+        "subagent",
+        "subagents",
+        "multi agente",
+        "multi agentes",
+        "agentes paralelos",
+        "parallel agents",
+        "team execution",
+        "swarm",
+        "delegar",
+        "delegacao",
+        "delegação",
+        "usar agentes",
+        "use subagentes",
+        "orquestrar agentes"
+      ],
+      "aliases": [
+        "multiagent",
+        "multiagents",
+        "subagent",
+        "subagents",
+        "agentes paralelos",
+        "team execution",
+        "swarm",
+        "delegar",
+        "orquestrar agentes"
+      ],
       "status": "canonical"
     },
     "skill-aionui-cowork-orchestration": {
@@ -118,8 +296,30 @@
       "risk": "medium",
       "source": "local-orchestration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["aionui", "aion ui", "cowork app", "cowork agents", "team mode", "aionui team", "aionui codex", "aionui claude", "aionui gemini", "aionui opencode", "mcp unified management", "agent cowork", "multi-agent cowork"],
-      "aliases": ["aionui", "aion ui", "cowork app", "team mode", "aionui team", "multi-agent cowork", "mcp unified management"],
+      "triggers": [
+        "aionui",
+        "aion ui",
+        "cowork app",
+        "cowork agents",
+        "team mode",
+        "aionui team",
+        "aionui codex",
+        "aionui claude",
+        "aionui gemini",
+        "aionui opencode",
+        "mcp unified management",
+        "agent cowork",
+        "multi-agent cowork"
+      ],
+      "aliases": [
+        "aionui",
+        "aion ui",
+        "cowork app",
+        "team mode",
+        "aionui team",
+        "multi-agent cowork",
+        "mcp unified management"
+      ],
       "status": "canonical"
     },
     "skill-evolution-api": {
@@ -128,8 +328,19 @@
       "risk": "medium",
       "source": "local-integration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["evolution api", "whatsapp", "zap", "webhook whatsapp", "instancia whatsapp", "qr code whatsapp", "mensagens whatsapp"],
-      "aliases": ["whatsapp", "evolution api"],
+      "triggers": [
+        "evolution api",
+        "whatsapp",
+        "zap",
+        "webhook whatsapp",
+        "instancia whatsapp",
+        "qr code whatsapp",
+        "mensagens whatsapp"
+      ],
+      "aliases": [
+        "whatsapp",
+        "evolution api"
+      ],
       "status": "canonical"
     },
     "skill-frontend-ux-guardrails": {
@@ -138,8 +349,21 @@
       "risk": "medium",
       "source": "local-frontend-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["ux guardrails", "frontend polish", "responsive", "overflow", "layout quebrado", "dashboard ux", "accessibility", "a11y"],
-      "aliases": ["ux", "responsivo", "mobile quebrado"],
+      "triggers": [
+        "ux guardrails",
+        "frontend polish",
+        "responsive",
+        "overflow",
+        "layout quebrado",
+        "dashboard ux",
+        "accessibility",
+        "a11y"
+      ],
+      "aliases": [
+        "ux",
+        "responsivo",
+        "mobile quebrado"
+      ],
       "status": "canonical"
     },
     "skill-modern-ui-patterns": {
@@ -148,8 +372,19 @@
       "risk": "low",
       "source": "local-frontend-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["modern ui", "ui patterns", "componentes", "design system", "saas ui", "admin ui", "layout moderno"],
-      "aliases": ["ui moderna", "design system"],
+      "triggers": [
+        "modern ui",
+        "ui patterns",
+        "componentes",
+        "design system",
+        "saas ui",
+        "admin ui",
+        "layout moderno"
+      ],
+      "aliases": [
+        "ui moderna",
+        "design system"
+      ],
       "status": "canonical"
     },
     "skill-open-design-ui": {
@@ -158,8 +393,18 @@
       "risk": "low",
       "source": "local-frontend-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["open design", "design tokens", "design ui", "visual qa", "component library", "brand ui"],
-      "aliases": ["open design", "visual qa"],
+      "triggers": [
+        "open design",
+        "design tokens",
+        "design ui",
+        "visual qa",
+        "component library",
+        "brand ui"
+      ],
+      "aliases": [
+        "open design",
+        "visual qa"
+      ],
       "status": "canonical"
     },
     "skill-live-processing": {
@@ -168,8 +413,18 @@
       "risk": "medium",
       "source": "local-media-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["live processing", "processamento ao vivo", "stream processing", "live video", "fila de video", "worker de video"],
-      "aliases": ["live video", "processamento ao vivo"],
+      "triggers": [
+        "live processing",
+        "processamento ao vivo",
+        "stream processing",
+        "live video",
+        "fila de video",
+        "worker de video"
+      ],
+      "aliases": [
+        "live video",
+        "processamento ao vivo"
+      ],
       "status": "canonical"
     },
     "skill-manual-video-processing": {
@@ -178,8 +433,18 @@
       "risk": "medium",
       "source": "local-media-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["manual video", "upload video", "processar video", "video processing", "transcode", "jobs de video"],
-      "aliases": ["upload video", "processar video"],
+      "triggers": [
+        "manual video",
+        "upload video",
+        "processar video",
+        "video processing",
+        "transcode",
+        "jobs de video"
+      ],
+      "aliases": [
+        "upload video",
+        "processar video"
+      ],
       "status": "canonical"
     },
     "skill-smart-clip-detection": {
@@ -188,8 +453,18 @@
       "risk": "medium",
       "source": "local-media-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["clip detection", "detectar cortes", "smart clips", "highlight detection", "viral clips", "recortar video"],
-      "aliases": ["clips", "cortes"],
+      "triggers": [
+        "clip detection",
+        "detectar cortes",
+        "smart clips",
+        "highlight detection",
+        "viral clips",
+        "recortar video"
+      ],
+      "aliases": [
+        "clips",
+        "cortes"
+      ],
       "status": "canonical"
     },
     "skill-unified-analytics": {
@@ -198,8 +473,20 @@
       "risk": "medium",
       "source": "local-analytics-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["analytics", "event tracking", "metrics", "funnels", "dashboard metrics", "kpis", "telemetria"],
-      "aliases": ["analytics", "metricas", "event tracking"],
+      "triggers": [
+        "analytics",
+        "event tracking",
+        "metrics",
+        "funnels",
+        "dashboard metrics",
+        "kpis",
+        "telemetria"
+      ],
+      "aliases": [
+        "analytics",
+        "metricas",
+        "event tracking"
+      ],
       "status": "canonical"
     },
     "skill-elevenlabs-voice-cloning": {
@@ -208,8 +495,18 @@
       "risk": "high",
       "source": "local-ai-orchestration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["elevenlabs", "voice cloning", "clonar voz", "tts", "text to speech", "voice generation"],
-      "aliases": ["elevenlabs", "voz"],
+      "triggers": [
+        "elevenlabs",
+        "voice cloning",
+        "clonar voz",
+        "tts",
+        "text to speech",
+        "voice generation"
+      ],
+      "aliases": [
+        "elevenlabs",
+        "voz"
+      ],
       "status": "canonical"
     },
     "skill-google-workspace-sync": {
@@ -218,8 +515,19 @@
       "risk": "medium",
       "source": "local-integration-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["google workspace", "google drive", "google sheets", "google calendar", "workspace sync", "oauth google"],
-      "aliases": ["google workspace", "google calendar", "meet"],
+      "triggers": [
+        "google workspace",
+        "google drive",
+        "google sheets",
+        "google calendar",
+        "workspace sync",
+        "oauth google"
+      ],
+      "aliases": [
+        "google workspace",
+        "google calendar",
+        "meet"
+      ],
       "status": "canonical"
     },
     "skill-lgpd-brasil": {
@@ -228,8 +536,27 @@
       "risk": "high",
       "source": "local-privacy-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["lgpd", "lgpd brasil", "lei geral de protecao de dados", "anpd", "ripd", "dpo", "encarregado", "privacidade lgpd", "dados pessoais", "dados sensiveis"],
-      "aliases": ["lgpd", "lgpd brasil", "lei geral de protecao de dados", "anpd", "ripd", "dpo", "encarregado lgpd"],
+      "triggers": [
+        "lgpd",
+        "lgpd brasil",
+        "lei geral de protecao de dados",
+        "anpd",
+        "ripd",
+        "dpo",
+        "encarregado",
+        "privacidade lgpd",
+        "dados pessoais",
+        "dados sensiveis"
+      ],
+      "aliases": [
+        "lgpd",
+        "lgpd brasil",
+        "lei geral de protecao de dados",
+        "anpd",
+        "ripd",
+        "dpo",
+        "encarregado lgpd"
+      ],
       "status": "canonical"
     },
     "skill-cobranca-automatizada-saas-abacatepay": {
@@ -238,8 +565,60 @@
       "risk": "high",
       "source": "local-saas-billing-patterns",
       "mirrorEverywhere": true,
-      "triggers": ["cobranca", "cobrança", "billing automatizado", "regua de cobranca", "régua de cobrança", "fatura", "invoice", "dunning", "abacatepay cobranca", "billing cron", "trial expiration", "invoice portal", "notificacao cobranca", "notificação cobrança", "billing metrics", "mrr", "billing admin", "planos", "plans"],
-      "aliases": ["cobranca", "billing automatizado", "regua de cobranca"],
+      "triggers": [
+        "cobranca",
+        "cobrança",
+        "billing automatizado",
+        "regua de cobranca",
+        "régua de cobrança",
+        "fatura",
+        "invoice",
+        "dunning",
+        "abacatepay cobranca",
+        "billing cron",
+        "trial expiration",
+        "invoice portal",
+        "notificacao cobranca",
+        "notificação cobrança",
+        "billing metrics",
+        "mrr",
+        "billing admin",
+        "planos",
+        "plans"
+      ],
+      "aliases": [
+        "cobranca",
+        "billing automatizado",
+        "regua de cobranca"
+      ],
+      "status": "canonical"
+    },
+    "skill-optimize-images": {
+      "description": "Otimiza imagens para blogs e sites, incluindo conversão de formato, redimensionamento, compressão, responsividade, acessibilidade e validação visual. Use quando pedirem para otimizar, reduzir, preparar, converter ou melhorar imagens para web.",
+      "category": "media",
+      "risk": "low",
+      "source": "local-media-patterns",
+      "mirrorEverywhere": true,
+      "triggers": [
+        "otimizar imagem",
+        "otimizar imagens",
+        "imagem para blog",
+        "imagem para site",
+        "compressão de imagem",
+        "webp",
+        "avif",
+        "image optimization"
+      ],
+      "aliases": [
+        "otimizar imagem",
+        "otimizar imagens",
+        "imagens web",
+        "imagem para blog",
+        "imagem para site",
+        "compressão de imagens",
+        "webp",
+        "avif"
+      ],
       "status": "canonical"
     }
   }

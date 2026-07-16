@@ -8,7 +8,7 @@ Repositório: [github.com/FernandoBolzan/Orquestrador-Maestro](https://github.co
 
 O ponto central do Orquestrador Maestro é simples: ele não cria uma IA nova. Ele instala uma camada portátil de regras, skills, hooks, perfis e entrypoints para que as ferramentas de IA do usuário leiam o mesmo contrato operacional antes de agir.
 
-Na prática, o usuário instala uma vez, e Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity passam a encontrar o Orquestrador por padrão nas pastas corretas do próprio usuário. Para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf em nível de projeto, o `init-dev` cria o bootstrap de workspace no projeto aberto.
+Na prática, o usuário instala uma vez, e Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Grok CLI, Windsurf e Antigravity passam a encontrar o Orquestrador por padrão nas pastas corretas do próprio usuário. Para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf em nível de projeto, o `init-dev` cria o bootstrap de workspace no projeto aberto.
 
 ### 1. Instalação Portátil
 
@@ -51,6 +51,20 @@ orquestrador-maestro doctor
 ```
 
 No Linux e no macOS, `orquestrador-maestro doctor` exige `pwsh` ou `powershell` no `PATH`.
+
+### Grok CLI
+
+Depois de instalar o Grok CLI oficial, conecte-o ao Orquestrador:
+
+```bash
+# Linux/macOS
+bash scripts/install-grok-orquestrador.sh
+
+# Windows PowerShell
+powershell -ExecutionPolicy Bypass -File .\scripts\install-grok-orquestrador.ps1
+```
+
+O instalador configura `~/.grok/config.toml`, aponta o Grok para as skills globais e mantém a mesma skill `skill-optimize-images` disponível. Valide com `grok inspect`.
 
 Se preferir Git/ZIP, use as seções de instalação completa abaixo. O npm é o caminho mais simples para quem só quer instalar e manter atualizado.
 
@@ -139,7 +153,7 @@ Principais melhorias:
 - saída segura por padrão, com caminhos locais redigidos nos relatórios de instalação e remoção;
 - validação pública reforçada contra arquivos locais, temporários, caches, memórias privadas e raízes como `.omx/`, `.local/` e `DEV/`;
 - smoke tests em home temporário para validar instalação, verificação, listagem e desinstalação sem tocar no usuário real;
-- matriz de entrypoints em `orquestrador/PROGRAM_ENTRYPOINTS.json` para Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Windsurf e Antigravity;
+- matriz de entrypoints em `orquestrador/PROGRAM_ENTRYPOINTS.json` para Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Grok CLI, Windsurf e Antigravity;
 - bootstrap de workspace para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf via arquivos reconhecidos no projeto aberto;
 - documentação de economia de contexto para orientar IAs a lerem primeiro regras, índices, roteadores e `DEV/` antes de carregar arquivos longos;
 - novo fluxo determinístico de projeto com `DEV/SPECS/ACTIVE.md`, `DEV/HANDOFF.md`, `DEV/VERIFY.md`, `compact-worklog` e `check-dev-gates` para reduzir looping e contexto desperdiçado.

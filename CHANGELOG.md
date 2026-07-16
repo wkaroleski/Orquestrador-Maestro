@@ -2,14 +2,18 @@
 
 All notable changes to Orquestrador Maestro are documented here.
 
-## Unreleased
+## 0.1.3 - 2026-07-15
 
 ### Added
+- Grok CLI integration for Windows, Linux, and macOS through `~/.grok/config.toml`, `AGENTS.md`, and the shared `.agents/skills`/`.orquestrador/skills` roots.
+- `skill-optimize-images`, routed by phrases such as “otimizar imagem”, “imagem para blog”, “imagem para site”, WebP, and AVIF.
+- `scripts/install-grok-orquestrador.ps1` and `scripts/install-grok-orquestrador.sh` for portable Grok setup.
 - `skill-lgpd-brasil` as a new canonical LGPD/privacy skill in `orquestrador/skills/`, with routing for dados pessoais, consentimento, RIPD, direitos do titular, retenção, incidentes, and transferências internacionais.
 - June 2026 radar now includes Ponytail, React Doctor, and Headroom as references for minimal implementation gates, deterministic React review, and opt-in context compression.
 - README community contribution section now records Hector Noya and Felinto from Grupo IAPro as collaborators in the Ponytail, React Doctor, and Headroom improvement track.
 
 ### Changed
+- README and tool-profile documentation now include Grok CLI installation, discovery, and verification.
 - README, catalog, aliases, and router now surface the LGPD skill alongside the existing privacy-related and SaaS routing skills.
 - `docs/research/repo-radar-2026-06.md` was rewritten with clean UTF-8 text and expanded decisions for context optimization, React gates, and reversible compression.
 

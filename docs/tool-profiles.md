@@ -1,5 +1,14 @@
 # Tool Profiles
 
+## Grok CLI
+
+The Grok CLI reads the Orquestrador through the same portable `AGENTS.md` and skill roots used by the other agents. Configure a user installation with:
+
+- Windows PowerShell: `scripts/install-grok-orquestrador.ps1`
+- Linux/macOS: `scripts/install-grok-orquestrador.sh`
+
+The installer writes `~/.grok/config.toml` and points Grok at `~/.orquestrador/skills` and `~/.agents/skills`. Verify discovery with `grok inspect`.
+
 `tool-profiles/` guarda hooks e perfis textuais selecionados para reaproveitar o comportamento do Orquestrador em outras ferramentas sem publicar o diretório completo de cada uma.
 
 Os hooks e entrypoints estão detalhados em [orquestrador-reference.md](orquestrador-reference.md). Este arquivo explica principalmente quais perfis são empacotados e onde o instalador os coloca.

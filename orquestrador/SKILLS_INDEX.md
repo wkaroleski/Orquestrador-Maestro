@@ -56,8 +56,8 @@ Then open only the selected `SKILL.md` files and their directly referenced files
 | Unified analytics | `/skill:skill-unified-analytics` |
 | ElevenLabs voice integration | `/skill:skill-elevenlabs-voice-cloning` |
 | Google Workspace sync | `/skill:skill-google-workspace-sync` |
-| LGPD / privacy compliance | `/skill:skill-lgpd-brasil` |
 | Automated billing (AbacatePay, dunning, trial) | `/skill:skill-cobranca-automatizada-saas-abacatepay` |
+| WhatsApp Meta Ads leads | `/skill:skill-whatsapp-meta-ads-leads` |
 
 ## Maintenance
 
