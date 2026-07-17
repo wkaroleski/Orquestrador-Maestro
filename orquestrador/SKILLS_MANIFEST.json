@@ -253,6 +253,33 @@
       ],
       "status": "canonical"
     },
+    "skill-browser-agent": {
+      "description": "Reliable web-browser agents using semantic page state, accessibility-tree inspection, structured Playwright actions, post-action validation, replay, and bounded visual fallbacks.",
+      "category": "automation",
+      "risk": "medium",
+      "source": "local-browser-agent-patterns",
+      "mirrorEverywhere": true,
+      "triggers": [
+        "browser agent",
+        "agente de navegador",
+        "automacao web",
+        "automação web",
+        "navegar na web",
+        "playwright agent",
+        "semantic browser",
+        "accessibility tree",
+        "arvore de acessibilidade",
+        "browser automation",
+        "web agent"
+      ],
+      "aliases": [
+        "browser agent",
+        "agente web",
+        "automação de navegador",
+        "playwright"
+      ],
+      "status": "canonical"
+    },
     "skill-multiagent-orchestration": {
       "description": "Multiagent and subagent orchestration for splitting independent engineering work, assigning ownership, reducing token waste, and integrating results safely.",
       "category": "orchestration",

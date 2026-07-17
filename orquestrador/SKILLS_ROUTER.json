@@ -186,6 +186,26 @@
       "cost": "medium",
       "safety": "server-side-secrets-and-budget-limits"
     },
+    "skill-browser-agent": {
+      "description": "Reliable web-browser agents using semantic page state, accessibility-tree inspection, structured Playwright actions, post-action validation, replay, and bounded visual fallbacks.",
+      "triggers": [
+        "browser agent",
+        "agente de navegador",
+        "automacao web",
+        "automação web",
+        "navegar na web",
+        "playwright agent",
+        "semantic browser",
+        "accessibility tree",
+        "arvore de acessibilidade",
+        "browser automation",
+        "web agent"
+      ],
+      "canonicalPath": "{{USER_HOME}}/.orquestrador/skills/skill-browser-agent/SKILL.md",
+      "codexPath": "{{USER_HOME}}/.codex/skills/skill-browser-agent/SKILL.md",
+      "cost": "medium",
+      "safety": "approved-origins-validated-actions-private-browser-state"
+    },
     "skill-multiagent-orchestration": {
       "description": "Multiagent and subagent orchestration for splitting independent engineering work, assigning ownership, reducing token waste, and integrating results safely.",
       "triggers": [
