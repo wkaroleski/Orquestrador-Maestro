@@ -1,9 +1,0 @@
-# Grok CLI user configuration for Orquestrador Maestro.
-# Install this as ~/.grok/config.toml (Windows: %USERPROFILE%\\.grok\\config.toml).
-
-[skills]
-paths = [
-  "~/.orquestrador/skills",
-  "~/.agents/skills"
-]
-

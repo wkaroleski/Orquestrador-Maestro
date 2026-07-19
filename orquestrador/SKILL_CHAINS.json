@@ -112,22 +112,6 @@
         "skill-unified-analytics"
       ]
     },
-    "skill-lgpd-brasil": {
-      "mayInvoke": [
-        "skill-saas-factory",
-        "skill-supabase-rls",
-        "skill-saas-security-scan",
-        "skill-security-hooks",
-        "skill-ai-orchestration",
-        "skill-google-workspace-sync",
-        "skill-evolution-api",
-        "skill-unified-analytics"
-      ],
-      "rules": [
-        "Use LGPD as the primary skill when the task involves Brazilian personal data, consent, rights requests, RIPD, privacy notices, retention, incidents, or international transfers.",
-        "Use the related technical skills only when they directly implement or audit the processing surface."
-      ]
-    },
     "skill-live-processing": {
       "mayInvoke": [
         "skill-smart-clip-detection",
@@ -145,6 +129,17 @@
       "mayInvoke": [
         "skill-frontend-ux-guardrails",
         "skill-modern-ui-patterns"
+      ]
+    },
+    "skill-whatsapp-meta-ads-leads": {
+      "mayInvoke": [
+        "skill-evolution-api",
+        "skill-cobranca-automatizada-saas-abacatepay"
+      ],
+      "rules": [
+        "Use when the user asks about WhatsApp campaigns for leads in Meta Ads.",
+        "Combine with Evolution API skill for WhatsApp API integration.",
+        "Combine with billing skill for payment collection via WhatsApp."
       ]
     }
   }

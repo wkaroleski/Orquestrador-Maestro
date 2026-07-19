@@ -1,8 +1,0 @@
----
-name: Orquestrador Maestro
----
-
-- Read `AGENTS.md` first, then `.orquestrador/rules.md` and `.orquestrador/maestro.md`.
-- Use `DEV/README.md`, `DEV/INDEX.md`, `DEV/CONTEXT.md` and `DEV/WORKLOG.md` when they exist.
-- Prefer the smallest useful change, keep context compact, and verify before claiming completion.
-- Do not expose private paths, tokens, caches, logs, or local-only memory.

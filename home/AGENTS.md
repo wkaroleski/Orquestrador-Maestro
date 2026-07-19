@@ -35,6 +35,7 @@ A skill is a set of local instructions to follow that is stored in a `SKILL.md` 
 - doctor: Use when Codex or OMX installation/runtime health needs diagnosis. (file: {{USER_HOME}}/.codex/skills/doctor/SKILL.md)
 - skill-creator: Guide for creating effective skills. This skill should be used when users want to create a new skill (or update an existing skill) that extends Codex's capabilities with specialized knowledge, workflows, or tool integrations. (file: {{USER_HOME}}/.codex/skills/.system/skill-creator/SKILL.md)
 - skill-installer: Install Codex skills into $CODEX_HOME/skills from a curated list or a GitHub repo path. Use when a user asks to list installable skills, install a curated skill, or install a skill from another repo (including private repos). (file: {{USER_HOME}}/.codex/skills/.system/skill-installer/SKILL.md)
+- skill-whatsapp-meta-ads-leads: Criar campanhas de WhatsApp no Meta Ads para gerar leads qualificados para negócios locais, baseado no método de Filipe Detrey. (file: {{USER_HOME}}/.orquestrador/skills/skill-whatsapp-meta-ads-leads/SKILL.md)
 
 ### How to use skills
 - Discovery: The list above is the skills available in this session (name + description + file path). Skill bodies live on disk at the listed paths.

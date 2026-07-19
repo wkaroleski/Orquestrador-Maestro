@@ -30,7 +30,7 @@ O projeto público funciona como snapshot sanitizado. O mantenedor evolui a font
 
 ## Instalação Recomendada
 
-Última revisão pública deste README: 2026-06-30.
+Última revisão pública deste README: 2026-07-19.
 
 Para instalar direto pelo npm:
 
@@ -82,9 +82,7 @@ Se preferir Git/ZIP, use as seções de instalação completa abaixo. O npm é o
 - [Iniciativa Grupo IAPro](#iniciativa-grupo-iapro)
 - [Requisitos e Compatibilidade](#requisitos-e-compatibilidade)
 - [Contribuição Da Comunidade](#contribuição-da-comunidade)
-- [Melhorias Recentes](#melhorias-recentes)
-- [Radar De Maio 2026](#radar-de-maio-2026)
-- [Radar De Junho 2026](#radar-de-junho-2026)
+- [Capacidades Atuais](#capacidades-atuais)
 - [Visão Geral](#visão-geral)
 - [Instalação Via npm](#instalação-via-npm)
 - [Como Funciona](#como-funciona)
@@ -116,97 +114,21 @@ Caso você esteja utilizando uma versão muito antiga de algum SO que não supor
 
 ## Contribuição Da Comunidade
 
-O suporte Linux/macOS foi integrado a partir do fork [`kivervinicius/Orquestrador-Maestro`](https://github.com/kivervinicius/Orquestrador-Maestro), aberto na PR [#1 - feat: suporte multiplataforma (Linux/macOS)](https://github.com/FernandoBolzan/Orquestrador-Maestro/pull/1).
+O projeto evolui com contribuições da comunidade Grupo IAPro e de colaboradores externos. Os créditos, PRs, forks, referências e impactos técnicos estão organizados no [CHANGELOG.md](CHANGELOG.md).
 
-O que foi aproveitado e melhorado:
+Para contribuir, consulte o [CONTRIBUTING.md](CONTRIBUTING.md). Ao concluir uma contribuição, registre também o crédito e a mudança correspondente no CHANGELOG.
 
-- instalador Bash para Linux/macOS em `install.sh` e `scripts/install.sh`;
-- verificador Bash em `scripts/verify-install.sh`;
-- inicializador `DEV/` para Unix em `scripts/init-project-dev.sh` e `.orquestrador/bin/init-project-dev.sh`;
-- sincronizador Unix de skills em `.orquestrador/sync-skills.sh`;
-- README com comandos separados para Windows, Linux e macOS.
+## Capacidades Atuais
 
-Antes da integração, os scripts foram ajustados para evitar dependência de `readlink -f`, funcionar no Bash antigo do macOS, copiar community skills e Codex skills para o mesmo destino sem perder fontes, manter proteção antes de remoções recursivas e aceitar `--home-path` para testes isolados.
+O Orquestrador Maestro atualmente oferece instalação e atualização multiplataforma, integração com Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Grok CLI, Windsurf e Antigravity, além de bootstrap para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider e Cline.
 
-Também foi integrada a PR [#2 - feat: add canonical skill management and validation scripts](https://github.com/FernandoBolzan/Orquestrador-Maestro/pull/2), criada por [`kivervinicius`](https://github.com/kivervinicius) e mergeada em 2026-05-23. Essa contribuição consolidou o fluxo canônico de skills:
+Também oferece roteamento de skills, hooks compactos, perfis de execução, subagentes opcionais, validação pública e de instalação, diagnóstico, telemetria desativada por padrão, sincronização de skills, catálogo canônico, documentação de privacidade e memória operacional `DEV/` com especificações, handoff, verificação e worklog compacto.
 
-- scripts `scripts/new-canonical-skill.ps1` e `scripts/new-canonical-skill.sh` para criar novas skills canônicas;
-- `scripts/skill-catalog.js` para apoiar catálogo, criação e validação de skills;
-- `orquestrador/SKILLS_MANIFEST.json` como registro canônico de skills e comportamento de espelhamento;
-- `orquestrador/sync-skills.ps1` e `orquestrador/sync-skills.sh` lendo o manifesto em vez de listas rígidas;
-- validação em `scripts/validate-skills.ps1` e `scripts/validate-skills.sh`;
-- documentação atualizada em `docs/skill-catalog.md`, `docs/update-flow.md` e `orquestrador/SKILLS_ORGANIZATION.md`.
+O histórico detalhado das melhorias, pesquisas, decisões, contribuições e migrações está no [CHANGELOG.md](CHANGELOG.md). As pesquisas completas ficam em [docs/research/](docs/research/), enquanto as regras de atualização estão em [docs/update-flow.md](docs/update-flow.md).
 
-Na prática, a PR #2 deixou o projeto mais fácil de manter: novas skills passam por um caminho repetível de criação, manifesto, sincronização, validação e documentação.
+Para conferir novidades antes de atualizar, consulte o [CHANGELOG.md](CHANGELOG.md). Para propor melhorias, use o [CONTRIBUTING.md](CONTRIBUTING.md); contribuições da comunidade e seus impactos devem ser registradas no changelog.
 
-Crédito também ao Bruno, integrante da comunidade Grupo IAPro, pela curadoria e pelo papo que trouxe as referências de RTK e Caveman para a discussão. Essa contribuição ajudou a priorizar melhorias de economia de contexto, redução de leitura desnecessária, uso mais consciente da pasta `DEV/` e organização do Orquestrador para evitar gasto excessivo de tokens.
-
-Hector Noya e Felinto, integrantes do Grupo IAPro, também ficam registrados como colaboradores da comunidade nesta evolução do Orquestrador. Eles contribuíram com a curadoria e discussão das referências Ponytail, React Doctor e Headroom, ajudando a direcionar melhorias de gate de menor implementação suficiente, revisão React mais determinística e compressão/retrieval opt-in para contexto pesado.
-
-## Melhorias Recentes
-
-A versão atual também incorporou aprendizados de projetos como [`rtk-ai/rtk`](https://github.com/rtk-ai/rtk) e [`juliusbrussee/caveman`](https://github.com/juliusbrussee/caveman), adaptados ao objetivo do Orquestrador Maestro: instalar uma configuração pública, auditável e reutilizável para vários agentes de IA.
-
-Principais melhorias:
-
-- instalador previsível com `DryRun`, `ListTargets`, `Only`, `Uninstall`, `NonInteractive` e `VerbosePaths` no PowerShell e no Bash;
-- saída segura por padrão, com caminhos locais redigidos nos relatórios de instalação e remoção;
-- validação pública reforçada contra arquivos locais, temporários, caches, memórias privadas e raízes como `.omx/`, `.local/` e `DEV/`;
-- smoke tests em home temporário para validar instalação, verificação, listagem e desinstalação sem tocar no usuário real;
-- matriz de entrypoints em `orquestrador/PROGRAM_ENTRYPOINTS.json` para Codex, Claude Code, OpenCode, Cursor, Gemini CLI, Grok CLI, Windsurf e Antigravity;
-- bootstrap de workspace para VS Code, GitHub Copilot, Continue, JetBrains AI Assistant, Aider, Cline e Windsurf via arquivos reconhecidos no projeto aberto;
-- documentação de economia de contexto para orientar IAs a lerem primeiro regras, índices, roteadores e `DEV/` antes de carregar arquivos longos;
-- novo fluxo determinístico de projeto com `DEV/SPECS/ACTIVE.md`, `DEV/HANDOFF.md`, `DEV/VERIFY.md`, `compact-worklog` e `check-dev-gates` para reduzir looping e contexto desperdiçado.
-
-Para entender os detalhes, veja [docs/installer-options.md](docs/installer-options.md), [docs/context-economy.md](docs/context-economy.md), [docs/privacy-model.md](docs/privacy-model.md) e [docs/orquestrador-reference.md](docs/orquestrador-reference.md).
-
-## Radar De Maio 2026
-
-A atualização mais recente revisou projetos públicos de agentes, harness engineering, MCP, skills e memória com atividade verificada no GitHub entre abril e maio de 2026. O objetivo não é copiar código, e sim transformar bons padrões em documentação, validação e próximos passos próprios do Orquestrador.
-
-O que ficou como direção técnica:
-
-- **canais e atualização**: projetos como [`openai/codex`](https://github.com/openai/codex) e [`google-gemini/gemini-cli`](https://github.com/google-gemini/gemini-cli) reforçam que CLI pública precisa ter instalação simples, update previsível, changelog claro e canais de release bem explicados antes de criar variantes como `latest`, `preview` ou `nightly`;
-- **telemetria explícita**: [`google-gemini/gemini-cli`](https://github.com/google-gemini/gemini-cli), [`ChromeDevTools/chrome-devtools-mcp`](https://github.com/ChromeDevTools/chrome-devtools-mcp) e [`entireio/cli`](https://github.com/entireio/cli) reforçam que telemetria e coleta de sessão devem ter documentação objetiva, botão de desligar, payload permitido e proibição clara de dados privados;
-- **harness determinístico**: [`coleam00/archon`](https://github.com/coleam00/archon), [`ai-boost/awesome-harness-engineering`](https://github.com/ai-boost/awesome-harness-engineering) e [`aiming-lab/AutoHarness`](https://github.com/aiming-lab/AutoHarness) apontam para fases, gates, artefatos, validação e planos/checkpoints como parte do produto, não como detalhe interno;
-- **subagentes portáveis**: [`shinpr/sub-agents-mcp`](https://github.com/shinpr/sub-agents-mcp) mostra um caminho para definir agentes em Markdown e expor execução por MCP, mantendo o padrão do Orquestrador de criar perfis reutilizáveis sem prender tudo a uma única ferramenta;
-- **engenharia de contexto**: [`bonigarcia/context-engineering`](https://github.com/bonigarcia/context-engineering), [`deepset-ai/haystack`](https://github.com/deepset-ai/haystack), [`sbhooley/ainativelang`](https://github.com/sbhooley/ainativelang) e [`MemTensor/MemOS`](https://github.com/MemTensor/MemOS) reforçam o modelo de contexto em camadas: instruções, memória, ferramentas, estado, roteamento, custo, auditoria e governança;
-- **SkillOps**: [`gotalab/skillport`](https://github.com/gotalab/skillport) entra como referência estável para a ideia de gerenciar skills uma vez e servir em múltiplas ferramentas via CLI ou MCP.
-
-O radar completo, com data de atividade, licença e decisão de aproveitamento, está em [docs/research/repo-radar-2026-05.md](docs/research/repo-radar-2026-05.md).
-
-Na prática, isso deixa o roadmap público mais claro:
-
-1. manter `npm install -g` e `orquestrador-maestro update` como caminho simples;
-2. só adicionar canais `preview` ou `nightly` quando houver cadência real de release;
-3. manter telemetria anônima, documentada, desativável e sem caminhos locais;
-4. evoluir `DEV/` com templates de plano, implementação, verificação e handoff;
-5. estudar MCP/subagentes como camada opcional, sem quebrar a instalação atual;
-6. documentar cada referência externa antes de transformar qualquer padrão em código.
-
-## Radar De Junho 2026
-
-A revisão pública de junho de 2026 cruzou fontes adicionais para melhorar produto, documentação, fluxo de atualização, UX/UI e economia real de contexto sem transformar o repositório em depósito de material externo:
-
-- [`tenfoldmarc/website-builder-setup`](https://github.com/tenfoldmarc/website-builder-setup): reforçou a necessidade de onboarding orientado a resultado, passos curtos e UX de instalação mais explícita;
-- [`bradautomates/claude-video`](https://github.com/bradautomates/claude-video): reforçou a separação entre README operacional, `CHANGELOG.md` canônico, empacotamento claro e fluxo de release previsível;
-- [`anthropics/claude-cookbooks`](https://github.com/anthropics/claude-cookbooks): reforçou organização por registro, guias de contribuição, categorias estáveis e documentação que ajuda a IA a achar o playbook certo sem carregar tudo;
-- pasta pública do Google Drive [`CS Fundamentals (Lets Code)`](https://drive.google.com/drive/folders/18FBvExqEtt9mtNKKP65f_ETdtS7nCG1G): útil como biblioteca externa de referência, mas inadequada para ser vendorizada neste snapshot público.
-- [`DietrichGebert/ponytail`](https://github.com/DietrichGebert/ponytail): reforçou o gate de menor implementação suficiente para evitar overengineering, dependências desnecessárias e subagentes produzindo código demais;
-- [`millionco/react-doctor`](https://github.com/millionco/react-doctor): reforçou a ideia de gate React determinístico, com audit local, configuração explícita e foco em problemas novos introduzidos por uma mudança;
-- [`headroomlabs-ai/headroom`](https://github.com/headroomlabs-ai/headroom): reforçou o roadmap de compressão opt-in e reversível para outputs longos, logs, RAG, arquivos e histórico de sessão.
-
-O que virou melhoria concreta neste projeto:
-
-- `CHANGELOG.md` passa a ser o histórico canônico empacotado junto da CLI;
-- o CLI ganha `orquestrador-maestro changelog` para mostrar o que mudou antes do update;
-- o CLI ganha `orquestrador-maestro doctor` para rodar o diagnóstico operacional empacotado depois da instalação ou atualização;
-- o fluxo recomendado para usuário instalado fica explícito: `npm update -g`, `changelog`, `update`, `verify` e `doctor`;
-- referências grandes e privadas passam a ter contrato formal de uso local via `REFERENCE_PACKS.md`, em vez de cópia para dentro do repositório público;
-- a trilha de UX/UI fica mais objetiva para agentes: usar primeiro `skill-open-design-ui`, depois `skill-modern-ui-patterns` e `skill-frontend-ux-guardrails` quando a tarefa realmente pedir interface;
-- o roadmap de contexto passa a separar três frentes: escrever menos quando o simples resolve, auditar React com gate especializado quando o projeto pedir e comprimir contexto pesado só de forma opt-in, mensurável e recuperável.
-
-O detalhamento desta revisão está em [docs/research/repo-radar-2026-06.md](docs/research/repo-radar-2026-06.md).
+Esta evolução também incorpora uma dica do Eduardo Queiroz, do Grupo IAPro, sobre o fluxo de desenvolvimento assistido por IA de Matt Pocock, recomendado por uma desenvolvedora da Microsoft.
 
 ## Visão Geral
 
@@ -1136,11 +1058,11 @@ Palavras-chave naturais do README:
 - multi-agent workflow;
 - secure public AI configuration.
 
-## Changelog
+## Changelog e contribuições
 
-Última revisão pública deste resumo: 2026-06-28.
+Última revisão pública deste resumo: 2026-07-19.
 
-Este README mantém o changelog resumido do projeto para que a pessoa entenda rapidamente o que mudou antes de atualizar. O histórico canônico empacotado na release instalada fica em [CHANGELOG.md](CHANGELOG.md). Mudanças grandes também podem ter documentação dedicada em `docs/`, mas o resumo público deve continuar aqui.
+Este README explica o que o sistema faz e como utilizá-lo. O histórico canônico de atualizações, pesquisas, correções, migrações e contribuições da comunidade fica em [CHANGELOG.md](CHANGELOG.md). Mudanças grandes também podem ter documentação dedicada em `docs/`.
 
 Padrão usado para releases publicadas:
 
@@ -1160,6 +1082,7 @@ Mudanças já mergeadas no GitHub, mas ainda não publicadas no npm, ficam tempo
 
 - Added: radar de junho ampliado com Ponytail, React Doctor e Headroom como referências para implementação mínima, gate React e compressão opt-in de contexto.
 - Added: registro de Hector Noya e Felinto, integrantes do Grupo IAPro, como colaboradores comunitários da melhoria ligada a Ponytail, React Doctor e Headroom.
+- Added: reconhecimento a Eduardo Queiroz, do Grupo IAPro, pela indicação do fluxo de desenvolvimento assistido por IA de Matt Pocock, recomendado por uma desenvolvedora da Microsoft.
 - Changed: `docs/context-economy.md` agora explicita gates de otimização para reduzir código desnecessário, revisão subjetiva e contexto pesado.
 - Changed: `docs/research/repo-radar-2026-06.md` foi expandido com decisões práticas sem copiar código, prompts, assets ou conteúdo dos projetos externos.
 
