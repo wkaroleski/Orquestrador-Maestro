@@ -32,11 +32,19 @@ O projeto público funciona como snapshot sanitizado. O mantenedor evolui a font
 
 Última revisão pública deste README: 2026-07-19.
 
-Para instalar direto pelo npm:
+Para instalar automaticamente no macOS ou Linux:
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
 ```
+
+Para instalar automaticamente no Windows PowerShell:
+
+```powershell
+irm https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.ps1 | iex
+```
+
+Os bootstraps detectam automaticamente problemas de permissão do npm, configuram um diretório do usuário, ajustam o `PATH`, instalam a CLI e executam `install` e `verify`. Não use `sudo` nem abra o PowerShell como Administrador para a instalação normal.
 
 Para atualizar depois:
 
