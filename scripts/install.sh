@@ -153,7 +153,7 @@ selected_component() {
   if [ -z "${ONLY_COMPONENTS[*]-}" ]; then
     return 0
   fi
-  for wanted in "${ONLY_COMPONENTS[@]+"${ONLY_COMPONENTS[@]}"}"; do
+  for wanted in "${ONLY_COMPONENTS[@]}"; do
     if [ "$wanted" = "all" ]; then
       return 0
     fi
@@ -169,7 +169,7 @@ selected_component() {
 validate_only_components() {
   local component
   local allowed=" all core orquestrador global-agents skills community-skills codex agents claude opencode cursor gemini windsurf antigravity tool-profiles codex-skills codex-agents codex-prompts prompts "
-  for component in "${ONLY_COMPONENTS[@]+"${ONLY_COMPONENTS[@]}"}"; do
+  for component in "${ONLY_COMPONENTS[@]}"; do
     case "$allowed" in
       *" $component "*) ;;
       *)
