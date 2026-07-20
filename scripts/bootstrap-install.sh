@@ -36,8 +36,15 @@ if ! grep -Fqx "$PATH_LINE" "$SHELL_RC" 2>/dev/null; then
 fi
 
 export PATH="$BIN_DIR:$PATH"
-npm install -g "$PACKAGE@latest"
+npm install -g "$PACKAGE@latest" --force --prefer-online
 hash -r 2>/dev/null || true
+
+INSTALLED_VERSION="$(node -p "require('$PREFIX/lib/node_modules/@iapro/orquestrador-maestro-cli/package.json').version" 2>/dev/null || true)"
+if [ -z "$INSTALLED_VERSION" ]; then
+  echo "Erro: não foi possível confirmar a instalação da CLI em $PREFIX." >&2
+  exit 1
+fi
+echo "Versão instalada: $INSTALLED_VERSION"
 
 echo "Orquestrador instalado em: $(command -v orquestrador-maestro)"
 orquestrador-maestro install

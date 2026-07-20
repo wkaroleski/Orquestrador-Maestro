@@ -38,8 +38,15 @@ if ($parts -notcontains $bin) {
 }
 $env:Path = "$bin;$env:Path"
 
-& npm install -g "$package@latest"
+& npm install -g "$package@latest" --force --prefer-online
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+$installedPackage = Join-Path $bin "node_modules\@iapro\orquestrador-maestro-cli\package.json"
+if (-not (Test-Path -LiteralPath $installedPackage)) {
+  throw "Não foi possível confirmar a instalação da CLI em $bin."
+}
+$installedVersion = (Get-Content -Raw -LiteralPath $installedPackage | ConvertFrom-Json).version
+Write-Host "Versão instalada: $installedVersion"
 
 & orquestrador-maestro install
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
