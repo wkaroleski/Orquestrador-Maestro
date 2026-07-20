@@ -3,28 +3,42 @@ param()
 
 $ErrorActionPreference = "Stop"
 $package = "@iapro/orquestrador-maestro-cli"
-$packageVersion = "0.1.9"
-$bootstrapVersion = "2026.07.20.1"
+$packageVersion = "0.1.10"
+$bootstrapVersion = "2026.07.20.2"
 Write-Host "Orquestrador Maestro bootstrap $bootstrapVersion"
 
-if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+if (-not (Get-Command node -ErrorAction SilentlyContinue) -or -not (Get-Command npm -ErrorAction SilentlyContinue)) {
   throw "Node.js e npm são necessários. Instale o Node.js LTS e execute novamente."
+}
+
+$identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+$principal = New-Object Security.Principal.WindowsPrincipal($identity)
+if ($principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)) {
+  throw "Execute o bootstrap em um PowerShell normal, sem Administrador."
+}
+
+$nodeMajor = [int](& node -p "process.versions.node.split('.')[0]")
+if ($nodeMajor -lt 18) {
+  throw "Node.js 18 ou superior é necessário. Versão atual: $(& node --version)."
 }
 
 $prefix = (& npm config get prefix 2>$null).Trim()
 $bin = $prefix
-
-if (-not (Test-Path -LiteralPath $bin)) {
-  New-Item -ItemType Directory -Path $bin -Force | Out-Null
-}
-
-$probe = Join-Path $bin ".orquestrador-write-test"
+$globalRoot = (& npm root -g 2>$null).Trim()
 $writable = $true
-try {
-  Set-Content -LiteralPath $probe -Value "ok" -Encoding UTF8
-  Remove-Item -LiteralPath $probe -Force
-} catch {
-  $writable = $false
+foreach ($directory in @($bin, $globalRoot)) {
+  try {
+    if (-not $directory) { throw "Caminho npm vazio." }
+    if (-not (Test-Path -LiteralPath $directory)) {
+      New-Item -ItemType Directory -Path $directory -Force | Out-Null
+    }
+    $probe = Join-Path $directory ".orquestrador-write-test"
+    Set-Content -LiteralPath $probe -Value "ok" -Encoding UTF8
+    Remove-Item -LiteralPath $probe -Force
+  } catch {
+    $writable = $false
+    break
+  }
 }
 
 if (-not $writable) {
@@ -44,7 +58,8 @@ $env:Path = "$bin;$env:Path"
 & npm install -g "$package@$packageVersion" --force --prefer-online
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-$installedPackage = Join-Path $bin "node_modules\@iapro\orquestrador-maestro-cli\package.json"
+$globalRoot = (& npm root -g).Trim()
+$installedPackage = Join-Path $globalRoot "@iapro\orquestrador-maestro-cli\package.json"
 if (-not (Test-Path -LiteralPath $installedPackage)) {
   throw "Não foi possível confirmar a instalação da CLI em $bin."
 }

@@ -35,7 +35,7 @@ O projeto público funciona como snapshot sanitizado. O mantenedor evolui a font
 Para instalar automaticamente no macOS ou Linux:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
+curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh | bash
 ```
 
 Para instalar automaticamente no Windows PowerShell:
@@ -111,10 +111,10 @@ A proposta do projeto é compartilhar uma base prática e instalável para que m
 
 Para garantir que o Orquestrador Maestro funcione corretamente em seu ambiente, verifique os requisitos mínimos:
 
-- **Windows**: PowerShell 4.0 ou superior (padrão no Windows 10/11; no Windows 7 SP1, requer a instalação do Windows Management Framework 4.0).
+- **Windows**: PowerShell 4.0 ou superior em Windows 10/11.
 - **Linux/macOS**: Bash 3.2 ou superior (padrão no macOS e na maioria das distribuições Linux).
 - **Sistemas Operacionais**: Windows 10/11, Linux (Ubuntu, Debian, CentOS, etc.) e macOS 10.15+.
-- **Node.js** (Opcional): Recomendado (versão 10.12.0 ou superior) para funções de gerenciamento, como criação de novas skills, validação do catálogo e sincronização dinâmica no Linux/macOS. O funcionamento básico das regras e skills já instaladas não depende do Node.js.
+- **Node.js**: versão 18 ou superior para instalação via npm e uso da CLI. Quem instalar por Git/ZIP pode aplicar apenas os arquivos básicos sem Node.js, mas os comandos de gerenciamento exigem Node.js 18+.
 
 Caso você esteja utilizando uma versão muito antiga de algum SO que não suporte esses requisitos, os scripts de instalação podem apresentar erros de sintaxe ou comandos não encontrados.
 
@@ -180,7 +180,7 @@ Se baixar como ZIP, extraia a pasta antes de executar os comandos abaixo.
 Também é possível distribuir o Orquestrador Maestro como pacote npm:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
+curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh | bash
 ```
 
 Depois instale no home do usuário:
@@ -981,6 +981,7 @@ O validador público verifica:
 ## Documentação Principal
 
 - [docs/installation.md](docs/installation.md): instalação completa, destinos criados e resolução de problemas.
+- [docs/installation-troubleshooting.md](docs/installation-troubleshooting.md): solução para `EACCES`, instalação como root, `ONLY[@]` e `PATH`.
 - [docs/installer-options.md](docs/installer-options.md): flags do instalador, dry-run, listagem, `Only`, uninstall e teste em home temporário.
 - [docs/orquestrador.md](docs/orquestrador.md): download, instalação, verificação, uso e atualização.
 - [docs/orquestrador-reference.md](docs/orquestrador-reference.md): lógica interna, roteamento, hooks, perfis, agentes, sync e verificação.

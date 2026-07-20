@@ -1,6 +1,9 @@
 ---
 name: skill-release-engineering
 description: Prepara releases seguros com changelog, migrações, smoke tests, rollback, feature flags, CI e checklist operacional.
+category: delivery
+risk: high
+source: orquestrador-native
 ---
 
 # Release Engineering

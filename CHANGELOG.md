@@ -2,6 +2,24 @@
 
 Todas as mudanças relevantes do Orquestrador Maestro estão documentadas aqui.
 
+## 0.1.10 - 2026-07-20
+
+### Corrigido
+
+- O bootstrap macOS/Linux agora valida Node.js 18+, recusa root, tolera `SHELL` ausente e seleciona apenas prefixos npm completamente graváveis.
+- O bootstrap Windows agora recusa sessão elevada, valida Node.js 18+ e faz fallback seguro quando o prefixo npm protegido não pode ser criado ou escrito.
+- A versão instalada é confirmada por `npm root -g`, evitando suposições incorretas sobre o layout do prefixo.
+- A sincronização e a verificação de skills voltaram a concordar: 42 skills canônicas cabem nos limites declarados de todas as integrações.
+- A fonte canônica de `skill-lgpd-brasil` foi restaurada e a skill de WhatsApp Meta Ads foi registrada no manifesto e no roteador.
+- O validador do catálogo volta a passar com metadados completos nas skills canônicas.
+- A auditoria de dependências ignora exemplos opcionais ausentes em vez de falhar com erro de processo.
+
+### Testado
+
+- Instalação completa, verificação e desinstalação em PowerShell e Bash.
+- Ciclo do tarball npm: instalação global em prefixo de usuário, `version`, `install`, `verify`, `update`, `doctor` e `uninstall`.
+- Compatibilidade sintática dos scripts Unix e validação pública do conteúdo do pacote.
+
 ## Unreleased - 2026-07-19
 
 ### Adicionado

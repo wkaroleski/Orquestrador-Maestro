@@ -1,6 +1,9 @@
 ---
 name: skill-verification-before-completion
 description: Garante que uma tarefa só seja declarada concluída após evidência proporcional, cobrindo comportamento, qualidade e documentação.
+category: quality
+risk: low
+source: orquestrador-native
 ---
 
 # Verification Before Completion

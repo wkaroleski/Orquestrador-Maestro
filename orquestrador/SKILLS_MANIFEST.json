@@ -586,6 +586,24 @@
       ],
       "status": "canonical"
     },
+    "skill-whatsapp-meta-ads-leads": {
+      "description": "Configura campanhas de WhatsApp no Meta Ads para gerar leads qualificados para negócios locais.",
+      "category": "marketing",
+      "risk": "low",
+      "source": "filipe-detrey-campanha-whatsapp-2026",
+      "mirrorEverywhere": true,
+      "triggers": [
+        "whatsapp meta ads",
+        "campanha de whatsapp",
+        "leads qualificados whatsapp",
+        "meta ads para negócios locais"
+      ],
+      "aliases": [
+        "whatsapp meta ads leads",
+        "campanha whatsapp"
+      ],
+      "status": "canonical"
+    },
     "skill-cobranca-automatizada-saas-abacatepay": {
       "description": "Automatic SaaS billing engine with AbacatePay (PIX + card), dunning (regua de cobranca), trial management, invoice portal, Resend email and Evolution API WhatsApp notifications, admin CRUD, and billing metrics.",
       "category": "payments",

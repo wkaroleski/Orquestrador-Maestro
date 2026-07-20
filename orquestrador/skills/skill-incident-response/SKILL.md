@@ -1,6 +1,9 @@
 ---
 name: skill-incident-response
 description: Organiza resposta a incidentes técnicos com contenção, evidência, comunicação, recuperação, timeline e postmortem sem culpa.
+category: operations
+risk: high
+source: orquestrador-native
 ---
 
 # Incident Response

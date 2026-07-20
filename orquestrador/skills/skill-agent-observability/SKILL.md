@@ -1,6 +1,9 @@
 ---
 name: skill-agent-observability
 description: Define observabilidade para agentes e aplicações de IA com eventos, tracing, custos, latência, qualidade, regressões e privacidade.
+category: observability
+risk: medium
+source: orquestrador-native
 ---
 
 # Agent Observability

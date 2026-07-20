@@ -1,6 +1,9 @@
 ---
 name: skill-systematic-debugging
 description: Investiga bugs por evidência, reproduz o problema, rastreia a causa raiz e verifica a correção sem mascarar sintomas.
+category: engineering
+risk: medium
+source: orquestrador-native
 ---
 
 # Systematic Debugging

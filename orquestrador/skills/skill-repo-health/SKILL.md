@@ -1,6 +1,9 @@
 ---
 name: skill-repo-health
 description: Inspeciona um repositório e produz diagnóstico de stack, comandos de verificação, instruções, CI, riscos, documentação e próximos passos.
+category: engineering
+risk: medium
+source: orquestrador-native
 ---
 
 # Repository Health

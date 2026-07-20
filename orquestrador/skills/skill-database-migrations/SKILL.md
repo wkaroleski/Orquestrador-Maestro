@@ -1,6 +1,9 @@
 ---
 name: skill-database-migrations
 description: Planeja e verifica migrações de banco com compatibilidade, idempotência, RLS, seeds, índices, backfill e rollback seguro.
+category: database
+risk: high
+source: orquestrador-native
 ---
 
 # Database Migrations

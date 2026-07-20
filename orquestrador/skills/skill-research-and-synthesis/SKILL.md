@@ -1,6 +1,9 @@
 ---
 name: skill-research-and-synthesis
 description: Pesquisa temas atuais na web e produz síntese comparável, rastreável, com fontes primárias, datas, incerteza e recomendação.
+category: research
+risk: low
+source: orquestrador-native
 ---
 
 # Research and Synthesis

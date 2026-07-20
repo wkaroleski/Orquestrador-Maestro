@@ -1,6 +1,9 @@
 ---
 name: skill-adr
 description: Registra decisões arquiteturais com contexto, alternativas, drivers, consequências, evidência e plano de revisão.
+category: architecture
+risk: low
+source: orquestrador-native
 ---
 
 # Architecture Decision Record

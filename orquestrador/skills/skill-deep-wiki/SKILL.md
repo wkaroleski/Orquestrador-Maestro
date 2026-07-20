@@ -1,6 +1,9 @@
 ---
 name: skill-deep-wiki
 description: Gera documentação técnica navegável de um repositório, com arquitetura, Mermaid, onboarding, AGENTS.md, llms.txt e páginas por domínio.
+category: documentation
+risk: low
+source: orquestrador-native
 ---
 
 # Deep Wiki

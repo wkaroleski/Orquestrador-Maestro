@@ -28,7 +28,7 @@ Para publicar nesse nome, a conta npm precisa ser o usuário `iapro` ou ter perm
 Instalação automática recomendada no macOS/Linux:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
+curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh | bash
 ```
 
 No Windows PowerShell:
@@ -38,6 +38,8 @@ irm https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/s
 ```
 
 Esses bootstraps detectam permissões do npm, configuram um prefixo no perfil do usuário quando necessário, ajustam o `PATH`, instalam a CLI e executam `install` e `verify`. A instalação normal não deve usar `sudo` nem executar como Administrador.
+
+Consulte [installation-troubleshooting.md](installation-troubleshooting.md) para corrigir instalações antigas feitas como root, erros `EACCES`, mensagens `ONLY[@]: unbound variable` e problemas de `PATH`.
 
 Instalar o Orquestrador no home do usuário:
 

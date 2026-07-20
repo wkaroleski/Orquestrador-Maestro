@@ -1,6 +1,9 @@
 ---
 name: skill-webapp-testing
 description: Testa aplicações web com Playwright ou ferramenta equivalente, cobrindo fluxos críticos, acessibilidade, estados de erro e regressões visuais.
+category: testing
+risk: medium
+source: orquestrador-native
 ---
 
 # Web App Testing

@@ -418,6 +418,19 @@
       "cost": "medium",
       "safety": "least-privilege-oauth-and-sync-audit"
     },
+    "skill-whatsapp-meta-ads-leads": {
+      "description": "Configura campanhas de WhatsApp no Meta Ads para gerar leads qualificados para negócios locais.",
+      "triggers": [
+        "whatsapp meta ads",
+        "campanha de whatsapp",
+        "leads qualificados whatsapp",
+        "meta ads para negócios locais"
+      ],
+      "canonicalPath": "{{USER_HOME}}/.orquestrador/skills/skill-whatsapp-meta-ads-leads/SKILL.md",
+      "codexPath": "{{USER_HOME}}/.codex/skills/skill-whatsapp-meta-ads-leads/SKILL.md",
+      "cost": "medium",
+      "safety": "marketing-platform-and-personal-data"
+    },
     "skill-lgpd-brasil": {
       "description": "LGPD-focused privacy and data-governance skill for Brazilian software products. Use for data mapping, legal basis selection, consent, privacy notices, RIPD, rights requests, retention, vendor risk, incident response, and international transfer review.",
       "triggers": [

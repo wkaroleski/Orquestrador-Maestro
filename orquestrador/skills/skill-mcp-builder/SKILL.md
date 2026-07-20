@@ -1,6 +1,9 @@
 ---
 name: skill-mcp-builder
 description: Projeta e implementa MCP servers seguros, com schemas claros, autenticação mínima, tratamento de erros, testes e documentação operacional.
+category: integrations
+risk: high
+source: orquestrador-native
 ---
 
 # MCP Builder

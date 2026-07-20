@@ -1,6 +1,9 @@
 ---
 name: skill-quality-gate
 description: Avalia skills, plugins e MCPs antes da adoção, verificando formato, dependências, permissões, riscos de supply chain e critérios de validação.
+category: governance
+risk: high
+source: orquestrador-native
 ---
 
 # Skill Quality Gate

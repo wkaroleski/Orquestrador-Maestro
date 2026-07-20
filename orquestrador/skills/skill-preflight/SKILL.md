@@ -1,6 +1,9 @@
 ---
 name: skill-preflight
 description: Define constraints, failure modes, ownership, baseline verification, and minimal test plan before implementation.
+category: workflow
+risk: medium
+source: orquestrador-native
 ---
 
 # Preflight

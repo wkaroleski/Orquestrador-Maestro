@@ -1,6 +1,9 @@
 ---
 name: skill-dependency-upgrade
 description: Atualiza dependências com changelog, compatibilidade, vulnerabilidades, lockfile, testes e plano de rollback.
+category: maintenance
+risk: medium
+source: orquestrador-native
 ---
 
 # Dependency Upgrade
