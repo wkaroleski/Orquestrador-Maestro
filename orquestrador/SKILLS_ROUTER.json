@@ -418,6 +418,19 @@
       "cost": "medium",
       "safety": "least-privilege-oauth-and-sync-audit"
     },
+    "skill-whatsapp-meta-ads-leads": {
+      "description": "Configura campanhas de WhatsApp no Meta Ads para gerar leads qualificados para negócios locais.",
+      "triggers": [
+        "whatsapp meta ads",
+        "campanha de whatsapp",
+        "leads qualificados whatsapp",
+        "meta ads para negócios locais"
+      ],
+      "canonicalPath": "{{USER_HOME}}/.orquestrador/skills/skill-whatsapp-meta-ads-leads/SKILL.md",
+      "codexPath": "{{USER_HOME}}/.codex/skills/skill-whatsapp-meta-ads-leads/SKILL.md",
+      "cost": "medium",
+      "safety": "marketing-platform-and-personal-data"
+    },
     "skill-lgpd-brasil": {
       "description": "LGPD-focused privacy and data-governance skill for Brazilian software products. Use for data mapping, legal basis selection, consent, privacy notices, RIPD, rights requests, retention, vendor risk, incident response, and international transfer review.",
       "triggers": [
@@ -465,6 +478,21 @@
       "cost": "high",
       "safety": "server-side-payment-secrets-and-data-integrity"
     },
+    "skill-quality-gate": {"description":"Avalia skills, plugins e MCPs antes da adoção.","triggers":["quality gate","skill gate","auditar plugin"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-quality-gate/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-quality-gate/SKILL.md","cost":"medium","safety":"supply-chain-review"},
+    "skill-repo-health": {"description":"Diagnóstico de saúde de repositórios.","triggers":["repo health","inspecionar repositorio"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-repo-health/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-repo-health/SKILL.md","cost":"low","safety":"read-only-diagnostics"},
+    "skill-preflight": {"description":"Preflight de escopo, riscos e verificação.","triggers":["preflight","pre-flight"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-preflight/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-preflight/SKILL.md","cost":"low","safety":"bounded-planning"},
+    "skill-systematic-debugging": {"description":"Debugging por evidência e causa raiz.","triggers":["debug sistematico","causa raiz"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-systematic-debugging/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-systematic-debugging/SKILL.md","cost":"medium","safety":"diagnostic"},
+    "skill-verification-before-completion": {"description":"Verificação antes de declarar conclusão.","triggers":["verificar conclusão","verification before completion"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-verification-before-completion/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-verification-before-completion/SKILL.md","cost":"low","safety":"quality-gate"},
+    "skill-webapp-testing": {"description":"Testes web E2E e regressão visual.","triggers":["webapp testing","teste e2e","playwright"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-webapp-testing/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-webapp-testing/SKILL.md","cost":"medium","safety":"authorized-origins-only"},
+    "skill-mcp-builder": {"description":"Construção segura de MCP servers.","triggers":["mcp builder","criar mcp"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-mcp-builder/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-mcp-builder/SKILL.md","cost":"high","safety":"least-privilege-tools"},
+    "skill-deep-wiki": {"description":"Documentação técnica navegável.","triggers":["deep wiki","wiki tecnica"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-deep-wiki/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-deep-wiki/SKILL.md","cost":"medium","safety":"docs-only-by-default"},
+    "skill-agent-observability": {"description":"Observabilidade de agentes.","triggers":["agent observability","observabilidade de agente"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-agent-observability/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-agent-observability/SKILL.md","cost":"medium","safety":"redact-secrets-and-pii"},
+    "skill-release-engineering": {"description":"Engenharia de releases seguros.","triggers":["release engineering","preparar release"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-release-engineering/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-release-engineering/SKILL.md","cost":"high","safety":"no-deploy-without-authorization"},
+    "skill-database-migrations": {"description":"Migrações de banco seguras.","triggers":["database migration","migração de banco"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-database-migrations/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-database-migrations/SKILL.md","cost":"high","safety":"production-data-change"},
+    "skill-dependency-upgrade": {"description":"Atualização controlada de dependências.","triggers":["dependency upgrade","atualizar dependencias"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-dependency-upgrade/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-dependency-upgrade/SKILL.md","cost":"medium","safety":"lockfile-and-regression-checks"},
+    "skill-incident-response": {"description":"Resposta e recuperação de incidentes.","triggers":["incident response","incidente","postmortem"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-incident-response/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-incident-response/SKILL.md","cost":"high","safety":"preserve-evidence"},
+    "skill-adr": {"description":"Registros de decisões arquiteturais.","triggers":["adr","decisão arquitetural"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-adr/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-adr/SKILL.md","cost":"low","safety":"decision-record"},
+    "skill-research-and-synthesis": {"description":"Pesquisa rastreável com fontes.","triggers":["research and synthesis","pesquisa web"],"canonicalPath":"{{USER_HOME}}/.orquestrador/skills/skill-research-and-synthesis/SKILL.md","codexPath":"{{USER_HOME}}/.codex/skills/skill-research-and-synthesis/SKILL.md","cost":"medium","safety":"source-attribution"},
     "skill-optimize-images": {
       "description": "Otimiza imagens para blogs e sites, incluindo conversão de formato, redimensionamento, compressão, responsividade, acessibilidade e validação visual. Use quando pedirem para otimizar, reduzir, preparar, converter ou melhorar imagens para web.",
       "triggers": [

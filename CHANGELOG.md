@@ -2,7 +2,10 @@
 
 Todas as mudanças relevantes do Orquestrador Maestro estão documentadas aqui.
 
-## Unreleased - 2026-07-19
+## Unreleased - 2026-07-20
+
+### Contribuição comunitária
+- Adicionada a skill `improve-codebase-architecture`, de Eduardo Queiroz, para análises arquiteturais com relatório HTML decisório, diagramas, comparação de impactos técnicos e de produto e referências em português.
 
 ### Adicionado
 - README agora possui a seção concisa `Capacidades Atuais`, cobrindo a superfície pública do sistema: instalação e atualização portáteis, ferramentas de IA suportadas, bootstrap de projetos, roteamento de skills, hooks, perfis de execução, subagentes opcionais, validação, diagnóstico, controles de privacidade e fluxo de memória operacional `DEV/`.
