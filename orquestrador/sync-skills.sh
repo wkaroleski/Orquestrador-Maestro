@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 # Orquestrador Maestro - Unix skill synchronizer
 # Usage: bash ~/.orquestrador/sync-skills.sh [--check|--dry-run|--apply] [--home-path PATH]

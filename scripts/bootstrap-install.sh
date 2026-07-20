@@ -3,7 +3,11 @@ set -euo pipefail
 
 # Bootstrap oficial para macOS/Linux. Pode ser executado antes da CLI existir.
 PACKAGE="@iapro/orquestrador-maestro-cli"
+PACKAGE_VERSION="0.1.9"
+BOOTSTRAP_VERSION="2026.07.20.1"
 PREFIX="${ORQUESTRADOR_NPM_PREFIX:-$HOME/.npm-global}"
+
+echo "Orquestrador Maestro bootstrap $BOOTSTRAP_VERSION"
 
 if ! command -v npm >/dev/null 2>&1; then
   echo "Erro: Node.js e npm são necessários. Instale o Node.js LTS e execute novamente." >&2
@@ -36,12 +40,16 @@ if ! grep -Fqx "$PATH_LINE" "$SHELL_RC" 2>/dev/null; then
 fi
 
 export PATH="$BIN_DIR:$PATH"
-npm install -g "$PACKAGE@latest" --force --prefer-online
+npm install -g "$PACKAGE@$PACKAGE_VERSION" --force --prefer-online
 hash -r 2>/dev/null || true
 
 INSTALLED_VERSION="$(node -p "require('$PREFIX/lib/node_modules/@iapro/orquestrador-maestro-cli/package.json').version" 2>/dev/null || true)"
 if [ -z "$INSTALLED_VERSION" ]; then
   echo "Erro: não foi possível confirmar a instalação da CLI em $PREFIX." >&2
+  exit 1
+fi
+if [ "$INSTALLED_VERSION" != "$PACKAGE_VERSION" ]; then
+  echo "Erro: versão instalada $INSTALLED_VERSION; esperada $PACKAGE_VERSION." >&2
   exit 1
 fi
 echo "Versão instalada: $INSTALLED_VERSION"

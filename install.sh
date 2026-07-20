@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 # Orquestrador Maestro - Unix installer wrapper
 # Usage: bash install.sh [--home-path PATH] [--no-force] [--no-tool-profiles] [--core-only] [--skip-community-skills] [--skip-skill-sync] [--only ID] [--dry-run] [--list-targets] [--uninstall]

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eo pipefail
 
 # Orquestrador Maestro - Unix install verification
 # Usage: bash scripts/verify-install.sh [--home-path PATH] [--skip-tool-profiles] [--core-only]
