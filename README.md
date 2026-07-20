@@ -320,7 +320,7 @@ Por padrão, o instalador copia o núcleo, skills, agentes, prompts e perfis de 
 | `%USERPROFILE%\.orquestrador\skill-library\codex-skills` | `$HOME/.orquestrador/skill-library/codex-skills` | Catálogo completo de skills OMX/Codex para consulta e migração sem inflar o contexto nativo. |
 | `%USERPROFILE%\.orquestrador\skill-library\disabled-native` | `$HOME/.orquestrador/skill-library/disabled-native` | Skills antigas retiradas das raízes nativas para reduzir tokens sem apagar trabalho do usuário. |
 | `%USERPROFILE%\.ai-standards` | `$HOME/.ai-standards` | Standards portáteis usados pelo Antigravity. |
-| `%USERPROFILE%\.orquestrador-public-backups` | `$HOME/.orquestrador-public-backups` | Backups criados quando o instalador substitui arquivos existentes. |
+| `%USERPROFILE%\.orquestrador-public-backups` | `$HOME/.orquestrador-public-backups` | Backups somente dos arquivos gerenciados que o instalador substitui; sessões, autenticação e caches das ferramentas não são copiados. |
 
 O instalador também cria perfis textuais e entrypoints para ferramentas. Eles são os arquivos que fazem o Orquestrador ser chamado por padrão.
 

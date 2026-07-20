@@ -283,6 +283,26 @@ backup_path() {
   BACKED_UP_DESTINATIONS+=("$path")
 }
 
+backup_mapped_directory() {
+  local src_dir="$1"
+  local dest_dir="$2"
+  local label="$3"
+  local src_file relative existing_file backup_file
+
+  [ -d "$src_dir" ] || return 0
+  [ -d "$dest_dir" ] || return 0
+
+  while IFS= read -r -d '' src_file; do
+    relative="${src_file#$src_dir/}"
+    existing_file="$dest_dir/$relative"
+    if [ -f "$existing_file" ] || [ -L "$existing_file" ]; then
+      backup_file="$BACKUP_DIR/$label/$relative"
+      mkdir -p "$(dirname "$backup_file")"
+      cp -p "$existing_file" "$backup_file"
+    fi
+  done < <(find "$src_dir" -type f -print0)
+}
+
 add_target() {
   local src="$1"
   local dest="$2"
@@ -479,10 +499,10 @@ if [ "$UNINSTALL" = true ]; then
   fi
 
   for entry in "${TARGETS[@]+"${TARGETS[@]}"}"; do
-    IFS='|' read -r _src dest label _component _kind <<EOF
+    IFS='|' read -r src dest label _component _kind <<EOF
 $entry
 EOF
-    backup_path "$dest" "$label"
+    backup_mapped_directory "$src" "$dest" "$label"
   done
 
   for entry in "${FILE_TARGETS[@]+"${FILE_TARGETS[@]}"}"; do
@@ -550,10 +570,10 @@ backup_path "$TARGET_ORQUESTRADOR" ".orquestrador"
 backup_path "$TARGET_AGENTS" "AGENTS.md"
 
 for entry in "${TARGETS[@]+"${TARGETS[@]}"}"; do
-  IFS='|' read -r _src dest label _component _kind <<EOF
+  IFS='|' read -r src dest label _component _kind <<EOF
 $entry
 EOF
-  backup_path "$dest" "$label"
+  backup_mapped_directory "$src" "$dest" "$label"
 done
 
 for entry in "${FILE_TARGETS[@]+"${FILE_TARGETS[@]}"}"; do

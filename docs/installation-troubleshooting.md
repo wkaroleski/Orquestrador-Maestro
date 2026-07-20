@@ -18,6 +18,43 @@ irm https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/s
 
 O bootstrap exige Node.js 18 ou superior, detecta um prefixo global do npm sem permissão de escrita, configura um prefixo dentro do home do usuário, atualiza o `PATH`, instala a versão estável da CLI e executa `install` e `verify`.
 
+## Disco cheio após uma instalação antiga no macOS
+
+As versões anteriores à `0.1.11` podiam copiar o perfil inteiro de uma ferramenta para `$HOME/.orquestrador-public-backups`. No Codex, isso podia incluir sessões e caches grandes. A partir da `0.1.11`, somente os arquivos efetivamente gerenciados pelo Orquestrador são incluídos no backup.
+
+Para recuperar espaço, remover a instalação e reinstalar do zero sem apagar sessões, autenticação ou configurações pessoais das ferramentas, execute no Terminal do usuário normal, sem `sudo`:
+
+```bash
+# 1. Confira o espaço ocupado pelos backups antigos.
+du -sh "$HOME/.orquestrador-public-backups" 2>/dev/null || true
+
+# 2. Apague somente os backups criados pelo Orquestrador para liberar espaço.
+rm -rf -- "$HOME/.orquestrador-public-backups"
+df -h "$HOME"
+
+# 3. Instale a CLI corrigida, use o desinstalador seguro e remova a CLI.
+npm install -g @iapro/orquestrador-maestro-cli@0.1.11 --force --prefer-online
+orquestrador-maestro uninstall
+npm uninstall -g @iapro/orquestrador-maestro-cli
+
+# 4. Remova eventuais sobras exclusivas do Orquestrador.
+rm -rf -- "$HOME/.orquestrador" "$HOME/.orquestrador-public-backups"
+
+# 5. Faça uma instalação limpa e verifique o resultado.
+curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh | bash
+orquestrador-maestro verify
+```
+
+Não remova as pastas `$HOME/.codex`, `$HOME/.claude`, `$HOME/.cursor`, `$HOME/.gemini`, `$HOME/.opencode` ou equivalentes. Elas pertencem às ferramentas e podem conter sessões, logins e configurações pessoais.
+
+Se ainda existir uma instalação antiga feita como root em `/usr/local`, confirme primeiro os dois caminhos abaixo. Remova-os somente se apontarem para o pacote do Orquestrador:
+
+```bash
+ls -ld /usr/local/lib/node_modules/@iapro/orquestrador-maestro-cli /usr/local/bin/orquestrador-maestro 2>/dev/null
+sudo rm -rf -- /usr/local/lib/node_modules/@iapro/orquestrador-maestro-cli
+sudo rm -f -- /usr/local/bin/orquestrador-maestro
+```
+
 ## Erro `EACCES` em `/usr/local`
 
 Exemplo:

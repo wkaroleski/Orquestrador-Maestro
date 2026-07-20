@@ -2,6 +2,14 @@
 
 Todas as mudanças relevantes do Orquestrador Maestro estão documentadas aqui.
 
+## 0.1.11 - 2026-07-20
+
+### Corrigido
+
+- No macOS/Linux, instalação e desinstalação agora fazem backup somente dos arquivos gerenciados pelo Orquestrador dentro dos perfis das ferramentas.
+- Sessões, autenticação, caches, bancos locais e demais arquivos pessoais em `.codex`, `.claude`, `.cursor`, `.gemini` e perfis equivalentes não são mais copiados para `.orquestrador-public-backups`.
+- Os testes completos agora criam uma sessão pessoal sentinela e comprovam que ela não é copiada nem removida durante instalação e desinstalação.
+
 ## 0.1.10 - 2026-07-20
 
 ### Corrigido
