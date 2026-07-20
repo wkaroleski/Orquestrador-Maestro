@@ -17,6 +17,13 @@ UNINSTALL=false
 NON_INTERACTIVE=false
 VERBOSE_PATHS=false
 
+if [ "$(id -u)" -eq 0 ] && [ -n "${SUDO_USER:-}" ] && [ -z "${ORQUESTRADOR_ALLOW_ROOT_INSTALL:-}" ]; then
+  echo "Error: installer was run as root via sudo." >&2
+  echo "Run it again as the normal user, without sudo:" >&2
+  echo "  orquestrador-maestro install" >&2
+  exit 1
+fi
+
 while [ "$#" -gt 0 ]; do
   case "$1" in
     --home-path)
