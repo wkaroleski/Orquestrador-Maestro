@@ -35,9 +35,7 @@ O projeto público funciona como snapshot sanitizado. O mantenedor evolui a font
 Para instalar direto pelo npm:
 
 ```bash
-npm install -g @iapro/orquestrador-maestro-cli
-orquestrador-maestro install
-orquestrador-maestro verify
+bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
 ```
 
 Para atualizar depois:
@@ -174,7 +172,7 @@ Se baixar como ZIP, extraia a pasta antes de executar os comandos abaixo.
 Também é possível distribuir o Orquestrador Maestro como pacote npm:
 
 ```bash
-npm install -g @iapro/orquestrador-maestro-cli
+bash <(curl -fsSL https://raw.githubusercontent.com/FernandoBolzan/Orquestrador-Maestro/main/scripts/bootstrap-install.sh)
 ```
 
 Depois instale no home do usuário:
