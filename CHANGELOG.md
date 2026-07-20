@@ -6,6 +6,33 @@ Todas as mudanças relevantes do Orquestrador Maestro estão documentadas aqui.
 
 ### Contribuição comunitária
 - Adicionada a skill `improve-codebase-architecture`, de Eduardo Queiroz, para análises arquiteturais com relatório HTML decisório, diagramas, comparação de impactos técnicos e de produto e referências em português.
+## 0.1.11 - 2026-07-20
+
+### Corrigido
+
+- No macOS/Linux, instalação e desinstalação agora fazem backup somente dos arquivos gerenciados pelo Orquestrador dentro dos perfis das ferramentas.
+- Sessões, autenticação, caches, bancos locais e demais arquivos pessoais em `.codex`, `.claude`, `.cursor`, `.gemini` e perfis equivalentes não são mais copiados para `.orquestrador-public-backups`.
+- Os testes completos agora criam uma sessão pessoal sentinela e comprovam que ela não é copiada nem removida durante instalação e desinstalação.
+
+## 0.1.10 - 2026-07-20
+
+### Corrigido
+
+- O bootstrap macOS/Linux agora valida Node.js 18+, recusa root, tolera `SHELL` ausente e seleciona apenas prefixos npm completamente graváveis.
+- O bootstrap Windows agora recusa sessão elevada, valida Node.js 18+ e faz fallback seguro quando o prefixo npm protegido não pode ser criado ou escrito.
+- A versão instalada é confirmada por `npm root -g`, evitando suposições incorretas sobre o layout do prefixo.
+- A sincronização e a verificação de skills voltaram a concordar: 42 skills canônicas cabem nos limites declarados de todas as integrações.
+- A fonte canônica de `skill-lgpd-brasil` foi restaurada e a skill de WhatsApp Meta Ads foi registrada no manifesto e no roteador.
+- O validador do catálogo volta a passar com metadados completos nas skills canônicas.
+- A auditoria de dependências ignora exemplos opcionais ausentes em vez de falhar com erro de processo.
+
+### Testado
+
+- Instalação completa, verificação e desinstalação em PowerShell e Bash.
+- Ciclo do tarball npm: instalação global em prefixo de usuário, `version`, `install`, `verify`, `update`, `doctor` e `uninstall`.
+- Compatibilidade sintática dos scripts Unix e validação pública do conteúdo do pacote.
+
+## Unreleased - 2026-07-19
 
 ### Adicionado
 - README agora possui a seção concisa `Capacidades Atuais`, cobrindo a superfície pública do sistema: instalação e atualização portáteis, ferramentas de IA suportadas, bootstrap de projetos, roteamento de skills, hooks, perfis de execução, subagentes opcionais, validação, diagnóstico, controles de privacidade e fluxo de memória operacional `DEV/`.
